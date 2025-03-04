@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { HomeProps } from '../../types/home';
+import profileImage from '../../assets/profile.jpg';
 
 interface HeroSectionProps extends Pick<HomeProps, 'setActivePage' | 'onCursorChange'> {
   scrollY: number;
@@ -126,7 +127,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
           >
             <img 
-              src="/src/assets/profile.jpg" 
+              src={profileImage} 
               alt="Yaroslav Shevchenko" 
               className="w-full h-full object-cover object-center transition-all duration-1000"
             />

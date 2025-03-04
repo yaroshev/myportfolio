@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
+import profileImage from '../assets/profile.jpg';
 
 interface AboutProps {
   onCursorChange?: (cursorType: string) => void;
@@ -188,7 +189,7 @@ const About: React.FC<AboutProps> = ({ onCursorChange = () => {} }) => {
                 onMouseLeave={() => onCursorChange('default')}
               >
                 <img 
-                  src="/src/assets/profile.jpg" 
+                  src={profileImage} 
                   alt="Yaroslav Shevchenko" 
                   className="w-full h-full object-cover object-center"
                 />
