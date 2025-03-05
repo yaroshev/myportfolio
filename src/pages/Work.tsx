@@ -3,9 +3,10 @@ import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'fra
 
 interface WorkProps {
   onCursorChange?: (cursorType: string) => void;
+  setActivePage?: (page: string) => void;
 }
 
-const Work: React.FC<WorkProps> = ({ onCursorChange = () => {} }) => {
+const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage }) => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [visibleProjects, setVisibleProjects] = useState<any[]>([]);
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
@@ -128,14 +129,41 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {} }) => {
       stats: ['1000+ Flight Hours', 'Licensed Pilot', 'High-Profile Events'],
       color: 'from-sky-500 to-indigo-500',
       accentColor: 'rgba(56, 189, 248, 0.1)'
+    },
+    {
+      id: 9,
+      title: 'Modern E-Commerce Experience',
+      category: 'webdesign',
+      description: 'Designed and developed a cutting-edge e-commerce platform with seamless user experience, advanced filtering capabilities, and optimized checkout flow. The responsive design ensures perfect functionality across all devices while maintaining brand consistency.',
+      image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
+      year: '2023',
+      client: 'Boutique Retail Brand',
+      services: ['UI/UX Design', 'Frontend Development', 'E-commerce Strategy', 'Performance Optimization'],
+      stats: ['35% Conversion Increase', '2.5s Load Time', 'Mobile-First Design'],
+      color: 'from-primary-500 to-accent-500',
+      accentColor: 'rgba(14, 165, 233, 0.1)'
+    },
+    {
+      id: 10,
+      title: 'Corporate Website Redesign',
+      category: 'webdesign',
+      description: 'Executed a complete redesign of a corporate website focusing on modern aesthetics, improved information architecture, and enhanced user engagement. Implemented custom animations and interactive elements to create a memorable browsing experience.',
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2015&q=80',
+      year: '2024',
+      client: 'Enterprise Solutions Inc.',
+      services: ['Web Design', 'Content Strategy', 'SEO Optimization', 'Custom Animations'],
+      stats: ['75% Bounce Rate Reduction', '4x Lead Generation', 'Accessibility Compliant'],
+      color: 'from-accent-500 to-primary-500',
+      accentColor: 'rgba(217, 70, 239, 0.1)'
     }
   ];
 
   const filters = [
-    { id: 'all', label: 'All Projects', icon: '⚡️', description: '8+ years of digital innovation' },
-    { id: 'video', label: 'Video & Live', icon: '🎥', description: '1000+ videos produced' },
-    { id: 'web', label: 'Digital Marketing', icon: '🚀', description: '10M+ social reach' },
-    { id: 'ai', label: 'AI & Automation', icon: '🤖', description: '15+ AI solutions' }
+    { id: 'video', label: 'Video & Live', description: '1000+ videos produced' },
+    { id: 'web', label: 'Digital Marketing', description: '10M+ social reach' },
+    { id: 'webdesign', label: 'Web Design', description: 'Modern web experiences' },
+    { id: 'ai', label: 'AI & Automation', description: '15+ AI solutions' },
+    { id: 'all', label: 'All Projects', description: '8+ years of digital innovation' }
   ];
 
   useEffect(() => {
@@ -165,12 +193,6 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {} }) => {
 
   return (
     <div ref={containerRef} className="relative">
-      {/* Progress bar */}
-      <motion.div 
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-500 to-accent-500 origin-left z-50"
-        style={{ scaleX }}
-      />
-
       {/* Hero Section */}
       <motion.section 
         className="min-h-[90vh] flex items-center justify-center relative overflow-hidden"
@@ -255,44 +277,159 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {} }) => {
           }}
         />
       </motion.section>
-        
-        {/* Filters */}
-      <section className="py-8 sticky top-20 z-30 backdrop-blur-xl bg-dark-950/90 border-y border-dark-800/20">
-        <div className="max-w-7xl mx-auto px-6">
+      
+      {/* Filter Section - Redesigned as its own distinct section */}
+      <section className="py-16 relative z-20">
+        <div className="max-w-5xl mx-auto px-6">
+          {/* Section heading */}
           <motion.div 
-            className="flex flex-wrap gap-4 justify-center"
+            className="text-center mb-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.8 }}
           >
-            {filters.map((filter, index) => (
-              <motion.button
-                key={filter.id}
-                onClick={() => setActiveFilter(filter.id)}
-                className={`px-6 py-3 rounded-full text-sm tracking-wider uppercase transition-all duration-300 flex items-center gap-2 ${
-                  activeFilter === filter.id
-                    ? 'bg-gradient-to-r from-primary-500 to-accent-500 text-dark-950 shadow-lg shadow-primary-500/20'
-                    : 'border border-dark-700 text-dark-400 hover:text-dark-200 hover:border-dark-500'
-                }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 * index }}
-                onMouseEnter={() => onCursorChange('button')}
-                onMouseLeave={() => onCursorChange('default')}
+            <h2 className="text-2xl font-light tracking-tight font-display mb-3">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-200 to-accent-200">
+                Browse Projects
+              </span>
+            </h2>
+            <p className="text-dark-400 text-sm max-w-2xl mx-auto">
+              Filter through my portfolio to discover projects across different specialties
+            </p>
+          </motion.div>
+          
+          {/* Filter container with glass effect and hover glow */}
+          <motion.div 
+            className="relative backdrop-blur-md bg-dark-900/40 rounded-xl border border-dark-800/30 p-8 shadow-lg overflow-hidden group transition-all duration-700"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            whileHover={{ 
+              boxShadow: "0 0 15px 0 rgba(14, 165, 233, 0.05), 0 0 5px 0 rgba(217, 70, 239, 0.03)",
+              borderColor: "rgba(203, 213, 225, 0.06)"
+            }}
+            onMouseEnter={() => onCursorChange('button')}
+            onMouseLeave={() => onCursorChange('default')}
+          >
+            {/* Background pattern */}
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9Im5vbmUiIGQ9Ik0wIDBoMTAwdjEwMEgweiIvPjxwYXRoIGQ9Ik0xMDAgMEgwdjEwMGgxMDBWMHoiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIuNSIvPjwvZz48L3N2Zz4=')] opacity-10"></div>
+            
+            {/* Gradient background */}
+            <div className="absolute inset-0 opacity-10 group-hover:opacity-12 transition-opacity duration-700">
+              <div className="absolute top-0 left-1/4 w-1/2 h-full bg-gradient-radial from-primary-500/10 via-transparent to-transparent blur-3xl"></div>
+              <div className="absolute top-0 right-1/4 w-1/2 h-full bg-gradient-radial from-accent-500/10 via-transparent to-transparent blur-3xl"></div>
+            </div>
+            
+            {/* Subtle border glow on hover */}
+            <div className="absolute inset-0 rounded-xl border border-transparent group-hover:border-primary-500/3 group-hover:border-t-accent-500/3 opacity-0 group-hover:opacity-100 transition-all duration-700"></div>
+            
+            {/* Filter buttons */}
+            <div className="relative z-10">
+              <motion.div 
+                className="flex flex-wrap gap-8 justify-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
               >
-                <span className="text-base">{filter.icon}</span>
-                {filter.label}
-              </motion.button>
-            ))}
+                {filters.map((filter, index) => {
+                  const isActive = activeFilter === filter.id;
+                  return (
+                    <motion.div 
+                      key={filter.id}
+                      className="relative"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
+                    >
+                      <button 
+                        onClick={() => setActiveFilter(filter.id)}
+                        className={`relative z-10 text-sm uppercase tracking-wider font-light transition-colors duration-300 ${
+                          isActive 
+                            ? 'text-primary-400' 
+                            : 'text-dark-300 hover:text-dark-200'
+                        }`}
+                        onMouseEnter={() => onCursorChange('button')}
+                        onMouseLeave={() => onCursorChange('default')}
+                      >
+                        {filter.label}
+                      </button>
+                      <motion.div 
+                        className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 transition-all duration-300 ease-in-out"
+                        style={{ 
+                          width: isActive ? '100%' : '0%'
+                        }}
+                        animate={{
+                          width: isActive ? '100%' : '0%'
+                        }}
+                        transition={{
+                          duration: 0.3,
+                          ease: "easeInOut"
+                        }}
+                      />
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+              
+              {/* Filter description */}
+              <motion.div 
+                className="mt-6 text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={activeFilter}
+                    className="text-dark-400 text-sm font-light"
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {filters.find(f => f.id === activeFilter)?.description}
+                  </motion.p>
+                </AnimatePresence>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </section>
         
         {/* Projects Grid */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="py-24 relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div 
+            className="absolute top-1/4 -right-64 w-[500px] h-[500px] bg-gradient-to-br from-primary-500/5 to-accent-500/5 rounded-full blur-3xl"
+            animate={{ 
+              scale: [1, 1.2, 1],
+              x: [0, -30, 0],
+              opacity: [0.3, 0.5, 0.3]
+            }}
+            transition={{ 
+              duration: 15,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div 
+            className="absolute bottom-1/4 -left-64 w-[500px] h-[500px] bg-gradient-to-tr from-accent-500/5 to-primary-500/5 rounded-full blur-3xl"
+            animate={{ 
+              scale: [1, 1.2, 1],
+              x: [0, 30, 0],
+              opacity: [0.3, 0.5, 0.3]
+            }}
+            transition={{ 
+              duration: 15,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 2
+            }}
+          />
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
           <AnimatePresence mode="wait">
             {isLoading ? (
               <motion.div 
@@ -308,7 +445,7 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {} }) => {
               </motion.div>
             ) : (
               <motion.div 
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -332,40 +469,53 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {} }) => {
                     }}
                   >
                     <motion.div 
-                      className="aspect-[4/3] relative overflow-hidden rounded-xl"
-                      whileHover={{ scale: 0.95 }}
-                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                      className="aspect-[4/3] relative overflow-hidden rounded-lg backdrop-blur-sm border border-dark-800/20 shadow-lg"
+                      whileHover={{ 
+                        y: -5,
+                        transition: { duration: 0.3, ease: "easeOut" }
+                      }}
                     >
-                      <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-20 z-10 transition-opacity duration-500`} />
+                      {/* Gradient overlay */}
+                      <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-30 z-10 transition-opacity duration-500`} />
+                      
+                      {/* Dark overlay */}
                       <div className="absolute inset-0 bg-dark-900/60 z-10 group-hover:bg-dark-900/40 transition-all duration-500" />
+                      
+                      {/* Project image */}
                       <motion.img 
-                      src={project.image} 
-                      alt={project.title} 
+                        src={project.image} 
+                        alt={project.title} 
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700"
                         initial={{ scale: 1.2 }}
                         animate={{ scale: hoveredProject === project.id ? 1.1 : 1 }}
                         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                       />
+                      
+                      {/* Content overlay */}
                       <div className="absolute inset-0 z-20 p-8 flex flex-col justify-end">
+                        {/* Category badge */}
                         <motion.div 
                           className="overflow-hidden"
                           initial={{ opacity: 0, y: 20 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.5 }}
                         >
-                          <div className="text-xs text-dark-400 mb-3 tracking-wider uppercase flex items-center gap-2">
-                            {filters.find(f => f.id === project.category)?.icon}
+                          <div className="text-xs text-dark-400 mb-3 tracking-wider uppercase bg-dark-900/50 backdrop-blur-sm py-1 px-3 rounded-full w-fit">
                             {filters.find(f => f.id === project.category)?.label}
                           </div>
                         </motion.div>
+                        
+                        {/* Project title */}
                         <motion.h3 
-                          className="text-2xl font-light text-dark-100 mb-4"
+                          className="text-2xl font-light text-dark-100 mb-4 font-display"
                           initial={{ opacity: 0, y: 20 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.5, delay: 0.1 }}
                         >
                           {project.title}
                         </motion.h3>
+                        
+                        {/* Project description */}
                         <motion.p
                           className="text-dark-400 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                           initial={{ opacity: 0, y: 20 }}
@@ -375,22 +525,65 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {} }) => {
                           {project.description}
                         </motion.p>
                       </div>
+                      
+                      {/* Hover effect - subtle glow */}
+                      <motion.div 
+                        className={`absolute inset-0 opacity-0 group-hover:opacity-30 z-5 transition-opacity duration-500 bg-gradient-to-br ${project.color} blur-xl`}
+                        initial={{ opacity: 0 }}
+                        whileHover={{ opacity: 0.15 }}
+                        transition={{ duration: 0.5 }}
+                      />
                     </motion.div>
+                    
+                    {/* Project footer */}
                     <div className="mt-4 flex justify-between items-center">
                       <div className="text-dark-400 text-sm">{project.year}</div>
                       <motion.div 
-                        className="text-primary-400 text-sm flex items-center gap-2"
+                        className="text-primary-400 text-sm flex items-center gap-2 group-hover:text-accent-400 transition-colors duration-300"
                         whileHover={{ x: 5 }}
                       >
-                        View Details
-                        <span className="text-lg">→</span>
+                        <span className="relative">
+                          View Details
+                          <div className="absolute -bottom-1 left-0 h-px w-0 bg-gradient-to-r from-primary-400 to-accent-400 group-hover:w-full transition-all duration-300"></div>
+                        </span>
+                        <span className="text-lg transition-transform duration-300 group-hover:translate-x-1">→</span>
                       </motion.div>
                     </div>
+                    
+                    {/* Stats pills - only visible on hover */}
+                    <motion.div 
+                      className="absolute -bottom-12 left-0 right-0 flex gap-2 justify-center opacity-0 group-hover:opacity-100 group-hover:-bottom-8 transition-all duration-300"
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 0, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {project.stats.slice(0, 2).map((stat, statIndex) => (
+                        <div 
+                          key={statIndex} 
+                          className="text-xs py-1 px-3 rounded-full bg-dark-800/50 backdrop-blur-sm text-dark-300 border border-dark-700/20"
+                        >
+                          {stat}
+                        </div>
+                      ))}
+                    </motion.div>
                   </motion.div>
                 ))}
               </motion.div>
             )}
           </AnimatePresence>
+          
+          {/* Empty state when no projects match the filter */}
+          {visibleProjects.length === 0 && !isLoading && (
+            <motion.div 
+              className="py-32 text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h3 className="text-2xl font-light text-dark-200 mb-2">No projects found</h3>
+              <p className="text-dark-400">No projects match the selected filter. Try another category.</p>
+            </motion.div>
+          )}
         </div>
       </section>
 
