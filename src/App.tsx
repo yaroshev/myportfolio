@@ -77,7 +77,7 @@ function App() {
       ctx.fill();
     }
   }
-
+  
   // Initialize particles
   useEffect(() => {
     const initParticles = () => {
@@ -106,9 +106,11 @@ function App() {
     };
     
     window.addEventListener('resize', handleResize);
+    window.addEventListener('mousemove', handleMouseMove);
     
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
@@ -161,7 +163,7 @@ function App() {
       }
     };
   }, []);
-
+  
   // Handle scroll
   useEffect(() => {
     const handleScroll = () => {
@@ -180,11 +182,19 @@ function App() {
       clearTimeout(timer);
     };
   }, []);
-
+  
+  // Handle mouse movement
+  const handleMouseMove = (e: MouseEvent) => {
+    mouseRef.current = { x: e.clientX, y: e.clientY };
+  };
+  
+  // Render the active page
   const renderPage = () => {
     switch (activePage) {
+      case 'home':
+        return <Home setActivePage={setActivePage} />;
       case 'work':
-        return <Work />;
+        return <Work setActivePage={setActivePage} />;
       case 'about':
         return <About />;
       case 'resources':
@@ -230,25 +240,42 @@ function App() {
       <canvas 
         ref={canvasRef} 
         className="fixed inset-0 z-0 opacity-70"
+        style={{
+          willChange: 'transform',
+          transform: 'translateZ(0)',
+          backfaceVisibility: 'hidden'
+        }}
       />
       
       {/* Background gradient */}
-      <div className="fixed inset-0 bg-gradient-radial from-dark-900/50 via-dark-950 to-black opacity-80 z-0" />
+      <div 
+        className="fixed inset-0 bg-gradient-radial from-dark-900/50 via-dark-950 to-black opacity-80 z-0"
+        style={{
+          willChange: 'transform',
+          transform: 'translateZ(0)'
+        }}
+      />
       
       {/* Noise texture overlay */}
-      <div className="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')] opacity-30 z-0" />
+      <div 
+        className="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')] opacity-30 z-0"
+        style={{
+          willChange: 'transform',
+          transform: 'translateZ(0)'
+        }}
+      />
       
       <Header 
         activePage={activePage} 
         setActivePage={setActivePage} 
-        scrollY={scrollY}
+        scrollY={scrollY} 
       />
       
       <main className="flex-grow relative z-10">
         {renderPage()}
       </main>
       
-      <Footer />
+      <Footer setActivePage={setActivePage} />
     </div>
   );
 }

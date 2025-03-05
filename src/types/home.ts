@@ -9,7 +9,7 @@ export interface Project {
   description: string;
   tags: string[];
   metrics: Record<string, string>;
-  image: string;
+  image: string | any;
   color: string;
   videoUrl: string;
 }
@@ -20,7 +20,7 @@ export interface Stat {
 }
 
 export interface TestimonialProps {
-  quote: string;
+  quote: string[] | string;
   company: string;
   name: string;
   role: string;

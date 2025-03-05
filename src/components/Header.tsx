@@ -163,19 +163,21 @@ const Header: React.FC<HeaderProps> = ({
                 whileTap={{ y: 0 }}
               >
                 {item.label}
-                {activePage === item.id && (
-                  <motion.span 
-                    className="absolute -bottom-1 left-0 w-full h-px bg-gradient-to-r from-primary-400 to-accent-400"
-                    layoutId="navIndicator"
-                    transition={{ 
-                      type: 'spring', 
-                      stiffness: 300, 
-                      damping: 30,
-                      layout: { duration: 0.3, ease: "easeInOut" }
-                    }}
-                    style={{ originX: 0 }}
-                  />
-                )}
+                <motion.div 
+                  className="absolute -bottom-1 left-0 w-full h-px"
+                >
+                  {activePage === item.id && (
+                    <motion.span 
+                      className="absolute left-0 top-0 w-full h-full bg-gradient-to-r from-primary-400 to-accent-400"
+                      layoutId="navIndicator"
+                      transition={{ 
+                        type: 'spring', 
+                        stiffness: 150, 
+                        damping: 20
+                      }}
+                    />
+                  )}
+                </motion.div>
               </motion.button>
             ))}
           </nav>

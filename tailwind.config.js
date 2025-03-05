@@ -45,7 +45,7 @@ export default {
       },
       animation: {
         fadeIn: 'fadeIn 0.8s ease-in-out forwards',
-        float: 'float 6s ease-in-out infinite',
+        float: 'float 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         pulse: 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         shimmer: 'shimmer 2s linear infinite',
         slideUp: 'slideUp 0.8s ease-out forwards',
@@ -56,32 +56,32 @@ export default {
       },
       keyframes: {
         fadeIn: {
-          '0%': { opacity: 0 },
-          '100%': { opacity: 1 },
+          '0%': { opacity: 0, transform: 'translateZ(0)' },
+          '100%': { opacity: 1, transform: 'translateZ(0)' },
         },
         float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-20px)' },
+          '0%, 100%': { transform: 'translateY(0) translateZ(0)' },
+          '50%': { transform: 'translateY(-20px) translateZ(0)' },
         },
         shimmer: {
-          '0%': { backgroundPosition: '-200% 0' },
-          '100%': { backgroundPosition: '200% 0' },
+          '0%': { backgroundPosition: '-200% 0', transform: 'translateZ(0)' },
+          '100%': { backgroundPosition: '200% 0', transform: 'translateZ(0)' },
         },
         slideUp: {
-          '0%': { transform: 'translateY(20px)', opacity: 0 },
-          '100%': { transform: 'translateY(0)', opacity: 1 },
+          '0%': { transform: 'translateY(20px) translateZ(0)', opacity: 0 },
+          '100%': { transform: 'translateY(0) translateZ(0)', opacity: 1 },
         },
         slideDown: {
-          '0%': { transform: 'translateY(-20px)', opacity: 0 },
-          '100%': { transform: 'translateY(0)', opacity: 1 },
+          '0%': { transform: 'translateY(-20px) translateZ(0)', opacity: 0 },
+          '100%': { transform: 'translateY(0) translateZ(0)', opacity: 1 },
         },
         slideLeft: {
-          '0%': { transform: 'translateX(20px)', opacity: 0 },
-          '100%': { transform: 'translateX(0)', opacity: 1 },
+          '0%': { transform: 'translateX(20px) translateZ(0)', opacity: 0 },
+          '100%': { transform: 'translateX(0) translateZ(0)', opacity: 1 },
         },
         slideRight: {
-          '0%': { transform: 'translateX(-20px)', opacity: 0 },
-          '100%': { transform: 'translateX(0)', opacity: 1 },
+          '0%': { transform: 'translateX(-20px) translateZ(0)', opacity: 0 },
+          '100%': { transform: 'translateX(0) translateZ(0)', opacity: 1 },
         },
       },
       fontFamily: {

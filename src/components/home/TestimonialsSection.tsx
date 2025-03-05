@@ -1,26 +1,39 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { createPortal } from 'react-dom';
 import { HomeProps, TestimonialProps } from '../../types/home';
 
 interface TestimonialsSectionProps extends Pick<HomeProps, 'onCursorChange'> {}
 
 const testimonials: TestimonialProps[] = [
   {
-    quote: "Yaroslav is a pleasure to work with and goes the extra mile for us every single time, no matter the size of the project. He is knowledgeable, professional and always strives to make our projects the best that they can be, delivering a finished product beyond our expectations. When I first hired Yaroslav to do a promotional video, I didn't really know what I wanted, but he took charge and organized the whole shoot with little effort from me, which was amazing. If you have any media production needs, I would highly recommend Yaroslav- great local talent and a super nice guy delivering A+ videography!",
+    quote: [
+      "Yaroslav is a pleasure to work with and goes the extra mile for us every single time, no matter the size of the project. He is knowledgeable, professional and always strives to make our projects the best that they can be, delivering a finished product beyond our expectations.",
+      "When I first hired Yaroslav to do a promotional video, I didn't really know what I wanted, but he took charge and organized the whole shoot with little effort from me, which was amazing.",
+      "If you have any media production needs, I would highly recommend Yaroslav- great local talent and a super nice guy delivering A+ videography!"
+    ],
     company: "Hydroforce Excavating",
     name: "Jenn",
     role: "Marketing Manager",
     gradient: "from-primary-500/10 to-accent-500/10"
   },
   {
-    quote: "We did a project where we lifted a house with a 160-ton crane. The video Yaroslav made got 1.5 million views, which was incredibly impressive, and that's how we found out about him. After that, we hired him for a project where we did a tandem lift of two boats in Port Alberni. It was great working together—communication back and forth was excellent, and the final product turned out awesome. I would definitely recommend working with Yaroslav.",
+    quote: [
+      "We did a project where we lifted a house with a 160-ton crane. The video Yaroslav made got 1.5 million views, which was incredibly impressive, and that's how we found out about him.",
+      "After that, we hired him for a project where we did a tandem lift of two boats in Port Alberni. It was great working together—communication back and forth was excellent, and the final product turned out awesome.",
+      "I would definitely recommend working with Yaroslav."
+    ],
     company: "RKM Cranes",
     name: "Mike",
     role: "General Manager",
     gradient: "from-accent-500/10 to-primary-500/10"
   },
   {
-    quote: "I have had the pleasure of working with Yaroslav on several occasions for my jewelry brand, and each time has been an absolute delight. His ability to capture the essence of my products while paying close attention to every intricate detail exceeded all my expectations. From capturing the shimmer of gemstones to showcasing delicate craftsmanship, Yaroslav demonstrated exceptional expertise in every shot. The final videos not only elevated my brand's image but also received an overwhelmingly positive response from my customers and followers. I wholeheartedly recommend Yaroslav to anyone seeking exceptional videography services.",
+    quote: [
+      "I have had the pleasure of working with Yaroslav on several occasions for my jewelry brand, and each time has been an absolute delight. His ability to capture the essence of my products while paying close attention to every intricate detail exceeded all my expectations.",
+      "From capturing the shimmer of gemstones to showcasing delicate craftsmanship, Yaroslav demonstrated exceptional expertise in every shot. The final videos not only elevated my brand's image but also received an overwhelmingly positive response from my customers and followers.",
+      "I wholeheartedly recommend Yaroslav to anyone seeking exceptional videography services."
+    ],
     company: "Nomad Design",
     name: "Asel",
     role: "Designer",
@@ -49,8 +62,18 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 1 }}
+      style={{
+        willChange: 'opacity',
+        transform: 'translateZ(0)'
+      }}
     >
-      <div className="absolute inset-0 bg-gradient-radial from-dark-800/30 via-dark-900 to-black opacity-70 z-0" />
+      <div 
+        className="absolute inset-0 bg-gradient-radial from-dark-800/30 via-dark-900 to-black opacity-70 z-0"
+        style={{
+          willChange: 'transform',
+          transform: 'translateZ(0)'
+        }}
+      />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <motion.h2 
@@ -59,6 +82,10 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
+          style={{
+            willChange: 'transform, opacity',
+            transform: 'translateZ(0)'
+          }}
         >
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-200 to-accent-200">
             Client Testimonials
@@ -85,14 +112,6 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
                 duration: 0.7, 
                 delay: index * 0.2 
               }}
-              whileHover={{ 
-                y: -5,
-                transition: { 
-                  type: "spring", 
-                  stiffness: 300, 
-                  damping: 15 
-                }
-              }}
               onMouseEnter={() => {
                 setHoveredIndex(index);
                 onCursorChange('button');
@@ -101,16 +120,36 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
                 setHoveredIndex(null);
                 onCursorChange('default');
               }}
+              whileHover={{ 
+                y: -5,
+                transition: { 
+                  type: "spring", 
+                  stiffness: 300, 
+                  damping: 15 
+                }
+              }}
+              style={{
+                willChange: 'transform, opacity',
+                transform: 'translateZ(0)'
+              }}
             >
               {/* Gradient background */}
               <div 
                 className={`absolute inset-0 bg-gradient-to-br ${testimonial.gradient} -z-10`}
                 style={{
                   opacity: hoveredIndex === index ? 0.6 : 0,
-                  transition: 'opacity 0.6s ease-in-out'
+                  transition: 'opacity 0.6s ease-in-out',
+                  willChange: 'opacity',
+                  transform: 'translateZ(0)'
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-20" />
+              <div 
+                className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-20"
+                style={{
+                  willChange: 'transform',
+                  transform: 'translateZ(0)'
+                }}
+              />
               
               {/* Quote icon */}
               <div className="mb-6 relative">
@@ -127,7 +166,7 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
               {/* Testimonial content */}
               <div className="relative">
                 <p className="text-dark-200 mb-8 italic leading-relaxed line-clamp-4">
-                  {testimonial.quote}
+                  {testimonial.quote.join('\n')}
                 </p>
                 
                 <button 
@@ -159,15 +198,19 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
       </div>
 
       {/* Lightbox */}
-      <AnimatePresence>
-        {selectedTestimonial && (
+      {selectedTestimonial && createPortal(
+        <AnimatePresence>
           <motion.div 
-            className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 md:p-8"
+            className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-4 md:p-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={closeLightbox}
+            style={{
+              willChange: 'opacity',
+              transform: 'translateZ(0)'
+            }}
           >
             <motion.div 
               className="bg-dark-900/90 border border-dark-300/30 rounded-xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
@@ -176,6 +219,10 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
               onClick={(e) => e.stopPropagation()}
+              style={{
+                willChange: 'transform, opacity',
+                transform: 'translateZ(0)'
+              }}
             >
               <div className="flex justify-between items-start mb-6">
                 <div>
@@ -200,13 +247,20 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
                 </div>
               </div>
               
-              <p className="text-dark-200 italic leading-relaxed">
-                {selectedTestimonial.quote}
-              </p>
+              <div className="text-dark-200 italic leading-relaxed space-y-4">
+                {Array.isArray(selectedTestimonial.quote) ? (
+                  selectedTestimonial.quote.map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))
+                ) : (
+                  <p>{selectedTestimonial.quote}</p>
+                )}
+              </div>
             </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </motion.section>
   );
 };

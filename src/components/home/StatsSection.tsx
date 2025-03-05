@@ -44,7 +44,9 @@ const StatsSection: React.FC<StatsSectionProps> = ({
       className="py-24 relative"
       style={{ 
         opacity: statsOpacity,
-        y: springY // Use the spring-animated version
+        y: springY, // Use the spring-animated version
+        willChange: 'transform, opacity',
+        transform: 'translateZ(0)'
       }}
     >
       <div className="max-w-7xl mx-auto px-6">
@@ -54,6 +56,10 @@ const StatsSection: React.FC<StatsSectionProps> = ({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10%" }} // Increased margin for earlier animation start
           transition={{ duration: 0.7, ease: "easeOut" }} // Smoother easing
+          style={{
+            willChange: 'transform, opacity',
+            transform: 'translateZ(0)'
+          }}
         >
           Key Achievements
         </motion.h2>
@@ -80,15 +86,6 @@ const StatsSection: React.FC<StatsSectionProps> = ({
                 ease: "easeOut" // Smoother easing
               }}
               onClick={handleCardClick}
-              whileHover={{ 
-                y: -5,
-                scale: 1.02,
-                transition: { duration: 0.2 }
-              }}
-              whileTap={{ 
-                scale: 0.98,
-                transition: { duration: 0.1 }
-              }}
               onMouseEnter={() => {
                 setHoveredIndex(index);
                 onCursorChange('button');
@@ -97,22 +94,43 @@ const StatsSection: React.FC<StatsSectionProps> = ({
                 setHoveredIndex(null);
                 onCursorChange('default');
               }}
+              whileHover={{ 
+                y: -5,
+                scale: 1.02,
+                transition: { duration: 0.2, ease: "easeOut" }
+              }}
+              style={{
+                willChange: 'transform, opacity',
+                transform: 'translateZ(0)'
+              }}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-10" />
+              <div 
+                className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-10"
+                style={{
+                  willChange: 'transform',
+                  transform: 'translateZ(0)'
+                }}
+              />
               
               <motion.div 
-                className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" // Increased duration
+                className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" // Increased duration
                 initial={{ backgroundPosition: '0% 0%' }}
                 animate={hoveredIndex === index ? {
                   backgroundPosition: ['0% 0%', '100% 100%'],
                 } : {}}
                 transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse', ease: "linear" }} // Smoother animation
+                style={{
+                  willChange: 'background-position, opacity',
+                  transform: 'translateZ(0)'
+                }}
               />
               
               <motion.div 
-                className="absolute inset-0 rounded-lg -z-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" // Increased duration
+                className="absolute inset-0 rounded-lg -z-5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" // Increased duration
                 style={{
                   boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.3)',
+                  willChange: 'box-shadow, opacity',
+                  transform: 'translateZ(0)'
                 }}
                 animate={hoveredIndex === index ? {
                   boxShadow: [
@@ -128,6 +146,10 @@ const StatsSection: React.FC<StatsSectionProps> = ({
                 className="text-3xl md:text-4xl font-light mb-3 text-dark-100 relative"
                 animate={{ opacity: [0.95, 1, 0.95] }}
                 transition={{ duration: 4, repeat: Infinity, delay: index * 0.2, ease: "easeInOut" }} // Smoother and slower animation
+                style={{
+                  willChange: 'opacity',
+                  transform: 'translateZ(0)'
+                }}
               >
                 {stat.value}
               </motion.div>

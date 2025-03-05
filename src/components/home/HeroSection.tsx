@@ -42,14 +42,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           rotateX: mousePosition.y * 10,
           rotateY: mousePosition.x * -10,
           transformStyle: 'preserve-3d',
-          perspective: 1000
+          perspective: 1000,
+          willChange: 'transform',
+          transform: 'translateZ(0)'
         }}
       >
         <div 
           className="absolute inset-0 opacity-30"
           style={{ 
             backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(220, 220, 220, 0.1) 0%, transparent 80%)',
-            transform: `translateY(${-parallaxOffset * 0.2}px)`
+            transform: `translateY(${-parallaxOffset * 0.2}px) translateZ(0)`,
+            willChange: 'transform'
           }}
         />
         
@@ -60,7 +63,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             top: '20%', 
             left: '15%',
             transform: `translate3d(${mouseParallax.x * -1}px, ${mouseParallax.y * -1}px, 100px)`,
-            zIndex: 1
+            zIndex: 1,
+            willChange: 'transform, opacity'
           }}
           animate={{
             y: [0, -20, 0],
@@ -69,7 +73,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           transition={{
             duration: 8,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
+            repeatType: "mirror"
           }}
         />
         
@@ -79,7 +84,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             bottom: '10%', 
             right: '10%',
             transform: `translate3d(${mouseParallax.x}px, ${mouseParallax.y}px, 50px)`,
-            zIndex: 1
+            zIndex: 1,
+            willChange: 'transform, opacity'
           }}
           animate={{
             y: [0, 20, 0],
@@ -89,11 +95,18 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             duration: 10,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 1
+            delay: 1,
+            repeatType: "mirror"
           }}
         />
         
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9Im5vbmUiIGQ9Ik0wIDBoMTAwdjEwMEgweiIvPjxwYXRoIGQ9Ik0xMDAgMEgwdjEwMGgxMDBWMHoiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIuNSIvPjwvZz48L3N2Zz4=')] opacity-10" />
+        <div 
+          className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9Im5vbmUiIGQ9Ik0wIDBoMTAwdjEwMEgweiIvPjxwYXRoIGQ9Ik0xMDAgMEgwdjEwMGgxMDBWMHoiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIuNSIvPjwvZz48L3N2Zz4=')] opacity-10"
+          style={{
+            willChange: 'transform',
+            transform: 'translateZ(0)'
+          }}
+        />
       </motion.div>
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -102,6 +115,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
+          style={{
+            willChange: 'transform, opacity',
+            transform: 'translateZ(0)'
+          }}
         >
           {/* Profile Image - Clickable, brighter, with enhanced glow */}
           <motion.div 
@@ -147,7 +164,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           {/* Title - 15% larger */}
           <motion.h1 
             className="text-[3.45rem] md:text-[5.175rem] font-light tracking-tight mb-4 relative font-display"
-            style={{ transform: `translateY(${-parallaxOffset * 0.15}px)` }}
+            style={{ 
+              transform: `translateY(${-parallaxOffset * 0.15}px) translateZ(0)`,
+              willChange: 'transform'
+            }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -160,7 +180,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           {/* Description - moved up slightly */}
           <motion.p 
             className="text-sm md:text-base max-w-2xl mb-16 font-light text-dark-400"
-            style={{ transform: `translateY(${-parallaxOffset * 0.2}px)` }}
+            style={{ 
+              transform: `translateY(${-parallaxOffset * 0.2}px) translateZ(0)`,
+              willChange: 'transform'
+            }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
@@ -171,7 +194,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           {/* Action Buttons with CSS-based animations */}
           <motion.div 
             className="flex flex-wrap gap-10 justify-center"
-            style={{ transform: `translateY(${-parallaxOffset * 0.25}px)` }}
+            style={{ 
+              transform: `translateY(${-parallaxOffset * 0.25}px) translateZ(0)`,
+              willChange: 'transform'
+            }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
@@ -242,6 +268,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             }
             .animate-pulse-slow {
               animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+              will-change: opacity, text-shadow;
             }
           `}</style>
         </motion.div>

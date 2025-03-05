@@ -1,6 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { createPortal } from 'react-dom';
 import { HomeProps, Project } from '../../types/home';
+import etronImage from '../../assets/etron.png';
+import pininfarinaImage from '../../assets/pininfarina.png';
+import hydroforceImage from '../../assets/hydroforce.png';
+import rkmImage from '../../assets/rkm.png';
 
 interface FeaturedWorkSectionProps extends Pick<HomeProps, 'setActivePage' | 'onCursorChange'> {}
 
@@ -11,7 +16,7 @@ const featuredProjects: Project[] = [
     description: 'Exclusive coverage of the Pininfarina Battista hyper GT, showcasing this revolutionary electric hypercar with cinematic videography.',
     tags: ['Automotive', 'Luxury', 'Event Coverage'],
     metrics: { views: '250K+', engagement: '18%', reach: '400K+' },
-    image: 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2064&q=80',
+    image: pininfarinaImage,
     color: 'from-primary-500/10 to-accent-500/10',
     videoUrl: 'https://www.youtube.com/watch?v=0LHX2jUvutc'
   },
@@ -21,7 +26,7 @@ const featuredProjects: Project[] = [
     description: 'Dynamic showcase of the all-electric Audi e-tron, highlighting its innovative features and performance capabilities through compelling visual storytelling.',
     tags: ['Automotive', 'Electric Vehicles', 'Commercial'],
     metrics: { views: '180K+', engagement: '15%', reach: '320K+' },
-    image: 'https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80',
+    image: etronImage,
     color: 'from-accent-500/10 to-primary-500/10',
     videoUrl: 'https://www.youtube.com/watch?v=E9vsUKmagRA'
   },
@@ -31,7 +36,7 @@ const featuredProjects: Project[] = [
     description: 'Spectacular footage of a house lift using a 160-ton crane, showcasing the precision and power of heavy machinery in action.',
     tags: ['Industrial', 'Construction', 'Viral Content'],
     metrics: { views: '1.5M+', engagement: '22%', reach: '3M+' },
-    image: 'https://images.unsplash.com/photo-1566342088293-38debd381c63?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+    image: rkmImage,
     color: 'from-primary-500/10 to-accent-500/10',
     videoUrl: 'https://www.youtube.com/watch?v=9n86xwm6MxE&t=3s'
   },
@@ -41,7 +46,7 @@ const featuredProjects: Project[] = [
     description: 'Professional promotional video for Hydroforce Excavating, highlighting their expertise in excavation services with compelling visual storytelling.',
     tags: ['Construction', 'Promotional', 'Corporate'],
     metrics: { views: '75K+', engagement: '14%', reach: '150K+' },
-    image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+    image: hydroforceImage,
     color: 'from-accent-500/10 to-primary-500/10',
     videoUrl: 'https://www.youtube.com/watch?v=jogaasTnlwU'
   }
@@ -91,8 +96,18 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 1 }}
+      style={{
+        willChange: 'opacity',
+        transform: 'translateZ(0)'
+      }}
     >
-      <div className="absolute inset-0 bg-gradient-radial from-dark-800/30 via-dark-900 to-black opacity-70 z-0" />
+      <div 
+        className="absolute inset-0 bg-gradient-radial from-dark-800/30 via-dark-900 to-black opacity-70 z-0"
+        style={{
+          willChange: 'transform',
+          transform: 'translateZ(0)'
+        }}
+      />
       
       <style jsx>{`
         .hide-scrollbar::-webkit-scrollbar {
@@ -101,6 +116,8 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
         .hide-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
+          will-change: transform;
+          transform: translateZ(0);
         }
       `}</style>
       
@@ -121,6 +138,12 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
       <div 
         ref={scrollContainerRef}
         className="w-full px-6 overflow-x-auto py-12 hide-scrollbar"
+        style={{
+          scrollBehavior: 'smooth',
+          WebkitOverflowScrolling: 'touch',
+          willChange: 'transform',
+          transform: 'translateZ(0)'
+        }}
       >
         <div className="flex flex-nowrap gap-6 mx-auto" style={{ width: 'fit-content' }}>
           {featuredProjects.map((project, index) => (
@@ -161,6 +184,10 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
                 setHoveredIndex(null);
                 onCursorChange('default');
               }}
+              style={{
+                willChange: 'transform, opacity',
+                transform: 'translateZ(0)'
+              }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-10" />
               <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-5`} />
@@ -172,7 +199,11 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
                 <img 
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                  style={{
+                    willChange: 'transform',
+                    transform: 'translateZ(0)'
+                  }}
                 />
                 
                 {/* Play button */}
@@ -269,15 +300,19 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
       </div>
 
       {/* Enhanced Video Lightbox */}
-      <AnimatePresence>
-        {selectedVideo && selectedProject && (
+      {selectedVideo && selectedProject && createPortal(
+        <AnimatePresence>
           <motion.div 
-            className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4 md:p-8"
+            className="fixed inset-0 bg-black/90 backdrop-blur-md z-[9999] flex items-center justify-center p-4 md:p-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={closeVideoLightbox}
+            style={{
+              willChange: 'opacity',
+              transform: 'translateZ(0)'
+            }}
           >
             <motion.div 
               className="relative w-full max-w-6xl bg-dark-900/90 rounded-xl overflow-hidden border border-dark-300/30 shadow-2xl"
@@ -321,57 +356,35 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
                     {selectedProject.tags.map((tag, tagIndex) => (
                       <span 
                         key={tagIndex}
-                        className="px-2 py-1 bg-dark-800/50 rounded-full text-xs text-primary-300"
+                        className="px-2 py-0.5 bg-dark-800/50 rounded-full text-xs text-primary-300"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
                   
-                  <p className="text-dark-300 mb-8">
+                  <p className="text-dark-400 text-sm mb-6 leading-relaxed">
                     {selectedProject.description}
                   </p>
                   
                   <div className="mt-auto">
-                    <h3 className="text-dark-200 text-sm mb-4 uppercase tracking-wider">Project Metrics</h3>
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="text-lg text-dark-300 mb-2">Project Metrics</div>
+                    <div className="grid grid-cols-2 gap-4">
                       {Object.entries(selectedProject.metrics).map(([key, value], index) => (
-                        <div key={index} className="text-center p-3 bg-dark-800/30 rounded-lg">
-                          <div className="text-primary-400 text-xl font-medium mb-1">{value}</div>
-                          <div className="text-dark-400 text-xs capitalize">{key}</div>
+                        <div key={index} className="flex flex-col">
+                          <div className="text-primary-400 text-lg font-medium">{value}</div>
+                          <div className="text-dark-500 text-xs capitalize">{key}</div>
                         </div>
                       ))}
-                    </div>
-                    
-                    <div className="mt-8 pt-6 border-t border-dark-300/20">
-                      <div className="flex items-center justify-between">
-                        <div className="text-dark-400 text-sm">Share this project:</div>
-                        <div className="flex space-x-4">
-                          <button className="text-dark-400 hover:text-primary-300 transition-colors">
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                            </svg>
-                          </button>
-                          <button className="text-dark-400 hover:text-primary-300 transition-colors">
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
-                            </svg>
-                          </button>
-                          <button className="text-dark-400 hover:text-primary-300 transition-colors">
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </motion.section>
   );
 };

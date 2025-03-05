@@ -43,6 +43,10 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 1 }}
+      style={{
+        willChange: 'opacity',
+        transform: 'translateZ(0)'
+      }}
     >
       <div className="max-w-7xl mx-auto px-6">
         <motion.h2 
@@ -51,6 +55,10 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
+          style={{
+            willChange: 'transform, opacity',
+            transform: 'translateZ(0)'
+          }}
         >
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-200 to-accent-200">
             Services & Expertise
@@ -89,28 +97,38 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
               }}
               whileHover={{ 
                 y: -5,
-                transition: { duration: 0.2 }
+                transition: { duration: 0.2, ease: "easeOut" }
               }}
               whileTap={{ 
                 scale: 0.98,
                 transition: { duration: 0.1 }
               }}
+              style={{
+                willChange: 'transform, opacity',
+                transform: 'translateZ(0)'
+              }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-10" />
               
               <motion.div 
-                className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 initial={{ backgroundPosition: '0% 0%' }}
                 animate={hoveredIndex === index ? {
                   backgroundPosition: ['0% 0%', '100% 100%'],
                 } : {}}
                 transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse', ease: "linear" }}
+                style={{
+                  willChange: 'background-position, opacity',
+                  transform: 'translateZ(0)'
+                }}
               />
               
               <motion.div 
-                className="absolute inset-0 rounded-lg -z-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="absolute inset-0 rounded-lg -z-5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 style={{
                   boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.3)',
+                  willChange: 'box-shadow, opacity',
+                  transform: 'translateZ(0)'
                 }}
                 animate={hoveredIndex === index ? {
                   boxShadow: [
@@ -135,6 +153,10 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.3, delay: 0.5 + featureIndex * 0.1 }}
+                    style={{
+                      willChange: 'transform, opacity',
+                      transform: 'translateZ(0)'
+                    }}
                   >
                     <span className="text-primary-400 mr-2 group-hover:text-primary-300 transition-colors duration-300">→</span>
                     <span className="group-hover:text-dark-200 transition-colors duration-300">{feature}</span>
@@ -156,6 +178,8 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
         className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full"
         style={{
           background: 'radial-gradient(circle, rgba(56, 189, 248, 0.03) 0%, rgba(0, 0, 0, 0) 70%)',
+          willChange: 'transform, opacity',
+          transform: 'translateZ(0)'
         }}
         animate={{
           scale: [1, 1.1, 1],
@@ -164,7 +188,8 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
         transition={{
           duration: 8,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: "easeInOut",
+          repeatType: "mirror"
         }}
       />
     </motion.section>
