@@ -132,29 +132,63 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
     },
     {
       id: 9,
-      title: 'Modern E-Commerce Experience',
+      title: 'Fidgeteer',
       category: 'webdesign',
-      description: 'Designed and developed a cutting-edge e-commerce platform with seamless user experience, advanced filtering capabilities, and optimized checkout flow. The responsive design ensures perfect functionality across all devices while maintaining brand consistency.',
-      image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
-      year: '2023',
-      client: 'Boutique Retail Brand',
-      services: ['UI/UX Design', 'Frontend Development', 'E-commerce Strategy', 'Performance Optimization'],
-      stats: ['35% Conversion Increase', '2.5s Load Time', 'Mobile-First Design'],
-      color: 'from-primary-500 to-accent-500',
-      accentColor: 'rgba(14, 165, 233, 0.1)'
+      description: 'Designed and developed an interactive web experience for Fidgeteer, focusing on clean aesthetics and engaging user interactions. The site features smooth animations and a minimalist design approach that highlights content while maintaining excellent performance.',
+      image: 'https://api.microlink.io?url=https://fidgeteer.netlify.app&screenshot=true&meta=false&embed=screenshot.url',
+      fallbackImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+      website: 'https://fidgeteer.netlify.app/',
+      year: '2025',
+      client: 'Fidgeteer',
+      services: ['UI/UX Design', 'Frontend Development', 'Interactive Elements', 'Performance Optimization'],
+      stats: ['Fast Load Time', 'Interactive UI', 'Minimalist Design'],
+      color: 'from-blue-400 to-indigo-400',
+      accentColor: 'rgba(96, 165, 250, 0.1)'
     },
     {
       id: 10,
-      title: 'Corporate Website Redesign',
+      title: 'Domum Improvements',
       category: 'webdesign',
-      description: 'Executed a complete redesign of a corporate website focusing on modern aesthetics, improved information architecture, and enhanced user engagement. Implemented custom animations and interactive elements to create a memorable browsing experience.',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2015&q=80',
-      year: '2024',
-      client: 'Enterprise Solutions Inc.',
-      services: ['Web Design', 'Content Strategy', 'SEO Optimization', 'Custom Animations'],
-      stats: ['75% Bounce Rate Reduction', '4x Lead Generation', 'Accessibility Compliant'],
-      color: 'from-accent-500 to-primary-500',
-      accentColor: 'rgba(217, 70, 239, 0.1)'
+      description: 'Created a modern, professional website for Domum Improvements home improvement services. The design emphasizes clarity and trust while showcasing their portfolio of work through a clean, accessible interface that converts visitors into clients.',
+      image: 'https://api.microlink.io?url=https://domumimpro.netlify.app&screenshot=true&meta=false&embed=screenshot.url',
+      fallbackImage: 'https://images.unsplash.com/photo-1534237710431-e2fc698436d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+      website: 'https://domumimpro.netlify.app/',
+      year: '2025',
+      client: 'Domum Improvements',
+      services: ['Web Design', 'Content Strategy', 'Responsive Layout', 'Portfolio Showcase'],
+      stats: ['Conversion-Focused', 'Portfolio Showcase', 'Professional Design'],
+      color: 'from-emerald-400 to-teal-400',
+      accentColor: 'rgba(52, 211, 153, 0.1)'
+    },
+    {
+      id: 11,
+      title: 'Torrell Homes',
+      category: 'webdesign',
+      description: 'Designed and developed a professional website for Torrell Homes, a Victoria-based construction company. The site showcases their custom home building, garden suites, and renovation services with a clean, modern design that emphasizes their family-operated business values and quality craftsmanship.',
+      image: 'https://api.microlink.io?url=https://www.torrellhomes.ca&screenshot=true&meta=false&embed=screenshot.url',
+      fallbackImage: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+      website: 'https://www.torrellhomes.ca/',
+      year: '2023',
+      client: 'Torrell Homes',
+      services: ['Construction Website', 'Service Showcase', 'Responsive Design', 'Brand Development'],
+      stats: ['Family Business', 'Victoria, BC', 'Custom Homes'],
+      color: 'from-amber-400 to-orange-400',
+      accentColor: 'rgba(251, 191, 36, 0.1)'
+    },
+    {
+      id: 12,
+      title: 'YSMP',
+      category: 'webdesign',
+      description: 'Designed and developed a portfolio website for YSMP Media Production, showcasing their video production services and creative work. The site features a clean, professional design with a focus on visual content and easy navigation.',
+      image: 'https://api.microlink.io?url=https://ysmp.ca&screenshot=true&meta=false&embed=screenshot.url',
+      fallbackImage: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+      website: 'https://ysmp.ca/',
+      year: '2025',
+      client: 'YSMP Media Production',
+      services: ['Portfolio Website', 'Video Showcase', 'Responsive Design', 'Brand Identity'],
+      stats: ['Media Production', 'Portfolio Showcase', 'Professional Design'],
+      color: 'from-blue-500 to-indigo-500',
+      accentColor: 'rgba(59, 130, 246, 0.1)'
     }
   ];
 
@@ -458,7 +492,6 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    onClick={() => openProjectDetails(project)}
                     onMouseEnter={() => {
                       setHoveredProject(project.id);
                       onCursorChange('button');
@@ -468,104 +501,153 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
                       onCursorChange('default');
                     }}
                   >
-                    <motion.div 
-                      className="aspect-[4/3] relative overflow-hidden rounded-lg backdrop-blur-sm border border-dark-800/20 shadow-lg"
-                      whileHover={{ 
-                        y: -5,
-                        transition: { duration: 0.3, ease: "easeOut" }
+                    {/* Card Container with lift and glow effect */}
+                    <div 
+                      className="overflow-hidden rounded-lg border border-dark-800/20 backdrop-blur-sm bg-dark-900/40 shadow-lg transition-all duration-500 ease-out"
+                      style={{ 
+                        transform: hoveredProject === project.id ? 'translateY(-8px)' : 'translateY(0)',
+                        boxShadow: hoveredProject === project.id 
+                          ? '0 10px 30px -10px rgba(14, 165, 233, 0.15), 0 5px 15px -5px rgba(217, 70, 239, 0.1)' 
+                          : '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
                       }}
                     >
-                      {/* Gradient overlay */}
-                      <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-30 z-10 transition-opacity duration-500`} />
-                      
-                      {/* Dark overlay */}
-                      <div className="absolute inset-0 bg-dark-900/60 z-10 group-hover:bg-dark-900/40 transition-all duration-500" />
-                      
-                      {/* Project image */}
-                      <motion.img 
+                      {/* Website Preview */}
+                      <div 
+                        className="relative aspect-[16/9] overflow-hidden cursor-pointer"
+                        onClick={() => openProjectDetails(project)}
+                      >
+                        {/* Website Image */}
+                        <img 
                         src={project.image} 
                         alt={project.title} 
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700"
-                        initial={{ scale: 1.2 }}
-                        animate={{ scale: hoveredProject === project.id ? 1.1 : 1 }}
-                        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                      />
-                      
-                      {/* Content overlay */}
-                      <div className="absolute inset-0 z-20 p-8 flex flex-col justify-end">
-                        {/* Category badge */}
-                        <motion.div 
-                          className="overflow-hidden"
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.5 }}
-                        >
-                          <div className="text-xs text-dark-400 mb-3 tracking-wider uppercase bg-dark-900/50 backdrop-blur-sm py-1 px-3 rounded-full w-fit">
-                            {filters.find(f => f.id === project.category)?.label}
-                          </div>
-                        </motion.div>
+                          className="w-full h-full object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                          style={{ 
+                            transform: hoveredProject === project.id ? 'scale(1.05)' : 'scale(1)'
+                          }}
+                          onError={(e) => {
+                            if (project.fallbackImage) {
+                              e.currentTarget.src = project.fallbackImage;
+                            }
+                          }}
+                        />
                         
-                        {/* Project title */}
-                        <motion.h3 
-                          className="text-2xl font-light text-dark-100 mb-4 font-display"
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.5, delay: 0.1 }}
-                        >
-                          {project.title}
-                        </motion.h3>
-                        
-                        {/* Project description */}
-                        <motion.p
-                          className="text-dark-400 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.5, delay: 0.2 }}
-                        >
-                          {project.description}
-                        </motion.p>
+                        {/* Image Overlay */}
+                        <div 
+                          className="absolute inset-0 bg-dark-900/50 transition-opacity duration-500"
+                          style={{ 
+                            opacity: hoveredProject === project.id ? 0.3 : 0.5 
+                          }}
+                        />
                       </div>
                       
-                      {/* Hover effect - subtle glow */}
-                      <motion.div 
-                        className={`absolute inset-0 opacity-0 group-hover:opacity-30 z-5 transition-opacity duration-500 bg-gradient-to-br ${project.color} blur-xl`}
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 0.15 }}
-                        transition={{ duration: 0.5 }}
-                      />
-                    </motion.div>
-                    
-                    {/* Project footer */}
-                    <div className="mt-4 flex justify-between items-center">
-                      <div className="text-dark-400 text-sm">{project.year}</div>
-                      <motion.div 
-                        className="text-primary-400 text-sm flex items-center gap-2 group-hover:text-accent-400 transition-colors duration-300"
-                        whileHover={{ x: 5 }}
+                      {/* Content Section */}
+                      <div 
+                        className="p-5 relative"
+                        onClick={() => openProjectDetails(project)}
                       >
-                        <span className="relative">
-                          View Details
-                          <div className="absolute -bottom-1 left-0 h-px w-0 bg-gradient-to-r from-primary-400 to-accent-400 group-hover:w-full transition-all duration-300"></div>
-                        </span>
-                        <span className="text-lg transition-transform duration-300 group-hover:translate-x-1">→</span>
-                      </motion.div>
-                    </div>
-                    
-                    {/* Stats pills - only visible on hover */}
-                    <motion.div 
-                      className="absolute -bottom-12 left-0 right-0 flex gap-2 justify-center opacity-0 group-hover:opacity-100 group-hover:-bottom-8 transition-all duration-300"
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 0, y: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      {project.stats.slice(0, 2).map((stat, statIndex) => (
+                        {/* Background Pattern */}
+                        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9Im5vbmUiIGQ9Ik0wIDBoMTAwdjEwMEgweiIvPjxwYXRoIGQ9Ik0xMDAgMEgwdjEwMGgxMDBWMHoiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIuNSIvPjwvZz48L3N2Zz4=')] opacity-5"></div>
+                        
+                        {/* Subtle Gradient */}
+                        <div className={`absolute inset-0 opacity-5 bg-gradient-to-br ${project.color}`}></div>
+                        
+                        {/* Glow Effect on Hover */}
                         <div 
-                          key={statIndex} 
-                          className="text-xs py-1 px-3 rounded-full bg-dark-800/50 backdrop-blur-sm text-dark-300 border border-dark-700/20"
-                        >
-                          {stat}
+                          className="absolute inset-0 opacity-0 transition-opacity duration-500 pointer-events-none"
+                          style={{ 
+                            opacity: hoveredProject === project.id ? 0.07 : 0,
+                            background: `radial-gradient(circle at center, ${project.accentColor.replace('0.1', '1')}, transparent 70%)`
+                          }}
+                        ></div>
+                        
+                        {/* Content */}
+                        <div className="relative z-10">
+                          {/* Category */}
+                          <div className="text-xs text-primary-400 mb-2 tracking-wider uppercase">
+                            {filters.find(f => f.id === project.category)?.label}
+                          </div>
+                          
+                          {/* Title */}
+                          <h3 className="text-xl font-light text-white mb-2 font-display">
+                          {project.title}
+                          </h3>
+                          
+                          {/* Description */}
+                          <p className="text-dark-300 text-sm mb-4">
+                            {project.description.length > 120 
+                              ? `${project.description.substring(0, 120)}...` 
+                              : project.description
+                            }
+                          </p>
+                          
+                          {/* Footer with both buttons */}
+                          <div className="flex justify-between items-center pt-2 border-t border-dark-800/20">
+                            <div className="text-dark-400 text-xs">{project.year}</div>
+                            <div className="flex items-center gap-10">
+                              {/* Visit Website Button - Styled like hero buttons */}
+                              {project.category === 'webdesign' && project.website && (
+                                <div className="relative">
+                                  <a
+                                    href={project.website}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="relative z-10 text-xs uppercase tracking-wider font-light text-dark-200 hover:text-primary-400 transition-colors duration-300"
+                                    onClick={(e) => e.stopPropagation()}
+                                    onMouseEnter={(e) => {
+                                      e.currentTarget.nextElementSibling?.classList.add('w-full');
+                                      e.currentTarget.nextElementSibling?.classList.remove('w-[20%]');
+                                      onCursorChange('button');
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      e.currentTarget.nextElementSibling?.classList.remove('w-full');
+                                      e.currentTarget.nextElementSibling?.classList.add('w-[20%]');
+                                      onCursorChange('button');
+                                    }}
+                                    style={{
+                                      textShadow: '0 0 8px rgba(255, 255, 255, 0.2)'
+                                    }}
+                                  >
+                                    Visit Site
+                                  </a>
+                                  <div 
+                                    className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 transition-all duration-300 ease-in-out w-[20%]"
+                                  />
+                      </div>
+                              )}
+                              
+                              {/* View Details Button - Styled like hero buttons */}
+                              <div className="relative">
+                                <button 
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    openProjectDetails(project);
+                                  }}
+                                  className="relative z-10 text-xs uppercase tracking-wider font-light text-dark-200 hover:text-primary-400 transition-colors duration-300"
+                                  onMouseEnter={(e) => {
+                                    e.currentTarget.nextElementSibling?.classList.add('w-full');
+                                    e.currentTarget.nextElementSibling?.classList.remove('w-[20%]');
+                                    onCursorChange('button');
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.currentTarget.nextElementSibling?.classList.remove('w-full');
+                                    e.currentTarget.nextElementSibling?.classList.add('w-[20%]');
+                                    onCursorChange('button');
+                                  }}
+                                  style={{
+                                    textShadow: '0 0 8px rgba(255, 255, 255, 0.2)'
+                                  }}
+                                >
+                          View Details
+                                </button>
+                                <div 
+                                  className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 transition-all duration-300 ease-in-out w-[20%]"
+                                />
+                              </div>
+                            </div>
+                    </div>
                         </div>
-                      ))}
-                    </motion.div>
+                      </div>
+                    </div>
                   </motion.div>
                 ))}
               </motion.div>
@@ -591,97 +673,126 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
       <AnimatePresence>
         {selectedProject && (
           <motion.div 
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8"
+            className="fixed inset-0 bg-black/90 backdrop-blur-md z-[9999] flex items-center justify-center p-4 md:p-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
+            onClick={closeProjectDetails}
+            style={{
+              willChange: 'opacity',
+              transform: 'translateZ(0)'
+            }}
           >
             <motion.div 
-              className="absolute inset-0 bg-dark-950/90 backdrop-blur-xl"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={closeProjectDetails}
-            />
-            
-            <motion.div 
-              className="bg-dark-900 rounded-2xl overflow-hidden w-full max-w-5xl max-h-[90vh] overflow-y-auto relative z-10"
+              className="relative w-full max-w-6xl bg-dark-900/90 rounded-xl overflow-hidden border border-dark-300/30 shadow-2xl"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.4, type: "spring" }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative aspect-video">
+              <button 
+                onClick={closeProjectDetails}
+                className="absolute top-4 right-4 text-dark-400 hover:text-primary-300 transition-colors z-10"
+                onMouseEnter={() => onCursorChange('button')}
+                onMouseLeave={() => onCursorChange('default')}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              
+              <div className="flex flex-col md:flex-row h-full">
+                {/* Interactive Website Preview */}
+                <div className="w-full md:w-2/3 aspect-video md:aspect-auto md:h-[600px] relative">
+                  {selectedProject.category === 'webdesign' && selectedProject.website ? (
+                    <>
+                      {/* Interactive iframe for web design projects */}
+                      <div className="absolute inset-0 w-full h-full">
+                        <iframe
+                          src={selectedProject.website}
+                          title={`${selectedProject.title} website`}
+                          className="w-full h-full border-0"
+                          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                          loading="lazy"
+                        ></iframe>
+                      </div>
+                      
+                      {/* Overlay with message - appears briefly then fades out */}
+                      <motion.div 
+                        className="absolute inset-0 bg-dark-900/80 backdrop-blur-sm flex items-center justify-center pointer-events-none"
+                        initial={{ opacity: 1 }}
+                        animate={{ opacity: 0 }}
+                        transition={{ duration: 1.5, delay: 1 }}
+                      >
+                        <div className="text-center px-6">
+                          <div className="text-primary-400 text-lg mb-2">Interactive Preview</div>
+                          <p className="text-dark-300 text-sm">You can browse the website directly in this window</p>
+                        </div>
+                      </motion.div>
+                      
+                      <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent to-dark-900/20"></div>
+                      
+                      {/* Visit Website Button - Only for webdesign */}
+                      <a
+                        href={selectedProject.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="absolute bottom-6 left-6 px-6 py-3 bg-primary-500/90 backdrop-blur-sm text-white rounded-full text-sm tracking-wider uppercase hover:bg-primary-400 transition-all duration-300 flex items-center gap-2 z-10"
+                        onMouseEnter={() => onCursorChange('button')}
+                        onMouseLeave={() => onCursorChange('default')}
+                      >
+                        Open in New Tab
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                    </>
+                  ) : (
+                    // Fallback to static image for non-web projects
                 <img 
                   src={selectedProject.image} 
                   alt={selectedProject.title} 
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-transparent to-transparent opacity-70" />
-                <motion.button 
-                  className="absolute top-6 right-6 w-12 h-12 rounded-full bg-dark-950/50 backdrop-blur-md flex items-center justify-center text-dark-200 hover:text-white transition-colors"
-                  onClick={closeProjectDetails}
-                  onMouseEnter={() => onCursorChange('button')}
-                  onMouseLeave={() => onCursorChange('default')}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <span className="text-2xl">×</span>
-                </motion.button>
+                  )}
                   </div>
               
-              <div className="p-8 md:p-12">
-                <div className="flex flex-wrap justify-between items-start gap-8 mb-12">
-                  <div className="max-w-2xl">
-                    <div className="text-sm text-primary-400 mb-3 flex items-center gap-2">
-                      {filters.find(f => f.id === selectedProject.category)?.icon}
-                      {filters.find(f => f.id === selectedProject.category)?.label} • {selectedProject.year}
-                    </div>
-                    <h2 className="text-4xl font-light text-dark-100 font-display mb-6">{selectedProject.title}</h2>
-                    <p className="text-dark-300 leading-relaxed">{selectedProject.description}</p>
-                  </div>
-                  <div className="bg-dark-800/30 rounded-xl p-6 backdrop-blur-sm">
-                    <div className="text-sm text-dark-300 mb-4">Project Details</div>
-                    <div className="space-y-4">
-                      <div>
-                        <div className="text-xs text-dark-400 mb-1">Client</div>
-                        <div className="text-dark-200">{selectedProject.client}</div>
-                      </div>
-                      <div>
-                        <div className="text-xs text-dark-400 mb-1">Services</div>
-                        <div className="flex flex-wrap gap-2">
-                          {selectedProject.services.map((service: string, index: number) => (
+                {/* Content Side */}
+                <div className="w-full md:w-1/3 p-6 md:p-8 flex flex-col bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md">
+                  <h2 className="text-2xl md:text-3xl font-light text-dark-200 mb-4 font-display">{selectedProject.title}</h2>
+                  
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {selectedProject.services && selectedProject.services.map((service: string, index: number) => (
                             <span 
                               key={index}
-                              className="text-xs px-3 py-1 rounded-full bg-dark-800/50 text-dark-300"
+                        className="px-2 py-0.5 bg-dark-800/50 rounded-full text-xs text-primary-300"
                             >
                               {service}
                             </span>
                           ))}
                         </div>
+                  
+                  <p className="text-dark-400 text-sm mb-6 leading-relaxed">
+                    {selectedProject.description}
+                  </p>
+                  
+                  {selectedProject.client && (
+                    <div className="mb-6">
+                      <div className="text-dark-300 text-sm mb-1">Client</div>
+                      <div className="text-dark-200">{selectedProject.client}</div>
+                    </div>
+                  )}
+                  
+                  {/* Dark bar at the bottom */}
+                  <div className="mt-auto -mx-8 -mb-8 p-6 bg-dark-900/80 border-t border-dark-700/50">
+                    <div className="flex items-center justify-center">
+                      <div className="text-dark-400 text-xs">
+                        Completed in <span className="text-primary-400">{selectedProject.year}</span>
                       </div>
                     </div>
                   </div>
-                </div>
-                
-                <div className="flex flex-wrap gap-4 justify-between items-center border-t border-dark-800/50 pt-8">
-                  <button 
-                    className="px-6 py-3 border border-dark-700 rounded-full text-sm tracking-wider uppercase hover:bg-dark-800/50 transition-all duration-300 flex items-center gap-2"
-                    onClick={closeProjectDetails}
-                    onMouseEnter={() => onCursorChange('button')}
-                    onMouseLeave={() => onCursorChange('default')}
-                  >
-                    ← Back to Projects
-                  </button>
-                  <a 
-                    href="#" 
-                    className="px-6 py-3 bg-gradient-to-r from-primary-500 to-accent-500 text-dark-950 rounded-full text-sm tracking-wider uppercase hover:from-primary-400 hover:to-accent-400 transition-all duration-300 flex items-center gap-2"
-                    onMouseEnter={() => onCursorChange('button')}
-                    onMouseLeave={() => onCursorChange('default')}
-                  >
-                    Visit Project →
-                  </a>
                 </div>
               </div>
             </motion.div>

@@ -156,28 +156,24 @@ const Header: React.FC<HeaderProps> = ({
                 onClick={() => setActivePage(item.id)}
                 className={`relative text-sm tracking-wider uppercase transition-colors duration-300 ${
                   activePage === item.id
-                    ? 'text-dark-100'
+                    ? 'text-primary-400'
                     : 'text-dark-400 hover:text-dark-200'
                 }`}
-                whileHover={{ y: -2 }}
-                whileTap={{ y: 0 }}
               >
                 {item.label}
                 <motion.div 
-                  className="absolute -bottom-1 left-0 w-full h-px"
-                >
-                  {activePage === item.id && (
-                    <motion.span 
-                      className="absolute left-0 top-0 w-full h-full bg-gradient-to-r from-primary-400 to-accent-400"
-                      layoutId="navIndicator"
-                      transition={{ 
-                        type: 'spring', 
-                        stiffness: 150, 
-                        damping: 20
-                      }}
-                    />
-                  )}
-                </motion.div>
+                  className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 transition-all duration-300 ease-in-out"
+                  style={{ 
+                    width: activePage === item.id ? '100%' : '0%'
+                  }}
+                  animate={{
+                    width: activePage === item.id ? '100%' : '0%'
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    ease: "easeInOut"
+                  }}
+                />
               </motion.button>
             ))}
           </nav>
