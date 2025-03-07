@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { HomeProps, ServiceProps } from '../../types/home';
 
@@ -29,6 +29,108 @@ const services: ServiceProps[] = [
 
 const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setActivePage }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile on mount and window resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
+
+  // Center the initial card on mobile
+  useEffect(() => {
+    if (!scrollContainerRef.current || !isMobile) return;
+    
+    // Set initial active card to the middle card
+    const middleIndex = Math.floor(services.length / 2);
+    setActiveCardIndex(middleIndex);
+    
+    // Calculate scroll position to center the middle card
+    const containerWidth = scrollContainerRef.current.clientWidth;
+    const cardWidth = containerWidth * 0.80; // 80% of container width
+    const scrollPosition = middleIndex * cardWidth;
+    
+    // Add a small delay to ensure the DOM is fully rendered
+    setTimeout(() => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollLeft = scrollPosition;
+      }
+    }, 100);
+  }, [isMobile, services.length]);
+
+  // Handle scroll snap on mobile
+  useEffect(() => {
+    if (!scrollContainerRef.current || !isMobile) return;
+    
+    const handleScroll = () => {
+      if (!scrollContainerRef.current) return;
+      
+      const containerWidth = scrollContainerRef.current.clientWidth;
+      const scrollPosition = scrollContainerRef.current.scrollLeft;
+      const cardWidth = containerWidth * 0.80; // 80% of container width
+      
+      const newActiveIndex = Math.round(scrollPosition / cardWidth);
+      setActiveCardIndex(Math.min(newActiveIndex, services.length - 1));
+    };
+    
+    const scrollContainer = scrollContainerRef.current;
+    scrollContainer.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      scrollContainer.removeEventListener('scroll', handleScroll);
+    };
+  }, [isMobile, services.length]);
+
+  // Mouse/touch drag handlers for mobile scrolling
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!isMobile) return;
+    setIsDragging(true);
+    setStartX(e.pageX - (scrollContainerRef.current?.offsetLeft || 0));
+    setScrollLeft(scrollContainerRef.current?.scrollLeft || 0);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!isMobile) return;
+    setIsDragging(true);
+    setStartX(e.touches[0].pageX - (scrollContainerRef.current?.offsetLeft || 0));
+    setScrollLeft(scrollContainerRef.current?.scrollLeft || 0);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !isMobile) return;
+    e.preventDefault();
+    const x = e.pageX - (scrollContainerRef.current?.offsetLeft || 0);
+    const walk = (x - startX) * 1.5; // Scroll speed multiplier
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || !isMobile) return;
+    const x = e.touches[0].pageX - (scrollContainerRef.current?.offsetLeft || 0);
+    const walk = (x - startX) * 1.5; // Scroll speed multiplier
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+    }
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
 
   const handleCardClick = () => {
     if (setActivePage) {
@@ -37,55 +139,71 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
   };
 
   return (
-    <motion.section 
-      className="py-24 relative"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 1 }}
-      style={{
-        willChange: 'opacity',
-        transform: 'translateZ(0)'
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.h2 
-          className="text-3xl font-light tracking-tight text-center mb-16 font-display"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          style={{
-            willChange: 'transform, opacity',
-            transform: 'translateZ(0)'
-          }}
-        >
+    <section className="py-12 md:py-24 relative">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
+        <h2 className="text-2xl md:text-3xl font-light tracking-tight text-center mb-6 md:mb-16 font-display">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-200 to-accent-200">
             Services & Expertise
           </span>
-        </motion.h2>
+        </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
+        {/* Mobile scroll indicators - Only visible on mobile */}
+        <div className="flex justify-center gap-3 mb-5 md:hidden">
+          {services.map((_, index) => (
+            <div 
+              key={index}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                activeCardIndex === index 
+                  ? 'bg-primary-400 w-6' 
+                  : 'bg-dark-600 w-1.5'
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+      
+      {/* Desktop container for proper centering */}
+      <div className="md:flex md:justify-center md:items-center">
+        {/* Mobile: Horizontal scroll / Desktop: Original grid layout */}
+        <div 
+          ref={scrollContainerRef}
+          className={`
+            md:grid md:grid-cols-3 md:gap-8 md:max-w-6xl
+            flex overflow-x-auto snap-x snap-mandatory scrollbar-hide
+            -mx-6 px-6 md:mx-auto md:px-6 md:overflow-visible
+            pb-6 md:pb-0
+          `}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleDragEnd}
+          onMouseLeave={handleDragEnd}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleDragEnd}
+          style={{
+            scrollBehavior: 'smooth',
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none'
+          }}
+        >
           {services.map((service, index) => (
-            <motion.div
+            <div
               key={index} 
               className={`
                 relative overflow-hidden rounded-lg p-6 md:p-8 
                 backdrop-blur-md bg-dark-800/10 
                 border border-dark-300/30
-                transition-all duration-300 group z-10
+                transition-colors duration-300 group z-10
                 hover:border-transparent
-                ${hoveredIndex === index ? 'shadow-[0_0_25px_rgba(255,255,255,0.2)]' : 'shadow-lg'}
+                ${hoveredIndex === index ? 'shadow-[0_0_25px_rgba(255,255,255,0.15)]' : 'shadow-lg'}
                 cursor-pointer
+                flex-shrink-0 w-[80%] md:w-auto
+                snap-center
+                mr-5 md:mr-0
+                min-h-[340px] md:min-h-0
+                flex flex-col
               `}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-15%" }}
-              transition={{ 
-                duration: 0.7, 
-                delay: index * 0.08,
-                ease: "easeOut"
-              }}
               onClick={handleCardClick}
               onMouseEnter={() => {
                 setHoveredIndex(index);
@@ -95,104 +213,68 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
                 setHoveredIndex(null);
                 onCursorChange('default');
               }}
-              whileHover={{ 
-                y: -5,
-                transition: { duration: 0.2, ease: "easeOut" }
-              }}
-              whileTap={{ 
-                scale: 0.98,
-                transition: { duration: 0.1 }
-              }}
-              style={{
-                willChange: 'transform, opacity',
-                transform: 'translateZ(0)'
-              }}
             >
+              {/* Card background with improved gradient */}
               <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-10" />
               
-              <motion.div 
-                className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                initial={{ backgroundPosition: '0% 0%' }}
-                animate={hoveredIndex === index ? {
-                  backgroundPosition: ['0% 0%', '100% 100%'],
-                } : {}}
-                transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse', ease: "linear" }}
-                style={{
-                  willChange: 'background-position, opacity',
-                  transform: 'translateZ(0)'
-                }}
-              />
+              {/* Subtle accent color based on service */}
+              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${service.gradient} opacity-70`} />
               
-              <motion.div 
-                className="absolute inset-0 rounded-lg -z-5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{
-                  boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.3)',
-                  willChange: 'box-shadow, opacity',
-                  transform: 'translateZ(0)'
-                }}
-                animate={hoveredIndex === index ? {
-                  boxShadow: [
-                    'inset 0 0 0 1px rgba(255, 255, 255, 0.1)',
-                    'inset 0 0 0 1px rgba(255, 255, 255, 0.3)',
-                    'inset 0 0 0 1px rgba(255, 255, 255, 0.1)'
-                  ]
-                } : {}}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-              />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
-              <h3 className="text-xl font-light text-dark-100 relative mb-4">{service.title}</h3>
+              <div className="flex flex-col h-full">
+                {/* Service title with improved spacing */}
+                <h3 className="text-xl font-light text-dark-100 mb-3 relative">{service.title}</h3>
+                
+                {/* Description with better typography */}
+                <p className="text-dark-400 text-sm leading-relaxed mb-6 relative">{service.description}</p>
+                
+                {/* Features list pushed to bottom */}
+                <ul className="space-y-2.5 text-dark-300 relative mt-auto">
+                  {service.features.map((feature, featureIndex) => (
+                    <li 
+                      key={featureIndex} 
+                      className="flex items-center"
+                    >
+                      <span className="text-primary-400 mr-2 group-hover:text-primary-300 transition-colors duration-300">→</span>
+                      <span className="group-hover:text-dark-200 transition-colors duration-300 text-sm">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
               
-              <p className="text-dark-400 mb-6 relative">{service.description}</p>
-              
-              <ul className="space-y-3 text-dark-300 relative">
-                {service.features.map((feature, featureIndex) => (
-                  <motion.li 
-                    key={featureIndex} 
-                    className="flex items-center"
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: 0.5 + featureIndex * 0.1 }}
-                    style={{
-                      willChange: 'transform, opacity',
-                      transform: 'translateZ(0)'
-                    }}
-                  >
-                    <span className="text-primary-400 mr-2 group-hover:text-primary-300 transition-colors duration-300">→</span>
-                    <span className="group-hover:text-dark-200 transition-colors duration-300">{feature}</span>
-                  </motion.li>
-                ))}
-              </ul>
-              
-              <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {/* Improved visual indicator */}
+              <div className="absolute bottom-4 right-4 opacity-60 group-hover:opacity-100 transition-opacity duration-300 bg-dark-800/50 rounded-full p-1.5 border border-dark-700/30">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
       
-      <motion.div 
-        className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full"
-        style={{
-          background: 'radial-gradient(circle, rgba(56, 189, 248, 0.03) 0%, rgba(0, 0, 0, 0) 70%)',
-          willChange: 'transform, opacity',
-          transform: 'translateZ(0)'
-        }}
-        animate={{
-          scale: [1, 1.1, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-          repeatType: "mirror"
-        }}
-      />
-    </motion.section>
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
+        {/* Mobile scroll hint - Only visible on mobile */}
+        <div className="flex items-center justify-center gap-2 text-dark-500 text-xs mt-5 md:hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+          </svg>
+          <span>Swipe to explore more services</span>
+        </div>
+      </div>
+      
+      {/* CSS for hiding scrollbar */}
+      <style jsx global>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+    </section>
   );
 };
 

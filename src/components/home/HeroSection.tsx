@@ -30,7 +30,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <motion.section 
-      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16 sm:pt-20"
       style={{
         scale: heroScale,
         opacity: heroOpacity
@@ -56,12 +56,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           }}
         />
         
-        {/* Floating elements */}
+        {/* Floating elements - Adjusted for rule of thirds */}
         <motion.div 
           className="absolute w-64 h-64 rounded-full bg-gradient-to-r from-dark-200/10 to-dark-300/10 blur-3xl"
           style={{ 
-            top: '20%', 
-            left: '15%',
+            top: '33%', 
+            left: '33%',
             transform: `translate3d(${mouseParallax.x * -1}px, ${mouseParallax.y * -1}px, 100px)`,
             zIndex: 1,
             willChange: 'transform, opacity'
@@ -81,8 +81,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         <motion.div 
           className="absolute w-96 h-96 rounded-full bg-gradient-to-r from-dark-300/10 to-dark-200/10 blur-3xl"
           style={{ 
-            bottom: '10%', 
-            right: '10%',
+            bottom: '33%', 
+            right: '33%',
             transform: `translate3d(${mouseParallax.x}px, ${mouseParallax.y}px, 50px)`,
             zIndex: 1,
             willChange: 'transform, opacity'
@@ -110,8 +110,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({
       </motion.div>
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
+        {/* Mobile-optimized layout using rule of thirds */}
         <motion.div 
-          className="flex flex-col items-center text-center"
+          className="flex flex-col items-center text-center h-full justify-between py-8 md:py-0"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
@@ -120,10 +121,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             transform: 'translateZ(0)'
           }}
         >
-          {/* Profile Image - Clickable, brighter, with enhanced glow */}
+          {/* Profile Image - Larger on mobile and better positioned */}
           <motion.div 
             onClick={() => setActivePage('about')}
-            className="w-36 h-36 md:w-52 md:h-52 rounded-full overflow-hidden mb-10 relative shadow-lg cursor-pointer"
+            className="w-40 h-40 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full overflow-hidden mb-10 sm:mb-12 md:mb-10 relative shadow-lg cursor-pointer mt-6 sm:mt-8"
             style={{ 
               transform: `translateY(${-parallaxOffset * 0.1}px)`,
               boxShadow: imageHovered 
@@ -161,39 +162,42 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             />
           </motion.div>
 
-          {/* Title - 15% larger */}
-          <motion.h1 
-            className="text-[3.45rem] md:text-[5.175rem] font-light tracking-tight mb-4 relative font-display"
-            style={{ 
-              transform: `translateY(${-parallaxOffset * 0.15}px) translateZ(0)`,
-              willChange: 'transform'
-            }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-dark-300 via-dark-100 to-dark-200">
-              Yaroslav Shevchenko
-            </span>
-          </motion.h1>
-          
-          {/* Description - moved up slightly */}
-          <motion.p 
-            className="text-sm md:text-base max-w-2xl mb-16 font-light text-dark-400"
-            style={{ 
-              transform: `translateY(${-parallaxOffset * 0.2}px) translateZ(0)`,
-              willChange: 'transform'
-            }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            Digital Communications Professional specializing in media production, live streaming, and digital transformation. Based in BC, Canada.
-          </motion.p>
+          <div className="flex flex-col space-y-6 sm:space-y-8 md:space-y-10">
+            {/* Title - Positioned at middle third, adjusted size for mobile */}
+            <motion.h1 
+              className="text-[2.5rem] sm:text-[3.45rem] md:text-[5.175rem] font-light tracking-tight relative font-display"
+              style={{ 
+                transform: `translateY(${-parallaxOffset * 0.15}px) translateZ(0)`,
+                willChange: 'transform',
+                lineHeight: 1.1
+              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-dark-300 via-dark-100 to-dark-200">
+                Yaroslav Shevchenko
+              </span>
+            </motion.h1>
+            
+            {/* Description - Positioned at middle third, optimized spacing */}
+            <motion.p 
+              className="text-sm sm:text-base max-w-2xl font-light text-dark-400 px-4 sm:px-0"
+              style={{ 
+                transform: `translateY(${-parallaxOffset * 0.2}px) translateZ(0)`,
+                willChange: 'transform'
+              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
+              Digital Communications Professional specializing in media production, live streaming, and digital transformation. Based in BC, Canada.
+            </motion.p>
+          </div>
 
-          {/* Action Buttons with CSS-based animations */}
+          {/* Action Buttons - Positioned at bottom third */}
           <motion.div 
-            className="flex flex-wrap gap-10 justify-center"
+            className="flex flex-wrap gap-8 sm:gap-10 justify-center mt-12 sm:mt-14 md:mt-16"
             style={{ 
               transform: `translateY(${-parallaxOffset * 0.25}px) translateZ(0)`,
               willChange: 'transform'
@@ -206,7 +210,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="relative">
               <button 
                 onClick={() => setActivePage('work')}
-                className="relative z-10 text-sm uppercase tracking-wider font-light text-dark-200 hover:text-primary-400 transition-colors duration-300 animate-pulse-slow"
+                className="relative z-10 text-sm uppercase tracking-wider font-light text-dark-200 hover:text-primary-400 transition-colors duration-300 animate-pulse-slow px-3 py-2"
                 onMouseEnter={() => {
                   setWorkHovered(true);
                   onCursorChange('button');
@@ -223,9 +227,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                 View Work
               </button>
               <div 
-                className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 transition-all duration-300 ease-in-out"
+                className="absolute bottom-0 left-3 right-3 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 transition-all duration-300 ease-in-out"
                 style={{ 
-                  width: workHovered ? '100%' : '20%'
+                  width: workHovered ? 'calc(100% - 24px)' : '20%',
+                  left: '12px'
                 }}
               />
             </div>
@@ -234,7 +239,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="relative">
               <button 
                 onClick={() => setActivePage('about')}
-                className="relative z-10 text-sm uppercase tracking-wider font-light text-dark-200 hover:text-primary-400 transition-colors duration-300 animate-pulse-slow"
+                className="relative z-10 text-sm uppercase tracking-wider font-light text-dark-200 hover:text-primary-400 transition-colors duration-300 animate-pulse-slow px-3 py-2"
                 onMouseEnter={() => {
                   setAboutHovered(true);
                   onCursorChange('button');
@@ -245,16 +250,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                 }}
                 style={{
                   textShadow: aboutHovered ? 'none' : '0 0 8px rgba(255, 255, 255, 0.2)',
-                  animationDuration: '5s',
-                  animationDelay: '1s'
+                  animationDuration: '4s'
                 }}
               >
                 About Me
               </button>
               <div 
-                className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 transition-all duration-300 ease-in-out"
+                className="absolute bottom-0 left-3 right-3 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 transition-all duration-300 ease-in-out"
                 style={{ 
-                  width: aboutHovered ? '100%' : '20%'
+                  width: aboutHovered ? 'calc(100% - 24px)' : '20%',
+                  left: '12px'
                 }}
               />
             </div>

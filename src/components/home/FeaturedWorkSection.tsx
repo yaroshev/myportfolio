@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { HomeProps, Project } from '../../types/home';
 import etronImage from '../../assets/etron.png';
@@ -58,17 +58,69 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
+  // Check if mobile on mount and window resize
   useEffect(() => {
-    // Center the scroll container on load
-    if (scrollContainerRef.current) {
-      const containerWidth = scrollContainerRef.current.offsetWidth;
-      const contentWidth = scrollContainerRef.current.scrollWidth;
-      if (contentWidth > containerWidth) {
-        scrollContainerRef.current.scrollLeft = (contentWidth - containerWidth) / 2;
-      }
-    }
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
+
+  // Center the initial card on mobile
+  useEffect(() => {
+    if (!scrollContainerRef.current || !isMobile) return;
+    
+    // Set initial active card to the middle card
+    const middleIndex = Math.floor(featuredProjects.length / 2);
+    setActiveCardIndex(middleIndex);
+    
+    // Calculate scroll position to center the middle card
+    const containerWidth = scrollContainerRef.current.clientWidth;
+    const cardWidth = containerWidth * 0.80; // 80% of container width
+    const scrollPosition = middleIndex * cardWidth;
+    
+    // Add a small delay to ensure the DOM is fully rendered
+    setTimeout(() => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollLeft = scrollPosition;
+      }
+    }, 100);
+  }, [isMobile, featuredProjects.length]);
+
+  // Handle scroll snap on mobile
+  useEffect(() => {
+    if (!scrollContainerRef.current || !isMobile) return;
+    
+    const handleScroll = () => {
+      if (!scrollContainerRef.current) return;
+      
+      const containerWidth = scrollContainerRef.current.clientWidth;
+      const scrollPosition = scrollContainerRef.current.scrollLeft;
+      const cardWidth = containerWidth * 0.80; // 80% of container width
+      
+      const newActiveIndex = Math.round(scrollPosition / cardWidth);
+      setActiveCardIndex(Math.min(newActiveIndex, featuredProjects.length - 1));
+    };
+    
+    const scrollContainer = scrollContainerRef.current;
+    scrollContainer.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      scrollContainer.removeEventListener('scroll', handleScroll);
+    };
+  }, [isMobile, featuredProjects.length]);
 
   const openVideoLightbox = (url: string, project: Project) => {
     // Extract video ID from YouTube URL
@@ -89,18 +141,44 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
     document.body.style.overflow = 'auto';
   };
 
+  // Handle mouse and touch events for smooth scrolling
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setStartX(e.pageX - (scrollContainerRef.current?.offsetLeft || 0));
+    setScrollLeft(scrollContainerRef.current?.scrollLeft || 0);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true);
+    setStartX(e.touches[0].pageX - (scrollContainerRef.current?.offsetLeft || 0));
+    setScrollLeft(scrollContainerRef.current?.scrollLeft || 0);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - (scrollContainerRef.current?.offsetLeft || 0);
+    const walk = (x - startX) * 1.5; // Scroll speed multiplier
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    const x = e.touches[0].pageX - (scrollContainerRef.current?.offsetLeft || 0);
+    const walk = (x - startX) * 1.5; // Scroll speed multiplier
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+    }
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
+
   return (
-    <motion.section 
-      className="py-24 relative overflow-hidden"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 1 }}
-      style={{
-        willChange: 'opacity',
-        transform: 'translateZ(0)'
-      }}
-    >
+    <section className="py-12 md:py-24 relative overflow-hidden">
       <div 
         className="absolute inset-0 bg-gradient-radial from-dark-800/30 via-dark-900 to-black opacity-70 z-0"
         style={{
@@ -109,48 +187,44 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
         }}
       />
       
-      <style jsx>{`
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .hide-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-          will-change: transform;
-          transform: translateZ(0);
-        }
-      `}</style>
-      
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <motion.h2 
-          className="text-3xl font-light tracking-tight text-center mb-12 font-display"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-        >
+      <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+        <h2 className="text-2xl md:text-3xl font-light tracking-tight text-center mb-6 md:mb-12 font-display">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-dark-200 to-dark-300">
             Featured Work
           </span>
-        </motion.h2>
+        </h2>
       </div>
         
-      <div 
-        ref={scrollContainerRef}
-        className="w-full px-6 overflow-x-auto py-12 hide-scrollbar"
-        style={{
-          scrollBehavior: 'smooth',
-          WebkitOverflowScrolling: 'touch',
-          willChange: 'transform',
-          transform: 'translateZ(0)'
-        }}
-      >
-        <div className="flex flex-nowrap gap-6 mx-auto" style={{ width: 'fit-content' }}>
+      {/* Horizontal scroll container for both mobile and desktop */}
+      <div className="relative z-10 overflow-hidden">
+        <div 
+          ref={scrollContainerRef}
+          className="
+            flex overflow-x-auto snap-x snap-mandatory scrollbar-hide
+            -mx-6 px-6 md:px-12 lg:px-16
+            pb-6 md:pb-8
+            w-screen
+          "
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleDragEnd}
+          onMouseLeave={handleDragEnd}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleDragEnd}
+          style={{
+            scrollBehavior: 'smooth',
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none'
+          }}
+        >
           {featuredProjects.map((project, index) => (
-            <motion.div 
+            <div 
               key={index}
               className={`
-                relative flex-none w-[300px] md:w-[350px]
+                relative flex-shrink-0 
+                w-[80%] md:w-[335px] lg:w-[370px]
                 overflow-hidden rounded-lg
                 backdrop-blur-md bg-dark-800/10
                 border border-dark-300/30
@@ -158,23 +232,9 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
                 hover:border-transparent
                 ${hoveredIndex === index ? 'shadow-[0_0_25px_rgba(255,255,255,0.2)]' : 'shadow-lg'}
                 cursor-pointer
+                snap-center
+                mr-5 md:mr-6 lg:mr-8
               `}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ 
-                duration: 0.7, 
-                delay: index * 0.08,
-                ease: "easeOut"
-              }}
-              whileHover={{ 
-                y: -5,
-                transition: { duration: 0.2 }
-              }}
-              whileTap={{ 
-                scale: 0.98,
-                transition: { duration: 0.1 }
-              }}
               onClick={() => openVideoLightbox(project.videoUrl, project)}
               onMouseEnter={() => {
                 setHoveredIndex(index);
@@ -191,6 +251,9 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
             >
               <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-10" />
               <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-5`} />
+              
+              {/* Subtle accent color - visible on both mobile and desktop */}
+              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${project.color} opacity-70`} />
               
               {/* Thumbnail with play button */}
               <div 
@@ -258,19 +321,13 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <motion.div 
-          className="mt-12 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-        >
+        <div className="mt-12 text-center">
           <div className="relative inline-block">
             <button 
               onClick={() => setActivePage('work')}
@@ -296,10 +353,10 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
               }}
             />
           </div>
-        </motion.div>
+        </div>
       </div>
 
-      {/* Enhanced Video Lightbox */}
+      {/* Enhanced Video Lightbox - keeping animations here for better UX */}
       {selectedVideo && selectedProject && createPortal(
         <AnimatePresence>
           <motion.div 
@@ -385,7 +442,18 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
         </AnimatePresence>,
         document.body
       )}
-    </motion.section>
+      
+      {/* CSS for hiding scrollbar */}
+      <style jsx global>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+    </section>
   );
 };
 
