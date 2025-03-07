@@ -28,9 +28,6 @@ const Home: React.FC<HomeProps> = ({ setActivePage, onCursorChange = () => {} })
   const heroScale = useTransform(smoothScrollYProgress, [0, 0.2], [1, 0.9]);
   const heroOpacity = useTransform(smoothScrollYProgress, [0, 0.2], [1, 0]);
   
-  const statsOpacity = useTransform(smoothScrollYProgress, [0.08, 0.25], [0, 1]);
-  const statsY = useTransform(smoothScrollYProgress, [0.08, 0.25], [50, 0]);
-  
   useEffect(() => {
     const handleScroll = () => {
       requestAnimationFrame(() => {
@@ -71,8 +68,6 @@ const Home: React.FC<HomeProps> = ({ setActivePage, onCursorChange = () => {} })
       
       <StatsSection
         onCursorChange={onCursorChange}
-        statsOpacity={statsOpacity}
-        statsY={statsY}
         setActivePage={setActivePage}
       />
       

@@ -1,10 +1,59 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
+import { createPortal } from 'react-dom';
+import etronImage from '../assets/etron.png';
+import pininfarinaImage from '../assets/pininfarina.png';
+import hydroforceImage from '../assets/hydroforce.png';
+import rkmImage from '../assets/rkm.png';
 
 interface WorkProps {
   onCursorChange?: (cursorType: string) => void;
   setActivePage?: (page: string) => void;
 }
+
+// Featured video projects from the landing page
+const featuredVideos = [
+  {
+    title: 'Pininfarina Battista',
+    category: 'Automotive',
+    description: 'Exclusive coverage of the Pininfarina Battista hyper GT, showcasing this revolutionary electric hypercar with cinematic videography.',
+    tags: ['Automotive', 'Luxury', 'Event Coverage'],
+    metrics: { views: '250K+', engagement: '18%', reach: '400K+' },
+    image: pininfarinaImage,
+    color: 'from-primary-500/10 to-accent-500/10',
+    videoUrl: 'https://www.youtube.com/watch?v=0LHX2jUvutc'
+  },
+  {
+    title: 'Audi e-tron',
+    category: 'Automotive',
+    description: 'Dynamic showcase of the all-electric Audi e-tron, highlighting its innovative features and performance capabilities through compelling visual storytelling.',
+    tags: ['Automotive', 'Electric Vehicles', 'Commercial'],
+    metrics: { views: '180K+', engagement: '15%', reach: '320K+' },
+    image: etronImage,
+    color: 'from-accent-500/10 to-primary-500/10',
+    videoUrl: 'https://www.youtube.com/watch?v=E9vsUKmagRA'
+  },
+  {
+    title: 'RKM Cranes',
+    category: 'Industrial',
+    description: 'Spectacular footage of a house lift using a 160-ton crane, showcasing the precision and power of heavy machinery in action.',
+    tags: ['Industrial', 'Construction', 'Viral Content'],
+    metrics: { views: '1.5M+', engagement: '22%', reach: '3M+' },
+    image: rkmImage,
+    color: 'from-primary-500/10 to-accent-500/10',
+    videoUrl: 'https://www.youtube.com/watch?v=9n86xwm6MxE&t=3s'
+  },
+  {
+    title: 'Hydroforce Excavating',
+    category: 'Construction',
+    description: 'Professional promotional video for Hydroforce Excavating, highlighting their expertise in excavation services with compelling visual storytelling.',
+    tags: ['Construction', 'Promotional', 'Corporate'],
+    metrics: { views: '75K+', engagement: '14%', reach: '150K+' },
+    image: hydroforceImage,
+    color: 'from-accent-500/10 to-primary-500/10',
+    videoUrl: 'https://www.youtube.com/watch?v=jogaasTnlwU'
+  }
+];
 
 const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage }) => {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -13,6 +62,9 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
   const [isLoading, setIsLoading] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
+  const [hoveredVideo, setHoveredVideo] = useState<number | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [selectedVideoProject, setSelectedVideoProject] = useState<any | null>(null);
   
   // Scroll animations
   const { scrollYProgress } = useScroll({
@@ -225,6 +277,27 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
     document.body.style.overflow = 'auto';
   };
 
+  // Open video lightbox
+  const openVideoLightbox = (url: string, project: any) => {
+    // Extract video ID from YouTube URL
+    const videoId = url.includes('watch?v=') 
+      ? url.split('watch?v=')[1].split('&')[0]
+      : url.split('/').pop();
+    
+    if (videoId) {
+      setSelectedVideo(videoId);
+      setSelectedVideoProject(project);
+      document.body.style.overflow = 'hidden';
+    }
+  };
+
+  // Close video lightbox
+  const closeVideoLightbox = () => {
+    setSelectedVideo(null);
+    setSelectedVideoProject(null);
+    document.body.style.overflow = 'auto';
+  };
+
   return (
     <div ref={containerRef} className="relative">
       {/* Hero Section */}
@@ -430,7 +503,155 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
         </div>
       </section>
         
-        {/* Projects Grid */}
+      {/* Featured Videos Section */}
+      <section className={`py-16 md:py-20 relative overflow-hidden ${activeFilter !== 'all' && activeFilter !== 'video' ? 'hidden' : ''}`}>
+        <div 
+          className="absolute inset-0 bg-gradient-radial from-dark-800/30 via-dark-900 to-black opacity-70 z-0"
+        />
+        
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <motion.div 
+            className="text-center mb-10 md:mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-2xl md:text-3xl font-light tracking-tight font-display mb-3">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-200 to-accent-200">
+                Featured Video Work
+              </span>
+            </h2>
+            <p className="text-dark-400 text-base max-w-2xl mx-auto">
+              Cinematic storytelling across automotive, industrial, and commercial projects
+            </p>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+            {featuredVideos.map((video, index) => (
+              <motion.div 
+                key={index}
+                className="group relative"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                onMouseEnter={() => {
+                  setHoveredVideo(index);
+                  onCursorChange('button');
+                }}
+                onMouseLeave={() => {
+                  setHoveredVideo(null);
+                  onCursorChange('default');
+                }}
+              >
+                {/* Card Container with lift and glow effect */}
+                <div 
+                  className="overflow-hidden rounded-lg border border-dark-800/20 backdrop-blur-sm bg-dark-900/40 shadow-lg transition-all duration-500 ease-out"
+                  style={{ 
+                    transform: hoveredVideo === index ? 'translateY(-8px)' : 'translateY(0)',
+                    boxShadow: hoveredVideo === index 
+                      ? '0 10px 30px -10px rgba(14, 165, 233, 0.15), 0 5px 15px -5px rgba(217, 70, 239, 0.1)' 
+                      : '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+                  }}
+                >
+                  {/* Video Thumbnail */}
+                  <div 
+                    className="relative aspect-[16/9] overflow-hidden cursor-pointer"
+                    onClick={() => openVideoLightbox(video.videoUrl, video)}
+                  >
+                    <img 
+                      src={video.image}
+                      alt={video.title}
+                      className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                      style={{ 
+                        transform: hoveredVideo === index ? 'scale(1.05)' : 'scale(1)'
+                      }}
+                    />
+                    
+                    {/* Image Overlay */}
+                    <div 
+                      className="absolute inset-0 bg-dark-900/50 transition-opacity duration-500"
+                      style={{ 
+                        opacity: hoveredVideo === index ? 0.3 : 0.5 
+                      }}
+                    />
+                    
+                    {/* Play button */}
+                    <div className="absolute inset-0 flex items-center justify-center z-20">
+                      <div className="w-12 h-12 rounded-full bg-dark-900/70 backdrop-blur-sm flex items-center justify-center border border-primary-500/30 transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary-500/20">
+                        <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Content Section */}
+                  <div className="p-5 relative">
+                    {/* Background Pattern */}
+                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9Im5vbmUiIGQ9Ik0wIDBoMTAwdjEwMEgweiIvPjxwYXRoIGQ9Ik0xMDAgMEgwdjEwMGgxMDBWMHoiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIuNSIvPjwvZz48L3N2Zz4=')] opacity-5"></div>
+                    
+                    {/* Subtle Gradient */}
+                    <div className={`absolute inset-0 opacity-5 bg-gradient-to-br ${video.color}`}></div>
+                    
+                    {/* Content */}
+                    <div className="relative z-10">
+                      {/* Category */}
+                      <div className="text-xs text-primary-400 mb-2 tracking-wider uppercase">
+                        {video.category}
+                      </div>
+                      
+                      {/* Title */}
+                      <h3 className="text-xl font-light text-white mb-2 font-display">
+                        {video.title}
+                      </h3>
+                      
+                      {/* Description */}
+                      <p className="text-dark-300 text-sm mb-4">
+                        {video.description.length > 120 
+                          ? `${video.description.substring(0, 120)}...` 
+                          : video.description
+                        }
+                      </p>
+                      
+                      {/* Footer */}
+                      <div className="flex justify-between items-center pt-2 border-t border-dark-800/20">
+                        <div className="text-dark-400 text-xs">{video.metrics.views} Views</div>
+                        <div className="flex items-center gap-2">
+                          <div className="relative">
+                            <button
+                              onClick={() => openVideoLightbox(video.videoUrl, video)}
+                              className="relative z-10 text-xs uppercase tracking-wider font-light text-dark-200 hover:text-primary-400 transition-colors duration-300"
+                              onMouseEnter={(e) => {
+                                e.currentTarget.nextElementSibling?.classList.add('w-full');
+                                e.currentTarget.nextElementSibling?.classList.remove('w-[20%]');
+                                onCursorChange('button');
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.nextElementSibling?.classList.remove('w-full');
+                                e.currentTarget.nextElementSibling?.classList.add('w-[20%]');
+                                onCursorChange('button');
+                              }}
+                              style={{
+                                textShadow: '0 0 8px rgba(255, 255, 255, 0.2)'
+                              }}
+                            >
+                              Watch Video
+                            </button>
+                            <div className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 transition-all duration-300 ease-in-out w-[20%]" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+        
+      {/* Projects Grid */}
       <section className="py-24 relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 pointer-events-none">
@@ -607,17 +828,17 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
                                       textShadow: '0 0 8px rgba(255, 255, 255, 0.2)'
                                     }}
                                   >
-                                    Visit Site
+                                    Visit Website
                                   </a>
                                   <div 
                                     className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 transition-all duration-300 ease-in-out w-[20%]"
                                   />
-                      </div>
+                                </div>
                               )}
                               
-                              {/* View Details Button - Styled like hero buttons */}
+                              {/* View Details Button */}
                               <div className="relative">
-                                <button 
+                                <button
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     openProjectDetails(project);
@@ -637,14 +858,14 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
                                     textShadow: '0 0 8px rgba(255, 255, 255, 0.2)'
                                   }}
                                 >
-                          View Details
+                                  Details
                                 </button>
                                 <div 
                                   className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 transition-all duration-300 ease-in-out w-[20%]"
                                 />
                               </div>
                             </div>
-                    </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -679,10 +900,6 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={closeProjectDetails}
-            style={{
-              willChange: 'opacity',
-              transform: 'translateZ(0)'
-            }}
           >
             <motion.div 
               className="relative w-full max-w-6xl bg-dark-900/90 rounded-xl overflow-hidden border border-dark-300/30 shadow-2xl"
@@ -695,8 +912,6 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
               <button 
                 onClick={closeProjectDetails}
                 className="absolute top-4 right-4 text-dark-400 hover:text-primary-300 transition-colors z-10"
-                onMouseEnter={() => onCursorChange('button')}
-                onMouseLeave={() => onCursorChange('default')}
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -704,7 +919,7 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
               </button>
               
               <div className="flex flex-col md:flex-row h-full">
-                {/* Interactive Website Preview */}
+                {/* Website Preview Side */}
                 <div className="w-full md:w-2/3 aspect-video md:aspect-auto md:h-[600px] relative">
                   {selectedProject.category === 'webdesign' && selectedProject.website ? (
                     <>
@@ -751,13 +966,13 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
                     </>
                   ) : (
                     // Fallback to static image for non-web projects
-                <img 
-                  src={selectedProject.image} 
-                  alt={selectedProject.title} 
-                  className="w-full h-full object-cover"
-                />
+                    <img 
+                      src={selectedProject.image} 
+                      alt={selectedProject.title} 
+                      className="w-full h-full object-cover"
+                    />
                   )}
-                  </div>
+                </div>
               
                 {/* Content Side */}
                 <div className="w-full md:w-1/3 p-6 md:p-8 flex flex-col bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md">
@@ -765,14 +980,14 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
                   
                   <div className="flex flex-wrap gap-2 mb-6">
                     {selectedProject.services && selectedProject.services.map((service: string, index: number) => (
-                            <span 
-                              key={index}
+                      <span 
+                        key={index}
                         className="px-2 py-0.5 bg-dark-800/50 rounded-full text-xs text-primary-300"
-                            >
-                              {service}
-                            </span>
-                          ))}
-                        </div>
+                      >
+                        {service}
+                      </span>
+                    ))}
+                  </div>
                   
                   <p className="text-dark-400 text-sm mb-6 leading-relaxed">
                     {selectedProject.description}
@@ -799,6 +1014,89 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Video Lightbox */}
+      {selectedVideo && selectedVideoProject && createPortal(
+        <AnimatePresence>
+          <motion.div 
+            className="fixed inset-0 bg-black/90 backdrop-blur-md z-[9999] flex items-center justify-center p-4 md:p-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={closeVideoLightbox}
+          >
+            <motion.div 
+              className="relative w-full max-w-6xl bg-dark-900/90 rounded-xl overflow-hidden border border-dark-300/30 shadow-2xl"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={closeVideoLightbox}
+                className="absolute top-4 right-4 text-dark-400 hover:text-primary-300 transition-colors z-10"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              
+              <div className="flex flex-col md:flex-row h-full">
+                {/* Video Side */}
+                <div className="w-full md:w-2/3 aspect-video md:aspect-auto md:h-[600px]">
+                  <iframe
+                    className="w-full h-full"
+                    src={`https://www.youtube.com/embed/${selectedVideo}?autoplay=1&rel=0`}
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+                
+                {/* Content Side */}
+                <div className="w-full md:w-1/3 p-6 md:p-8 flex flex-col bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md">
+                  <div className="mb-2">
+                    <span className="text-xs text-primary-400 uppercase tracking-wider">{selectedVideoProject.category}</span>
+                  </div>
+                  
+                  <h2 className="text-2xl md:text-3xl font-light text-dark-200 mb-4">{selectedVideoProject.title}</h2>
+                  
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {selectedVideoProject.tags.map((tag: string, tagIndex: number) => (
+                      <span 
+                        key={tagIndex}
+                        className="px-2 py-0.5 bg-dark-800/50 rounded-full text-xs text-primary-300"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  
+                  <p className="text-dark-400 text-sm mb-6 leading-relaxed">
+                    {selectedVideoProject.description}
+                  </p>
+                  
+                  <div className="mt-auto">
+                    <div className="text-lg text-dark-300 mb-2">Project Metrics</div>
+                    <div className="grid grid-cols-2 gap-4">
+                      {Object.entries(selectedVideoProject.metrics).map(([key, value]: [string, string], index: number) => (
+                        <div key={index} className="flex flex-col">
+                          <div className="text-primary-400 text-lg font-medium">{value}</div>
+                          <div className="text-dark-500 text-xs capitalize">{key}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 };

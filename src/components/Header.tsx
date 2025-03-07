@@ -186,34 +186,36 @@ const Header: React.FC<HeaderProps> = ({
 
           {/* Mobile Menu Button */}
           <motion.button 
-            className="md:hidden text-dark-400 w-10 h-10 flex flex-col justify-center items-center gap-1.5 relative z-50"
+            className="md:hidden text-dark-400 w-10 h-10 flex flex-col justify-center items-center relative z-50"
             onClick={() => setMenuOpen(!menuOpen)}
             whileTap={{ scale: 0.9 }}
           >
-            <motion.span 
-              className="w-5 h-px bg-dark-300 block"
-              animate={{ 
-                rotate: menuOpen ? 45 : 0,
-                y: menuOpen ? 1 : 0
-              }}
-              transition={{ duration: 0.2 }}
-            />
-            <motion.span 
-              className="w-5 h-px bg-dark-300 block"
-              animate={{ 
-                opacity: menuOpen ? 0 : 1,
-                x: menuOpen ? -10 : 0
-              }}
-              transition={{ duration: 0.2 }}
-            />
-            <motion.span 
-              className="w-5 h-px bg-dark-300 block"
-              animate={{ 
-                rotate: menuOpen ? -45 : 0,
-                y: menuOpen ? -1 : 0
-              }}
-              transition={{ duration: 0.2 }}
-            />
+            <div className="relative w-7 h-7 flex items-center justify-center">
+              <motion.span 
+                className="absolute w-6 h-[1.5px] bg-dark-300 block"
+                animate={{ 
+                  rotate: menuOpen ? 45 : 0,
+                  y: menuOpen ? 0 : -5
+                }}
+                transition={{ duration: 0.2 }}
+              />
+              <motion.span 
+                className="absolute w-6 h-[1.5px] bg-dark-300 block"
+                animate={{ 
+                  opacity: menuOpen ? 0 : 1,
+                  x: menuOpen ? -10 : 0
+                }}
+                transition={{ duration: 0.2 }}
+              />
+              <motion.span 
+                className="absolute w-6 h-[1.5px] bg-dark-300 block"
+                animate={{ 
+                  rotate: menuOpen ? -45 : 0,
+                  y: menuOpen ? 0 : 5
+                }}
+                transition={{ duration: 0.2 }}
+              />
+            </div>
           </motion.button>
         </div>
       </motion.div>
@@ -228,45 +230,103 @@ const Header: React.FC<HeaderProps> = ({
             exit={{ opacity: 0, clipPath: "circle(0% at top right)" }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              {/* Decorative elements that match the site's aesthetic */}
+              <div className="absolute top-1/4 -right-32 w-64 h-64 bg-gradient-to-br from-primary-500/5 to-accent-500/5 rounded-full blur-3xl"></div>
+              <div className="absolute bottom-1/4 -left-32 w-64 h-64 bg-gradient-to-tr from-accent-500/5 to-primary-500/5 rounded-full blur-3xl"></div>
+              
+              {/* Subtle grid pattern */}
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9Im5vbmUiIGQ9Ik0wIDBoMTAwdjEwMEgweiIvPjxwYXRoIGQ9Ik0xMDAgMEgwdjEwMGgxMDBWMHoiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIuNSIvPjwvZz48L3N2Zz4=')] opacity-5"></div>
+            </div>
+            
             <nav className="flex flex-col items-center space-y-8">
               {navItems.map((item, index) => (
-                <motion.button
+                <motion.div
                   key={item.id}
-                  onClick={() => {
-                    setActivePage(item.id);
-                    setMenuOpen(false);
-                  }}
-                  className={`text-3xl font-light tracking-wider transition-colors duration-300 ${
-                    activePage === item.id
-                      ? 'text-dark-100'
-                      : 'text-dark-400'
-                  }`}
+                  className="relative"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
-                  {item.label}
-                </motion.button>
+                  <motion.button
+                    onClick={() => {
+                      setActivePage(item.id);
+                      setMenuOpen(false);
+                    }}
+                    className={`text-2xl font-light tracking-wider transition-colors duration-300 ${
+                      activePage === item.id
+                        ? 'text-primary-400'
+                        : 'text-dark-300'
+                    }`}
+                    whileHover={{ 
+                      color: '#fff',
+                      x: 5,
+                      transition: { duration: 0.2 }
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {item.label}
+                  </motion.button>
+                  
+                  {/* Underline effect similar to desktop nav */}
+                  <motion.div 
+                    className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 transition-all duration-300 ease-in-out"
+                    style={{ 
+                      width: activePage === item.id ? '100%' : '0%'
+                    }}
+                    animate={{
+                      width: activePage === item.id ? '100%' : '0%'
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: "easeInOut"
+                    }}
+                  />
+                </motion.div>
               ))}
             </nav>
             
+            {/* Social links in mobile menu */}
             <motion.div 
-              className="absolute bottom-12 left-0 right-0 flex justify-center items-center space-x-6"
+              className="absolute bottom-16 left-0 right-0 flex justify-center gap-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, delay: 0.4 }}
             >
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-dark-400 hover:text-dark-200 transition-colors">
-                GitHub
+              <a 
+                href="https://www.instagram.com/yaro_shev/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full border border-dark-700 flex items-center justify-center text-dark-400 hover:text-primary-400 hover:border-primary-400 transition-all duration-300"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-dark-400 hover:text-dark-200 transition-colors">
-                LinkedIn
+              <a 
+                href="mailto:yaro.shev.3@gmail.com" 
+                className="w-10 h-10 rounded-full border border-dark-700 flex items-center justify-center text-dark-400 hover:text-primary-400 hover:border-primary-400 transition-all duration-300"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-dark-400 hover:text-dark-200 transition-colors">
-                Twitter
-              </a>
+            </motion.div>
+            
+            {/* Status indicator in mobile menu */}
+            <motion.div 
+              className="absolute bottom-8 left-0 right-0 flex justify-center items-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, delay: 0.5 }}
+            >
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-primary-400 animate-pulse"></span>
+                <span className="text-xs text-dark-400">Available for work</span>
+              </div>
             </motion.div>
           </motion.div>
         )}
