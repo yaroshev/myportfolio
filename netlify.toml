@@ -2,13 +2,32 @@
   command = "npm run build"
   publish = "dist"
 
-# Handle static files directly (no redirects needed)
+# Explicitly handle static files
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/sitemap.xml"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/robots.txt"
+  to = "/robots.txt"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/manifest.json"
+  to = "/manifest.json"
+  status = 200
+  force = true
+
 [[headers]]
   for = "/sitemap.xml"
   [headers.values]
     Content-Type = "application/xml"
     X-Content-Type-Options = "nosniff"
     Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "/robots.txt"
@@ -16,6 +35,7 @@
     Content-Type = "text/plain"
     X-Content-Type-Options = "nosniff"
     Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "/manifest.json"
@@ -23,6 +43,7 @@
     Content-Type = "application/json"
     X-Content-Type-Options = "nosniff"
     Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=3600"
 
 # Default redirect for SPA - this should be last
 [[redirects]]
