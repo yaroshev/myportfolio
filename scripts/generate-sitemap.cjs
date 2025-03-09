@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Configuration
-const BASE_URL = 'https://yaroshev.com'; // Updated to your actual domain
+const BASE_URL = 'https://yaroshev.com'; // Your domain
 const PUBLIC_DIR = path.join(__dirname, '../public');
 const PAGES = [
   { path: '/', priority: '1.0', changefreq: 'weekly' },
@@ -45,6 +45,7 @@ if (!fs.existsSync(PUBLIC_DIR)) {
 
 // Write sitemap to file
 const sitemap = generateSitemap();
-fs.writeFileSync(path.join(PUBLIC_DIR, 'sitemap.xml'), sitemap);
+const sitemapPath = path.join(PUBLIC_DIR, 'sitemap.xml');
+fs.writeFileSync(sitemapPath, sitemap);
 
-console.log('Sitemap generated successfully!'); 
+console.log(`Sitemap generated successfully at ${sitemapPath}!`); 
