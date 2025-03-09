@@ -21,6 +21,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
       },
     },
+    copyPublicDir: true, // Ensure public directory is copied
   },
-  publicDir: resolve(__dirname, 'public'), // Ensure absolute path
+  publicDir: 'public', // Use relative path instead
 });
