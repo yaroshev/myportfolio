@@ -44,8 +44,9 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
       },
     },
-    // Ensure all files in public directory are included in build
+    // Ensure all files in public directory are copied to dist
     copyPublicDir: true,
   },
-  publicDir: 'public', // Specify the public directory explicitly
+  // Explicitly set the public directory
+  publicDir: 'public'
 });
