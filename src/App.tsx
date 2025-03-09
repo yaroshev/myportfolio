@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -8,9 +9,27 @@ import Resources from './pages/Resources';
 import { Helmet } from 'react-helmet-async';
 
 function App() {
-  const [activePage, setActivePage] = useState('home');
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [scrollY, setScrollY] = useState(0);
+  
+  // Get current page from URL
+  const getActivePage = () => {
+    const path = location.pathname;
+    if (path === '/work') return 'work';
+    if (path === '/about') return 'about';
+    if (path === '/resources') return 'resources';
+    return 'home';
+  };
+  
+  const activePage = getActivePage();
+  
+  // Function to handle page navigation
+  const setActivePage = (page: string) => {
+    const path = page === 'home' ? '/' : `/${page}`;
+    navigate(path);
+  };
   
   // Handle scroll
   useEffect(() => {
@@ -30,6 +49,11 @@ function App() {
       clearTimeout(timer);
     };
   }, []);
+  
+  // Scroll to top on page change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   
   // Get page-specific SEO data
   const getPageSeoData = () => {
@@ -64,22 +88,6 @@ function App() {
           description: 'Portfolio of Yaroslav Shevchenko - Digital Creator & Web Designer specializing in modern web experiences, UI/UX design, and creative digital solutions.',
           canonicalUrl: 'https://yaroshev.com/'
         };
-    }
-  };
-  
-  // Render the active page
-  const renderPage = () => {
-    switch (activePage) {
-      case 'home':
-        return <Home setActivePage={setActivePage} />;
-      case 'work':
-        return <Work setActivePage={setActivePage} />;
-      case 'about':
-        return <About />;
-      case 'resources':
-        return <Resources />;
-      default:
-        return <Home setActivePage={setActivePage} />;
     }
   };
 
@@ -146,7 +154,12 @@ function App() {
         />
         
         <main className="flex-grow relative z-10" role="main" aria-label={`${activePage} page content`}>
-          {renderPage()}
+          <Routes>
+            <Route path="/" element={<Home setActivePage={setActivePage} />} />
+            <Route path="/work" element={<Work setActivePage={setActivePage} />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/resources" element={<Resources />} />
+          </Routes>
         </main>
         
         <Footer setActivePage={setActivePage} />

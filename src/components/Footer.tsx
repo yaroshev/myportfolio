@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 interface FooterProps {
@@ -50,10 +51,10 @@ const Footer: React.FC<FooterProps> = ({ setActivePage }) => {
   ];
   
   const navigationLinks = [
-    { id: 'home', label: 'Home' },
-    { id: 'work', label: 'Work' },
-    { id: 'about', label: 'About' },
-    { id: 'resources', label: 'Resources' }
+    { id: 'home', label: 'Home', path: '/' },
+    { id: 'work', label: 'Work', path: '/work' },
+    { id: 'about', label: 'About', path: '/about' },
+    { id: 'resources', label: 'Resources', path: '/resources' }
   ];
 
   const handleNavClick = (pageId: string) => {
@@ -163,17 +164,21 @@ const Footer: React.FC<FooterProps> = ({ setActivePage }) => {
               }}
             >
               {navigationLinks.map((item, index) => (
-                <motion.div 
-                  key={index}
-                  className="text-dark-400 hover:text-primary-400 transition-colors duration-300 flex items-center cursor-pointer"
-                  whileHover={{ x: 5 }}
+                <Link 
+                  key={index} 
+                  to={item.path}
                   onClick={() => handleNavClick(item.id)}
                 >
-                  <span className="text-primary-500 mr-2 text-xs">→</span>
-                  <span className="hover:text-primary-400 transition-colors duration-300">
-                    {item.label}
-                  </span>
-                </motion.div>
+                  <motion.div 
+                    className="text-dark-400 hover:text-primary-400 transition-colors duration-300 flex items-center cursor-pointer"
+                    whileHover={{ x: 5 }}
+                  >
+                    <span className="text-primary-500 mr-2 text-xs">→</span>
+                    <span className="hover:text-primary-400 transition-colors duration-300">
+                      {item.label}
+                    </span>
+                  </motion.div>
+                </Link>
               ))}
             </motion.div>
           </div>
