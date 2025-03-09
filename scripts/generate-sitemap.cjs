@@ -18,57 +18,52 @@ const getCurrentDate = () => {
   return date.toISOString().split('T')[0];
 };
 
-// Generate sitemap XML content
+// Generate sitemap content
 const generateSitemap = () => {
-  const today = getCurrentDate();
-  
-  let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n';
-  sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-  
-  PAGES.forEach(page => {
-    sitemap += '  <url>\n';
-    sitemap += `    <loc>${BASE_URL}${page.path}</loc>\n`;
-    sitemap += `    <lastmod>${today}</lastmod>\n`;
-    sitemap += `    <changefreq>${page.changefreq}</changefreq>\n`;
-    sitemap += `    <priority>${page.priority}</priority>\n`;
-    sitemap += '  </url>\n';
-  });
-  
-  sitemap += '</urlset>';
-  
-  return sitemap;
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${PAGES.map(page => `  <url>
+    <loc>${BASE_URL}${page.path}</loc>
+    <lastmod>${getCurrentDate()}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`;
+
+  // Ensure directories exist
+  if (!fs.existsSync(PUBLIC_DIR)) {
+    fs.mkdirSync(PUBLIC_DIR, { recursive: true });
+  }
+  if (!fs.existsSync(DIST_DIR)) {
+    fs.mkdirSync(DIST_DIR, { recursive: true });
+  }
+
+  // Write to public directory
+  const publicPath = path.join(PUBLIC_DIR, 'sitemap.xml');
+  fs.writeFileSync(publicPath, sitemap);
+  fs.chmodSync(publicPath, 0o644); // Set read permissions
+  console.log(`Sitemap generated in public directory: ${publicPath}`);
+
+  // Copy to dist directory if it exists
+  const distPath = path.join(DIST_DIR, 'sitemap.xml');
+  if (fs.existsSync(DIST_DIR)) {
+    fs.copyFileSync(publicPath, distPath);
+    fs.chmodSync(distPath, 0o644); // Set read permissions
+    console.log(`Sitemap copied to dist directory: ${distPath}`);
+  }
+
+  // Verify file access
+  try {
+    fs.accessSync(publicPath, fs.constants.R_OK);
+    console.log(`Verified read access for: ${publicPath}`);
+    if (fs.existsSync(distPath)) {
+      fs.accessSync(distPath, fs.constants.R_OK);
+      console.log(`Verified read access for: ${distPath}`);
+    }
+  } catch (err) {
+    console.error('Error verifying file access:', err);
+  }
 };
 
-// Ensure directories exist
-[PUBLIC_DIR, DIST_DIR].forEach(dir => {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-});
-
-// Write sitemap to files
-const sitemap = generateSitemap();
-
-// Write to public directory
-const publicSitemapPath = path.join(PUBLIC_DIR, 'sitemap.xml');
-fs.writeFileSync(publicSitemapPath, sitemap, { mode: 0o644 });
-console.log(`Sitemap generated in public directory: ${publicSitemapPath}`);
-
-// Write to dist directory if it exists
-const distSitemapPath = path.join(DIST_DIR, 'sitemap.xml');
-if (fs.existsSync(DIST_DIR)) {
-  fs.writeFileSync(distSitemapPath, sitemap, { mode: 0o644 });
-  console.log(`Sitemap copied to dist directory: ${distSitemapPath}`);
-}
-
-// Verify files are readable
-[publicSitemapPath, distSitemapPath].forEach(file => {
-  if (fs.existsSync(file)) {
-    try {
-      fs.accessSync(file, fs.constants.R_OK);
-      console.log(`Verified read access for: ${file}`);
-    } catch (err) {
-      console.error(`Warning: Cannot read ${file}:`, err);
-    }
-  }
-}); 
+// Generate the sitemap
+generateSitemap(); 
