@@ -8,7 +8,7 @@
     "generate-sitemap": "node scripts/generate-sitemap.cjs",
     "prebuild": "npm run generate-sitemap",
     "build": "rm -rf dist && tsc && vite build",
-    "postbuild": "cp public/sitemap.xml dist/ && cp public/robots.txt dist/ && cp public/_headers dist/",
+    "postbuild": "cp public/_redirects dist/ && cp public/_headers dist/ && cp public/sitemap.xml dist/ && cp public/robots.txt dist/",
     "lint": "eslint .",
     "preview": "vite preview"
   },

@@ -23,5 +23,5 @@ export default defineConfig({
     },
     copyPublicDir: true, // Ensure public directory is copied
   },
-  publicDir: 'public', // Use relative path instead
+  publicDir: 'public', // Use relative path
 });
