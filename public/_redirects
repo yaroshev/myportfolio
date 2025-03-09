@@ -1,6 +1,11 @@
-# Redirect all routes to index.html for client-side routing
-/* /index.html 200
+# Explicitly handle static files first
+/sitemap.xml /sitemap.xml 200!
+/robots.txt /robots.txt 200!
 
-# Explicitly handle static files
-/sitemap.xml /sitemap.xml 200
-/robots.txt /robots.txt 200 
+# Handle HTML pages
+/work /work.html 200
+/about /about.html 200
+/resources /resources.html 200
+
+# Default SPA fallback for other routes
+/* /index.html 200 

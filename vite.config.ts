@@ -19,6 +19,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
+        work: resolve(__dirname, 'work.html'),
+        about: resolve(__dirname, 'about.html'),
+        resources: resolve(__dirname, 'resources.html'),
       },
     },
     copyPublicDir: true, // Ensure public directory is copied

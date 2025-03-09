@@ -60,8 +60,6 @@ const Footer: React.FC<FooterProps> = ({ setActivePage }) => {
   const handleNavClick = (pageId: string) => {
     if (setActivePage) {
       setActivePage(pageId);
-      // Scroll to top when navigating
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -164,10 +162,10 @@ const Footer: React.FC<FooterProps> = ({ setActivePage }) => {
               }}
             >
               {navigationLinks.map((item, index) => (
-                <Link 
+                <a 
                   key={index} 
-                  to={item.path}
-                  onClick={() => handleNavClick(item.id)}
+                  href={item.path}
+                  onClick={(e) => { e.preventDefault(); handleNavClick(item.id); }}
                 >
                   <motion.div 
                     className="text-dark-400 hover:text-primary-400 transition-colors duration-300 flex items-center cursor-pointer"
@@ -178,7 +176,7 @@ const Footer: React.FC<FooterProps> = ({ setActivePage }) => {
                       {item.label}
                     </span>
                   </motion.div>
-                </Link>
+                </a>
               ))}
             </motion.div>
           </div>

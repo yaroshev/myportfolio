@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface HeaderProps {
@@ -135,10 +134,9 @@ const Header: React.FC<HeaderProps> = ({
         />
 
         <div className="relative flex justify-between items-center px-6 md:px-8">
-          <Link to="/">
+          <a href="/" onClick={(e) => { e.preventDefault(); handleNavClick('home'); }}>
             <motion.div 
               className="font-display text-xl tracking-wider cursor-pointer transition-opacity duration-300 hover:opacity-70 flex items-center" 
-              onClick={() => handleNavClick('home')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -157,15 +155,15 @@ const Header: React.FC<HeaderProps> = ({
                 <span>{formattedTime}</span>
               </div>
             </motion.div>
-          </Link>
+          </a>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-12">
             {navItems.map(item => (
-              <Link 
+              <a 
                 key={item.id} 
-                to={item.path}
-                onClick={() => handleNavClick(item.id)}
+                href={item.path}
+                onClick={(e) => { e.preventDefault(); handleNavClick(item.id); }}
               >
                 <motion.div
                   className={`relative text-sm tracking-wider uppercase transition-colors duration-300 ${
@@ -189,7 +187,7 @@ const Header: React.FC<HeaderProps> = ({
                     }}
                   />
                 </motion.div>
-              </Link>
+              </a>
             ))}
           </nav>
 
@@ -246,7 +244,7 @@ const Header: React.FC<HeaderProps> = ({
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              {/* Decorative elements that match the site's aesthetic */}
+              {/* Decorative elements */}
               <div className="absolute top-1/4 -right-32 w-64 h-64 bg-gradient-to-br from-primary-500/5 to-accent-500/5 rounded-full blur-3xl"></div>
               <div className="absolute bottom-1/4 -left-32 w-64 h-64 bg-gradient-to-tr from-accent-500/5 to-primary-500/5 rounded-full blur-3xl"></div>
               
@@ -256,10 +254,10 @@ const Header: React.FC<HeaderProps> = ({
             
             <nav className="flex flex-col items-center space-y-8">
               {navItems.map((item, index) => (
-                <Link 
+                <a 
                   key={item.id} 
-                  to={item.path}
-                  onClick={() => handleNavClick(item.id)}
+                  href={item.path}
+                  onClick={(e) => { e.preventDefault(); handleNavClick(item.id); }}
                 >
                   <motion.div
                     className="relative"
@@ -280,7 +278,7 @@ const Header: React.FC<HeaderProps> = ({
                       />
                     )}
                   </motion.div>
-                </Link>
+                </a>
               ))}
             </nav>
           </motion.div>

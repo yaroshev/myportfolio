@@ -2,12 +2,12 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Home from './pages/Home';
+import Work from './pages/Work';
 import './index.css';
 
-// Create a simplified page component for Home
-const HomePage = () => {
-  const activePage = 'home';
+// Create a simplified page component
+const WorkPage = () => {
+  const activePage = 'work';
   
   return (
     <div className="min-h-screen bg-dark-950 text-dark-100 flex flex-col relative overflow-hidden">
@@ -30,8 +30,8 @@ const HomePage = () => {
         scrollY={0} 
       />
       
-      <main className="flex-grow relative z-10" role="main" aria-label="home page content">
-        <Home setActivePage={(page) => {
+      <main className="flex-grow relative z-10" role="main" aria-label="work page content">
+        <Work setActivePage={(page) => {
           if (page === 'home') window.location.href = '/';
           else window.location.href = `/${page}`;
         }} />
@@ -47,6 +47,6 @@ const HomePage = () => {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <HomePage />
+    <WorkPage />
   </StrictMode>
-);
+); 
