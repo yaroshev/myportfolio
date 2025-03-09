@@ -4,6 +4,7 @@ const path = require('path');
 // Configuration
 const BASE_URL = 'https://yaroshev.com'; // Your domain
 const PUBLIC_DIR = path.join(__dirname, '../public');
+const DIST_DIR = path.join(__dirname, '../dist');
 const PAGES = [
   { path: '/', priority: '1.0', changefreq: 'weekly' },
   { path: '/work', priority: '0.8', changefreq: 'monthly' },
@@ -38,14 +39,36 @@ const generateSitemap = () => {
   return sitemap;
 };
 
-// Ensure public directory exists
-if (!fs.existsSync(PUBLIC_DIR)) {
-  fs.mkdirSync(PUBLIC_DIR, { recursive: true });
+// Ensure directories exist
+[PUBLIC_DIR, DIST_DIR].forEach(dir => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+});
+
+// Write sitemap to files
+const sitemap = generateSitemap();
+
+// Write to public directory
+const publicSitemapPath = path.join(PUBLIC_DIR, 'sitemap.xml');
+fs.writeFileSync(publicSitemapPath, sitemap, { mode: 0o644 });
+console.log(`Sitemap generated in public directory: ${publicSitemapPath}`);
+
+// Write to dist directory if it exists
+const distSitemapPath = path.join(DIST_DIR, 'sitemap.xml');
+if (fs.existsSync(DIST_DIR)) {
+  fs.writeFileSync(distSitemapPath, sitemap, { mode: 0o644 });
+  console.log(`Sitemap copied to dist directory: ${distSitemapPath}`);
 }
 
-// Write sitemap to file
-const sitemap = generateSitemap();
-const sitemapPath = path.join(PUBLIC_DIR, 'sitemap.xml');
-fs.writeFileSync(sitemapPath, sitemap);
-
-console.log(`Sitemap generated successfully at ${sitemapPath}!`); 
+// Verify files are readable
+[publicSitemapPath, distSitemapPath].forEach(file => {
+  if (fs.existsSync(file)) {
+    try {
+      fs.accessSync(file, fs.constants.R_OK);
+      console.log(`Verified read access for: ${file}`);
+    } catch (err) {
+      console.error(`Warning: Cannot read ${file}:`, err);
+    }
+  }
+}); 
