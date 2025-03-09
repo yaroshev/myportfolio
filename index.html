@@ -7,13 +7,36 @@
     <meta name="theme-color" content="#0F1225" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Yaroslav Shevchenko | Digital Creator & Web Designer</title>
-    <meta name="description" content="Portfolio of Yaroslav Shevchenko - Digital Creator & Web Designer with a vision for the future of digital experiences">
-    <meta name="keywords" content="web design, digital creator, portfolio, UI/UX, frontend developer">
+    <meta name="description" content="Portfolio of Yaroslav Shevchenko - Digital Creator & Web Designer specializing in modern web experiences, UI/UX design, and creative digital solutions.">
+    <meta name="keywords" content="web design, digital creator, portfolio, UI/UX, frontend developer, Yaroslav Shevchenko, web designer, creative developer">
     <meta name="author" content="Yaroslav Shevchenko">
-    <meta property="og:title" content="Yaroslav Shevchenko | Digital Creator & Web Designer">
-    <meta property="og:description" content="Portfolio of Yaroslav Shevchenko - Digital Creator & Web Designer with a vision for the future of digital experiences">
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="YS Portfolio">
+    <link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://yaroshev.com" />
+    
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yaroshev.com/">
+    <meta property="og:title" content="Yaroslav Shevchenko | Digital Creator & Web Designer">
+    <meta property="og:description" content="Portfolio of Yaroslav Shevchenko - Digital Creator & Web Designer specializing in modern web experiences, UI/UX design, and creative digital solutions.">
+    <meta property="og:image" content="https://yaroshev.com/og-image.jpg">
+    <meta property="og:image:alt" content="Yaroslav Shevchenko Portfolio Preview">
+    <meta property="og:site_name" content="Yaroslav Shevchenko Portfolio">
+    
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://yaroshev.com/">
+    <meta name="twitter:title" content="Yaroslav Shevchenko | Digital Creator & Web Designer">
+    <meta name="twitter:description" content="Portfolio of Yaroslav Shevchenko - Digital Creator & Web Designer specializing in modern web experiences, UI/UX design, and creative digital solutions.">
+    <meta name="twitter:image" content="https://yaroshev.com/twitter-image.jpg">
+    <meta name="twitter:image:alt" content="Yaroslav Shevchenko Portfolio Preview">
     
     <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,6 +50,32 @@
     <!-- Preload critical assets -->
     <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" crossorigin>
     <link rel="preload" as="font" href="https://fonts.gstatic.com/s/manrope/v14/xn7gYHE41ni1AdIRggexSg.woff2" crossorigin>
+    
+    <!-- Structured Data for Person -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Yaroslav Shevchenko",
+        "url": "https://yaroshev.com",
+        "jobTitle": "Digital Creator & Web Designer",
+        "sameAs": [
+          "https://www.instagram.com/yaro_shev/",
+          "https://yaroshev.com"
+        ]
+      }
+    </script>
+    
+    <!-- Structured Data for WebSite -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Yaroslav Shevchenko Portfolio",
+        "url": "https://yaroshev.com",
+        "description": "Portfolio of Yaroslav Shevchenko - Digital Creator & Web Designer specializing in modern web experiences, UI/UX design, and creative digital solutions."
+      }
+    </script>
     
     <style>
       body {
@@ -56,5 +105,21 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Google tag manager or analytics code can go here -->
+    <script>
+      // Check if service worker is supported
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then(registration => {
+              console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(error => {
+              console.error('Service Worker registration failed:', error);
+            });
+        });
+      }
+    </script>
   </body>
 </html>
