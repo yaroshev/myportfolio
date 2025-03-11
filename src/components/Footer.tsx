@@ -165,7 +165,6 @@ const Footer: React.FC<FooterProps> = ({ setActivePage }) => {
                 <a 
                   key={index} 
                   href={item.path}
-                  onClick={(e) => { e.preventDefault(); handleNavClick(item.id); }}
                 >
                   <motion.div 
                     className="text-dark-400 hover:text-primary-400 transition-colors duration-300 flex items-center cursor-pointer"

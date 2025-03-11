@@ -46,14 +46,6 @@ const Header: React.FC<HeaderProps> = ({
     hour12: false
   });
 
-  // Handle navigation click
-  const handleNavClick = (page: string) => {
-    setActivePage(page);
-    if (menuOpen) {
-      setMenuOpen(false);
-    }
-  };
-
   return (
     <motion.header 
       ref={headerRef}
@@ -134,7 +126,7 @@ const Header: React.FC<HeaderProps> = ({
         />
 
         <div className="relative flex justify-between items-center px-6 md:px-8">
-          <a href="/" onClick={(e) => { e.preventDefault(); handleNavClick('home'); }}>
+          <a href="/">
             <motion.div 
               className="font-display text-xl tracking-wider cursor-pointer transition-opacity duration-300 hover:opacity-70 flex items-center" 
               whileHover={{ scale: 1.05 }}
@@ -163,7 +155,6 @@ const Header: React.FC<HeaderProps> = ({
               <a 
                 key={item.id} 
                 href={item.path}
-                onClick={(e) => { e.preventDefault(); handleNavClick(item.id); }}
               >
                 <motion.div
                   className={`relative text-sm tracking-wider uppercase transition-colors duration-300 ${
@@ -257,7 +248,7 @@ const Header: React.FC<HeaderProps> = ({
                 <a 
                   key={item.id} 
                   href={item.path}
-                  onClick={(e) => { e.preventDefault(); handleNavClick(item.id); }}
+                  onClick={() => setMenuOpen(false)}
                 >
                   <motion.div
                     className="relative"
