@@ -76,9 +76,8 @@ const StatsSection: React.FC<StatsSectionProps> = ({
                 {stat.label}
               </div>
               
-              {/* More visible clickable indicator */}
+              {/* Arrow indicator */}
               <div className="absolute bottom-2 right-2 md:bottom-3 md:right-3 flex items-center opacity-70 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
-                <span className="text-xs text-primary-400 mr-1 hidden md:inline">View</span>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 md:h-4 md:w-4 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
