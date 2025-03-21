@@ -44,6 +44,7 @@ const testimonials: TestimonialProps[] = [
 const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChange }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [selectedTestimonial, setSelectedTestimonial] = useState<TestimonialProps | null>(null);
+  const [selectedTestimonialIndex, setSelectedTestimonialIndex] = useState<number>(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -110,8 +111,21 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
   }, [isMobile, testimonials.length]);
 
   const openLightbox = (testimonial: TestimonialProps) => {
+    const index = testimonials.findIndex(t => t.company === testimonial.company);
+    setSelectedTestimonialIndex(index);
     setSelectedTestimonial(testimonial);
     document.body.style.overflow = 'hidden';
+  };
+
+  const navigateTestimonial = (direction: 'prev' | 'next') => {
+    const newIndex = direction === 'next' 
+      ? (selectedTestimonialIndex + 1) % testimonials.length
+      : selectedTestimonialIndex - 1 < 0 
+        ? testimonials.length - 1 
+        : selectedTestimonialIndex - 1;
+    
+    setSelectedTestimonialIndex(newIndex);
+    setSelectedTestimonial(testimonials[newIndex]);
   };
 
   const closeLightbox = () => {
@@ -209,13 +223,12 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
             <div 
               key={index}
               className={`
-                relative overflow-hidden rounded-lg md:rounded-lg p-6 md:p-8
-                backdrop-blur-md bg-dark-900/10
+                relative overflow-hidden rounded-lg p-4 md:p-6 lg:p-8
+                backdrop-blur-md bg-dark-800/10 
                 border border-dark-300/30
-                transition-colors duration-300
-                group
-                ${hoveredIndex === index ? 'shadow-[0_0_25px_rgba(255,255,255,0.15)]' : 'shadow-lg'}
-                hover:border-transparent
+                transition-colors duration-300 group
+                hover:border-primary-500/30 active:border-primary-500/50
+                ${hoveredIndex === index ? 'shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'shadow-lg'}
                 cursor-pointer
                 flex-shrink-0 w-[80%] md:w-auto
                 snap-center
@@ -231,20 +244,17 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
                 setHoveredIndex(null);
                 onCursorChange('default');
               }}
+              onClick={() => openLightbox(testimonial)}
             >
-              {/* Gradient background */}
-              <div 
-                className={`absolute inset-0 bg-gradient-to-br ${testimonial.gradient} -z-10`}
-                style={{
-                  opacity: hoveredIndex === index ? 0.6 : 0,
-                  transition: 'opacity 0.6s ease-in-out'
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-20" />
+              {/* Card background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-10" />
               
-              {/* Subtle accent color based on testimonial - visible on both mobile and desktop */}
-              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${testimonial.gradient} opacity-70`} />
+              {/* Hover gradient - no animation, just transition */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
+              {/* Static border highlight instead of animation */}
+              <div className="absolute inset-0 rounded-lg border border-primary-500/10 opacity-30 md:opacity-0 md:group-hover:opacity-40 transition-opacity duration-300 -z-5" />
+
               {/* Quote icon */}
               <div className="mb-6 relative">
                 <svg className="w-10 h-10 text-primary-500/20 absolute -top-2 -left-2" fill="currentColor" viewBox="0 0 24 24">
@@ -256,7 +266,7 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
                   ))}
                 </div>
               </div>
-              
+
               {/* Testimonial content */}
               <div className="relative flex flex-col flex-grow">
                 <p className="text-dark-200 mb-8 italic leading-relaxed line-clamp-4">
@@ -264,17 +274,37 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
                 </p>
                 
                 <div className="mt-auto">
-                  <button 
-                    onClick={() => openLightbox(testimonial)}
-                    className="mb-6 px-4 py-2 bg-gradient-to-r from-primary-500/10 to-accent-500/10 hover:from-primary-500/15 hover:to-accent-500/15 border border-primary-500/20 rounded-md text-primary-300 text-sm transition-all duration-300 flex items-center"
-                    onMouseEnter={() => onCursorChange('button')}
-                    onMouseLeave={() => onCursorChange('default')}
+                  <div 
+                    className="
+                      mb-6 px-4 py-2.5
+                      bg-gradient-to-r from-primary-500/20 to-accent-500/20 
+                      group/btn relative overflow-hidden
+                      border border-primary-500/30 rounded-md 
+                      text-primary-100 text-sm 
+                      transition-all duration-300 
+                      flex items-center w-fit
+                      hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]
+                    "
                   >
-                    <span>Keep Reading</span>
-                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    {/* Animated gradient overlay */}
+                    <div className="
+                      absolute inset-0 
+                      bg-gradient-to-r from-primary-500/0 via-primary-500/20 to-accent-500/0
+                      translate-x-[-200%] group-hover/btn:translate-x-[200%]
+                      transition-transform duration-1000 ease-in-out
+                    "/>
+                    
+                    <span className="relative z-10 font-light">Keep Reading</span>
+                    <svg 
+                      className="w-4 h-4 ml-2 relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24" 
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
-                  </button>
+                  </div>
                   
                   {/* Company and person info */}
                   <div className="flex items-center pt-4 border-t border-dark-300/20">
@@ -312,8 +342,38 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
             transition={{ duration: 0.3 }}
             onClick={closeLightbox}
           >
+            {/* Previous Arrow */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigateTestimonial('prev');
+              }}
+              className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 p-2 text-dark-400 hover:text-primary-300 transition-all duration-300 hover:scale-110 group"
+              aria-label="Previous testimonial"
+            >
+              <div className="absolute inset-0 bg-dark-900/50 backdrop-blur-sm rounded-full scale-0 group-hover:scale-100 transition-transform duration-300" />
+              <svg className="w-8 h-8 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            {/* Next Arrow */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigateTestimonial('next');
+              }}
+              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 p-2 text-dark-400 hover:text-primary-300 transition-all duration-300 hover:scale-110 group"
+              aria-label="Next testimonial"
+            >
+              <div className="absolute inset-0 bg-dark-900/50 backdrop-blur-sm rounded-full scale-0 group-hover:scale-100 transition-transform duration-300" />
+              <svg className="w-8 h-8 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
             <motion.div 
-              className="bg-dark-900/90 border border-dark-300/30 rounded-xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+              className="bg-dark-900/90 border border-dark-300/30 rounded-xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto relative"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}

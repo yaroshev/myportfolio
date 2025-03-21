@@ -191,18 +191,13 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
             <div
               key={index} 
               className={`
-                relative overflow-hidden rounded-lg p-6 md:p-8 
+                relative overflow-hidden rounded-lg p-4 md:p-6 lg:p-8
                 backdrop-blur-md bg-dark-800/10 
                 border border-dark-300/30
-                transition-colors duration-300 group z-10
-                hover:border-transparent
-                ${hoveredIndex === index ? 'shadow-[0_0_25px_rgba(255,255,255,0.15)]' : 'shadow-lg'}
+                transition-colors duration-300 group
+                hover:border-primary-500/30 active:border-primary-500/50
+                ${hoveredIndex === index ? 'shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'shadow-lg'}
                 cursor-pointer
-                flex-shrink-0 w-[80%] md:w-auto
-                snap-center
-                mr-5 md:mr-0
-                min-h-[340px] md:min-h-0
-                flex flex-col
               `}
               onClick={handleCardClick}
               onMouseEnter={() => {
@@ -214,14 +209,15 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
                 onCursorChange('default');
               }}
             >
-              {/* Card background with improved gradient */}
+              {/* Card background */}
               <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-10" />
               
-              {/* Subtle accent color based on service */}
-              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${service.gradient} opacity-70`} />
-              
+              {/* Hover gradient - no animation, just transition */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
+              {/* Static border highlight instead of animation */}
+              <div className="absolute inset-0 rounded-lg border border-primary-500/10 opacity-30 md:opacity-0 md:group-hover:opacity-40 transition-opacity duration-300 -z-5" />
+
               <div className="flex flex-col h-full">
                 {/* Service title with improved spacing */}
                 <h3 className="text-xl font-light text-dark-100 mb-3 relative">{service.title}</h3>
@@ -243,9 +239,9 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
                 </ul>
               </div>
               
-              {/* Improved visual indicator */}
-              <div className="absolute bottom-4 right-4 opacity-60 group-hover:opacity-100 transition-opacity duration-300 bg-dark-800/50 rounded-full p-1.5 border border-dark-700/30">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {/* Arrow indicator */}
+              <div className="absolute bottom-2 right-2 md:bottom-3 md:right-3 flex items-center opacity-70 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 md:h-4 md:w-4 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               </div>

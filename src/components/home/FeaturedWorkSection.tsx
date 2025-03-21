@@ -229,8 +229,8 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
                 backdrop-blur-md bg-dark-800/10
                 border border-dark-300/30
                 transition-all duration-300 group z-10
-                hover:border-transparent
-                ${hoveredIndex === index ? 'shadow-[0_0_25px_rgba(255,255,255,0.2)]' : 'shadow-lg'}
+                hover:border-primary-500/30 active:border-primary-500/50
+                ${hoveredIndex === index ? 'shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'shadow-lg'}
                 cursor-pointer
                 snap-center
                 mr-5 md:mr-6 lg:mr-8
@@ -250,10 +250,12 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-10" />
-              <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-5`} />
               
-              {/* Subtle accent color - visible on both mobile and desktop */}
-              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${project.color} opacity-70`} />
+              {/* Hover gradient - no animation, just transition */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              
+              {/* Static border highlight instead of animation */}
+              <div className="absolute inset-0 rounded-lg border border-primary-500/10 opacity-30 md:opacity-0 md:group-hover:opacity-40 transition-opacity duration-300 -z-5" />
               
               {/* Thumbnail with play button */}
               <div 
