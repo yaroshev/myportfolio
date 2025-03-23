@@ -182,8 +182,137 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
           </span>
         </h2>
         
-        {/* Mobile scroll indicators - Only visible on mobile */}
-        <div className="flex justify-center gap-3 mb-5 md:hidden">
+        {/* Desktop container for proper centering */}
+        <div className="md:flex md:justify-center md:items-center">
+          {/* Mobile: Horizontal scroll / Desktop: Original grid layout */}
+          <div 
+            ref={scrollContainerRef}
+            className={`
+              md:grid md:grid-cols-3 md:gap-8
+              flex overflow-x-auto snap-x snap-mandatory scrollbar-hide
+              -mx-6 px-6 md:mx-0 md:px-0 md:overflow-visible
+              pb-6 md:pb-0
+            `}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleDragEnd}
+            onMouseLeave={handleDragEnd}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleDragEnd}
+            style={{
+              scrollBehavior: 'smooth',
+              WebkitOverflowScrolling: 'touch',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none'
+            }}
+          >
+            {testimonials.map((testimonial, index) => (
+              <div 
+                key={index}
+                className={`
+                  relative overflow-hidden rounded-lg p-4 md:p-6 lg:p-8
+                  backdrop-blur-md bg-dark-800/10 
+                  border border-dark-300/30
+                  transition-colors duration-300 group
+                  hover:border-primary-500/30 active:border-primary-500/50
+                  ${hoveredIndex === index ? 'shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'shadow-lg'}
+                  cursor-pointer
+                  flex-shrink-0 w-[80%] md:w-auto
+                  snap-center
+                  mr-5 md:mr-0
+                  min-h-[340px] md:min-h-0
+                  flex flex-col
+                `}
+                onMouseEnter={() => {
+                  setHoveredIndex(index);
+                  onCursorChange('button');
+                }}
+                onMouseLeave={() => {
+                  setHoveredIndex(null);
+                  onCursorChange('default');
+                }}
+                onClick={() => openLightbox(testimonial)}
+              >
+                {/* Card background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-10" />
+                
+                {/* Hover gradient - no animation, just transition */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
+                {/* Static border highlight instead of animation */}
+                <div className="absolute inset-0 rounded-lg border border-primary-500/10 opacity-30 md:opacity-0 md:group-hover:opacity-40 transition-opacity duration-300 -z-5" />
+
+                {/* Quote icon */}
+                <div className="mb-6 relative">
+                  <svg className="w-10 h-10 text-primary-500/20 absolute -top-2 -left-2" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                  <div className="flex space-x-1 ml-6">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className="text-primary-300">★</span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Testimonial content */}
+                <div className="relative flex flex-col flex-grow">
+                  <p className="text-dark-200 mb-8 italic leading-relaxed line-clamp-4">
+                    {testimonial.quote[0]}
+                  </p>
+                  
+                  <div className="mt-auto">
+                    <div 
+                      className="
+                        mb-6 px-4 py-2.5
+                        bg-gradient-to-r from-primary-500/20 to-accent-500/20 
+                        group/btn relative overflow-hidden
+                        border border-primary-500/30 rounded-md 
+                        text-primary-100 text-sm 
+                        transition-all duration-300 
+                        flex items-center w-fit
+                        hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]
+                      "
+                    >
+                      {/* Animated gradient overlay */}
+                      <div className="
+                        absolute inset-0 
+                        bg-gradient-to-r from-primary-500/0 via-primary-500/20 to-accent-500/0
+                        translate-x-[-200%] group-hover/btn:translate-x-[200%]
+                        transition-transform duration-1000 ease-in-out
+                      "/>
+                      
+                      <span className="relative z-10 font-light">Keep Reading</span>
+                      <svg 
+                        className="w-4 h-4 ml-2 relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24" 
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </div>
+                    
+                    {/* Company and person info */}
+                    <div className="flex items-center pt-4 border-t border-dark-300/20">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500/30 to-accent-500/30 flex items-center justify-center text-lg font-light text-white mr-4">
+                        {testimonial.name.charAt(0)}
+                      </div>
+                      <div>
+                        <div className="text-primary-200 font-light">{testimonial.company}</div>
+                        <div className="text-dark-400 text-sm">{testimonial.name} - {testimonial.role}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Mobile scroll indicators moved to bottom - Only visible on mobile */}
+        <div className="flex justify-center gap-3 mt-2 md:hidden">
           {testimonials.map((_, index) => (
             <div 
               key={index}
@@ -194,140 +323,6 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
               }`}
             />
           ))}
-        </div>
-        
-        {/* Mobile: Horizontal scroll container / Desktop: Grid layout */}
-        <div 
-          ref={scrollContainerRef}
-          className={`
-            md:grid md:grid-cols-3 md:gap-8
-            flex overflow-x-auto snap-x snap-mandatory scrollbar-hide
-            -mx-6 px-6 md:mx-0 md:px-0 md:overflow-visible
-            pb-6 md:pb-0
-          `}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleDragEnd}
-          onMouseLeave={handleDragEnd}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleDragEnd}
-          style={{
-            scrollBehavior: 'smooth',
-            WebkitOverflowScrolling: 'touch',
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none'
-          }}
-        >
-          {testimonials.map((testimonial, index) => (
-            <div 
-              key={index}
-              className={`
-                relative overflow-hidden rounded-lg p-4 md:p-6 lg:p-8
-                backdrop-blur-md bg-dark-800/10 
-                border border-dark-300/30
-                transition-colors duration-300 group
-                hover:border-primary-500/30 active:border-primary-500/50
-                ${hoveredIndex === index ? 'shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'shadow-lg'}
-                cursor-pointer
-                flex-shrink-0 w-[80%] md:w-auto
-                snap-center
-                mr-5 md:mr-0
-                min-h-[340px] md:min-h-0
-                flex flex-col
-              `}
-              onMouseEnter={() => {
-                setHoveredIndex(index);
-                onCursorChange('button');
-              }}
-              onMouseLeave={() => {
-                setHoveredIndex(null);
-                onCursorChange('default');
-              }}
-              onClick={() => openLightbox(testimonial)}
-            >
-              {/* Card background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-10" />
-              
-              {/* Hover gradient - no animation, just transition */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
-              {/* Static border highlight instead of animation */}
-              <div className="absolute inset-0 rounded-lg border border-primary-500/10 opacity-30 md:opacity-0 md:group-hover:opacity-40 transition-opacity duration-300 -z-5" />
-
-              {/* Quote icon */}
-              <div className="mb-6 relative">
-                <svg className="w-10 h-10 text-primary-500/20 absolute -top-2 -left-2" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
-                <div className="flex space-x-1 ml-6">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-primary-300">★</span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Testimonial content */}
-              <div className="relative flex flex-col flex-grow">
-                <p className="text-dark-200 mb-8 italic leading-relaxed line-clamp-4">
-                  {testimonial.quote[0]}
-                </p>
-                
-                <div className="mt-auto">
-                  <div 
-                    className="
-                      mb-6 px-4 py-2.5
-                      bg-gradient-to-r from-primary-500/20 to-accent-500/20 
-                      group/btn relative overflow-hidden
-                      border border-primary-500/30 rounded-md 
-                      text-primary-100 text-sm 
-                      transition-all duration-300 
-                      flex items-center w-fit
-                      hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]
-                    "
-                  >
-                    {/* Animated gradient overlay */}
-                    <div className="
-                      absolute inset-0 
-                      bg-gradient-to-r from-primary-500/0 via-primary-500/20 to-accent-500/0
-                      translate-x-[-200%] group-hover/btn:translate-x-[200%]
-                      transition-transform duration-1000 ease-in-out
-                    "/>
-                    
-                    <span className="relative z-10 font-light">Keep Reading</span>
-                    <svg 
-                      className="w-4 h-4 ml-2 relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24" 
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </div>
-                  
-                  {/* Company and person info */}
-                  <div className="flex items-center pt-4 border-t border-dark-300/20">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500/30 to-accent-500/30 flex items-center justify-center text-lg font-light text-white mr-4">
-                      {testimonial.name.charAt(0)}
-                    </div>
-                    <div>
-                      <div className="text-primary-200 font-light">{testimonial.company}</div>
-                      <div className="text-dark-400 text-sm">{testimonial.name} - {testimonial.role}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        
-        {/* Mobile scroll hint - Only visible on mobile */}
-        <div className="flex items-center justify-center gap-2 text-dark-500 text-xs mt-5 md:hidden">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
-          </svg>
-          <span>Swipe to explore more testimonials</span>
         </div>
       </div>
 

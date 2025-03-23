@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 
 interface PageTransitionProps {
   children: React.ReactNode;
-  pageName: string;
+  pageName?: string;
 }
 
-const PageTransition: React.FC<PageTransitionProps> = ({ children, pageName }) => {
+const PageTransition: React.FC<PageTransitionProps> = ({ children, pageName = 'page' }) => {
   // Scroll to top on page change
   useEffect(() => {
     window.scrollTo(0, 0);

@@ -3,15 +3,18 @@ import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import Work from './pages/Work';
-import About from './pages/About';
+import Work from './pages/work';
+import About from './pages/about';
 import Resources from './pages/Resources';
 import { Helmet } from 'react-helmet-async';
 
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() => {
+    // Check if this is the first load of the session
+    return !localStorage.getItem('hasVisited');
+  });
   const [scrollY, setScrollY] = useState(0);
   
   // Get current page from URL
@@ -31,24 +34,25 @@ function App() {
     navigate(path);
   };
   
-  // Handle scroll
+  // Handle initial load and scroll
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
     
-    // Simulate loading
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    // Only show loading animation on first visit
+    if (isLoading) {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+        localStorage.setItem('hasVisited', 'true');
+      }, 3000);
+      
+      return () => clearTimeout(timer);
+    }
     
     window.addEventListener('scroll', handleScroll);
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      clearTimeout(timer);
-    };
-  }, []);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isLoading]);
   
   // Scroll to top on page change
   useEffect(() => {

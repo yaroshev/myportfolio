@@ -2,10 +2,10 @@
 /sitemap.xml /sitemap.xml 200!
 /robots.txt /robots.txt 200!
 
+# SPA fallback - send all routes to index.html
+/* /index.html 200
+
 # Handle HTML pages
 /work /work.html 200
 /about /about.html 200
-/resources /resources.html 200
-
-# Default SPA fallback for other routes
-/* /index.html 200 
+/resources /resources.html 200 

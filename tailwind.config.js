@@ -95,6 +95,11 @@ export default {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
+      boxShadow: {
+        'glow-primary': '0 0 15px rgba(14, 165, 233, 0.5)',
+        'glow-accent': '0 0 15px rgba(217, 70, 239, 0.5)',
+        'glow-sm': '0 0 8px rgba(14, 165, 233, 0.3)',
+      },
     },
   },
   plugins: [],

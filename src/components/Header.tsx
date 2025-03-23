@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 interface HeaderProps {
   activePage: string;
@@ -52,11 +53,11 @@ const Header: React.FC<HeaderProps> = ({
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-      className="fixed top-0 left-0 right-0 z-50 flex justify-center px-6 md:px-12 pt-6"
+      className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 md:px-12 pt-4 md:pt-6"
     >
       <motion.div 
         className={`relative max-w-5xl w-full rounded-full transition-all duration-500 ${
-          scrolled ? 'py-3' : 'py-4'
+          scrolled ? 'py-2 md:py-3' : 'py-2.5 md:py-4'
         }`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -125,10 +126,10 @@ const Header: React.FC<HeaderProps> = ({
           }}
         />
 
-        <div className="relative flex justify-between items-center px-6 md:px-8">
-          <a href="/">
+        <div className="relative flex justify-between items-center px-4 md:px-8">
+          <Link to="/" onClick={() => setActivePage('home')}>
             <motion.div 
-              className="font-display text-xl tracking-wider cursor-pointer transition-opacity duration-300 hover:opacity-70 flex items-center" 
+              className="font-display text-lg md:text-xl tracking-wider cursor-pointer transition-opacity duration-300 hover:opacity-70 flex items-center" 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -147,22 +148,22 @@ const Header: React.FC<HeaderProps> = ({
                 <span>{formattedTime}</span>
               </div>
             </motion.div>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-12">
             {navItems.map(item => (
-              <a 
+              <Link 
                 key={item.id} 
-                href={item.path}
+                to={item.path}
+                onClick={() => setActivePage(item.id)}
+                className={`relative text-sm tracking-wider uppercase transition-colors duration-300 ${
+                  activePage === item.id
+                    ? 'text-primary-400'
+                    : 'text-dark-400 hover:text-dark-200'
+                }`}
               >
-                <motion.div
-                  className={`relative text-sm tracking-wider uppercase transition-colors duration-300 ${
-                    activePage === item.id
-                      ? 'text-primary-400'
-                      : 'text-dark-400 hover:text-dark-200'
-                  }`}
-                >
+                <motion.div>
                   {item.label}
                   <motion.div 
                     className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 transition-all duration-300 ease-in-out"
@@ -178,7 +179,7 @@ const Header: React.FC<HeaderProps> = ({
                     }}
                   />
                 </motion.div>
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -245,31 +246,21 @@ const Header: React.FC<HeaderProps> = ({
             
             <nav className="flex flex-col items-center space-y-8">
               {navItems.map((item, index) => (
-                <a 
+                <Link 
                   key={item.id} 
-                  href={item.path}
-                  onClick={() => setMenuOpen(false)}
+                  to={item.path}
+                  onClick={() => {
+                    setActivePage(item.id);
+                    setMenuOpen(false);
+                  }}
+                  className={`text-2xl font-light tracking-wider ${
+                    activePage === item.id 
+                      ? 'text-primary-400' 
+                      : 'text-dark-300 hover:text-dark-100'
+                  }`}
                 >
-                  <motion.div
-                    className="relative"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                  >
-                    <div className={`text-2xl font-light tracking-wider ${
-                      activePage === item.id ? 'text-white' : 'text-dark-300'
-                    }`}>
-                      {item.label}
-                    </div>
-                    {activePage === item.id && (
-                      <motion.div 
-                        className="absolute -bottom-2 left-0 right-0 h-px bg-gradient-to-r from-primary-400 to-accent-400"
-                        layoutId="activeNavIndicatorMobile"
-                      />
-                    )}
-                  </motion.div>
-                </a>
+                  {item.label}
+                </Link>
               ))}
             </nav>
           </motion.div>

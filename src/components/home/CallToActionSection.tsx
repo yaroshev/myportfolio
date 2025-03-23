@@ -225,6 +225,7 @@ const CallToActionSection: React.FC<CallToActionSectionProps> = ({ onCursorChang
             />
             
             <motion.div 
+              id="contactForm"
               className="relative bg-dark-900/80 backdrop-blur-xl rounded-2xl border border-dark-800/50 p-8 overflow-hidden"
               whileHover={{ 
                 boxShadow: "0 0 30px rgba(56, 189, 248, 0.15)",

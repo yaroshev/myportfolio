@@ -60,7 +60,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
     
     // Calculate scroll position to center the middle card
     const containerWidth = scrollContainerRef.current.clientWidth;
-    const cardWidth = containerWidth * 0.80; // 80% of container width
+    const cardWidth = containerWidth * 0.75; // 75% of container width
     const scrollPosition = middleIndex * cardWidth;
     
     // Add a small delay to ensure the DOM is fully rendered
@@ -80,7 +80,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
       
       const containerWidth = scrollContainerRef.current.clientWidth;
       const scrollPosition = scrollContainerRef.current.scrollLeft;
-      const cardWidth = containerWidth * 0.80; // 80% of container width
+      const cardWidth = containerWidth * 0.75; // 75% of container width
       
       const newActiveIndex = Math.round(scrollPosition / cardWidth);
       setActiveCardIndex(Math.min(newActiveIndex, services.length - 1));
@@ -146,20 +146,6 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
             Services & Expertise
           </span>
         </h2>
-        
-        {/* Mobile scroll indicators - Only visible on mobile */}
-        <div className="flex justify-center gap-3 mb-5 md:hidden">
-          {services.map((_, index) => (
-            <div 
-              key={index}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                activeCardIndex === index 
-                  ? 'bg-primary-400 w-6' 
-                  : 'bg-dark-600 w-1.5'
-              }`}
-            />
-          ))}
-        </div>
       </div>
       
       {/* Desktop container for proper centering */}
@@ -170,8 +156,8 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
           className={`
             md:grid md:grid-cols-3 md:gap-8 md:max-w-6xl
             flex overflow-x-auto snap-x snap-mandatory scrollbar-hide
-            -mx-6 px-6 md:mx-auto md:px-6 md:overflow-visible
-            pb-6 md:pb-0
+            -mx-4 px-4 md:mx-auto md:px-6 md:overflow-visible
+            pb-6 md:pb-0 gap-4
           `}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
@@ -191,13 +177,15 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
             <div
               key={index} 
               className={`
-                relative overflow-hidden rounded-lg p-4 md:p-6 lg:p-8
+                relative overflow-hidden rounded-lg p-6
                 backdrop-blur-md bg-dark-800/10 
                 border border-dark-300/30
                 transition-colors duration-300 group
                 hover:border-primary-500/30 active:border-primary-500/50
                 ${hoveredIndex === index ? 'shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'shadow-lg'}
                 cursor-pointer
+                flex-none w-[75vw] md:w-auto
+                snap-center
               `}
               onClick={handleCardClick}
               onMouseEnter={() => {
@@ -218,30 +206,30 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
               {/* Static border highlight instead of animation */}
               <div className="absolute inset-0 rounded-lg border border-primary-500/10 opacity-30 md:opacity-0 md:group-hover:opacity-40 transition-opacity duration-300 -z-5" />
 
-              <div className="flex flex-col h-full">
+              <div className="flex flex-col h-full min-h-[280px]">
                 {/* Service title with improved spacing */}
-                <h3 className="text-xl font-light text-dark-100 mb-3 relative">{service.title}</h3>
+                <h3 className="text-2xl font-light text-dark-100 mb-4 relative">{service.title}</h3>
                 
                 {/* Description with better typography */}
-                <p className="text-dark-400 text-sm leading-relaxed mb-6 relative">{service.description}</p>
+                <p className="text-dark-400 text-base leading-relaxed mb-8 relative">{service.description}</p>
                 
                 {/* Features list pushed to bottom */}
-                <ul className="space-y-2.5 text-dark-300 relative mt-auto">
+                <ul className="space-y-3 text-dark-300 relative mt-auto">
                   {service.features.map((feature, featureIndex) => (
                     <li 
                       key={featureIndex} 
                       className="flex items-center"
                     >
-                      <span className="text-primary-400 mr-2 group-hover:text-primary-300 transition-colors duration-300">→</span>
-                      <span className="group-hover:text-dark-200 transition-colors duration-300 text-sm">{feature}</span>
+                      <span className="text-primary-400 mr-3 group-hover:text-primary-300 transition-colors duration-300">→</span>
+                      <span className="group-hover:text-dark-200 transition-colors duration-300 text-base">{feature}</span>
                     </li>
                   ))}
                 </ul>
               </div>
               
               {/* Arrow indicator */}
-              <div className="absolute bottom-2 right-2 md:bottom-3 md:right-3 flex items-center opacity-70 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 md:h-4 md:w-4 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="absolute bottom-4 right-4 flex items-center opacity-70 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               </div>
@@ -250,14 +238,18 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
         </div>
       </div>
       
-      <div className="max-w-7xl mx-auto px-4 md:px-6">
-        {/* Mobile scroll hint - Only visible on mobile */}
-        <div className="flex items-center justify-center gap-2 text-dark-500 text-xs mt-5 md:hidden">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
-          </svg>
-          <span>Swipe to explore more services</span>
-        </div>
+      {/* Mobile scroll indicators moved to bottom - Only visible on mobile */}
+      <div className="flex justify-center gap-3 mt-2 md:hidden">
+        {services.map((_, index) => (
+          <div 
+            key={index}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              activeCardIndex === index 
+                ? 'bg-primary-400 w-6' 
+                : 'bg-dark-600 w-1.5'
+            }`}
+          />
+        ))}
       </div>
       
       {/* CSS for hiding scrollbar */}
