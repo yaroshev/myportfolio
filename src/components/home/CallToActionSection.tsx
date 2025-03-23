@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { HomeProps, FeatureProps } from '../../types/home';
+import emailjs from '@emailjs/browser';
 
 interface CallToActionSectionProps extends Pick<HomeProps, 'onCursorChange'> {}
 
@@ -42,10 +43,52 @@ const CallToActionSection: React.FC<CallToActionSectionProps> = ({ onCursorChang
     email: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const formRef = useRef<HTMLFormElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormState(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validation
+    if (!formState.name || !formState.email || !formState.message) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+    
+    try {
+      // Replace these values with your actual EmailJS credentials
+      // 1. Go to https://dashboard.emailjs.com/admin
+      // 2. Get your Service ID from the "Email Services" section
+      // 3. Create/select a template from "Email Templates" section and get its Template ID
+      // 4. Get your Public Key from Account > API Keys
+      const result = await emailjs.sendForm(
+        'service_hrpzxss', // EmailJS service ID
+        'template_i0pvy5m', // EmailJS template ID
+        formRef.current!,
+        'e3pbo0MYGSoBagA77' // EmailJS public key
+      );
+      
+      console.log('EmailJS success:', result.text);
+      setSubmitStatus('success');
+      setFormState({
+        name: '',
+        email: '',
+        message: ''
+      });
+    } catch (error) {
+      console.error('EmailJS error:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Get glow shadow color based on index
@@ -224,8 +267,10 @@ const CallToActionSection: React.FC<CallToActionSectionProps> = ({ onCursorChang
               }}
             />
             
-            <motion.div 
+            <motion.form 
               id="contactForm"
+              ref={formRef}
+              onSubmit={handleSubmit}
               className="relative bg-dark-900/80 backdrop-blur-xl rounded-2xl border border-dark-800/50 p-8 overflow-hidden"
               whileHover={{ 
                 boxShadow: "0 0 30px rgba(56, 189, 248, 0.15)",
@@ -262,6 +307,7 @@ const CallToActionSection: React.FC<CallToActionSectionProps> = ({ onCursorChang
                       style={{
                         boxShadow: hoveredInput === 'name' ? '0 0 0 1px rgba(56, 189, 248, 0.3)' : 'none'
                       }}
+                      disabled={isSubmitting}
                     />
                   </motion.div>
                 </div>
@@ -290,6 +336,7 @@ const CallToActionSection: React.FC<CallToActionSectionProps> = ({ onCursorChang
                       style={{
                         boxShadow: hoveredInput === 'email' ? '0 0 0 1px rgba(56, 189, 248, 0.3)' : 'none'
                       }}
+                      disabled={isSubmitting}
                     />
                   </motion.div>
                 </div>
@@ -317,19 +364,42 @@ const CallToActionSection: React.FC<CallToActionSectionProps> = ({ onCursorChang
                       style={{
                         boxShadow: hoveredInput === 'message' ? '0 0 0 1px rgba(56, 189, 248, 0.3)' : 'none'
                       }}
+                      disabled={isSubmitting}
                     />
                   </motion.div>
                 </div>
                 
+                {submitStatus === 'success' && (
+                  <motion.div 
+                    className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-4 py-3 rounded-lg"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    Your message has been sent successfully!
+                  </motion.div>
+                )}
+                
+                {submitStatus === 'error' && (
+                  <motion.div 
+                    className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    There was an error sending your message. Please try again.
+                  </motion.div>
+                )}
+                
                 <motion.button 
-                  className="w-full bg-gradient-to-r from-primary-500 to-accent-500 text-dark-950 rounded-lg px-6 py-4 text-sm tracking-wider uppercase transition-all duration-300 shadow-lg shadow-primary-500/20 relative overflow-hidden group"
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-primary-500 to-accent-500 text-dark-950 rounded-lg px-6 py-4 text-sm tracking-wider uppercase transition-all duration-300 shadow-lg shadow-primary-500/20 relative overflow-hidden group disabled:opacity-70"
                   whileHover={{ 
-                    scale: 1.02, 
-                    boxShadow: "0 15px 30px -10px rgba(56, 189, 248, 0.3)" 
+                    scale: isSubmitting ? 1 : 1.02, 
+                    boxShadow: isSubmitting ? "none" : "0 15px 30px -10px rgba(56, 189, 248, 0.3)" 
                   }}
-                  whileTap={{ scale: 0.98 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
                   onMouseEnter={() => onCursorChange('button')}
                   onMouseLeave={() => onCursorChange('default')}
+                  disabled={isSubmitting}
                 >
                   {/* Animated hover effect */}
                   <motion.div 
@@ -340,14 +410,26 @@ const CallToActionSection: React.FC<CallToActionSectionProps> = ({ onCursorChang
                   />
                   
                   <span className="relative z-10 flex items-center justify-center">
-                    Send Message
-                    <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
+                    {isSubmitting ? (
+                      <>
+                        Sending
+                        <svg className="w-4 h-4 ml-2 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      </>
+                    ) : (
+                      <>
+                        Send Message
+                        <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </>
+                    )}
                   </span>
                 </motion.button>
               </div>
-            </motion.div>
+            </motion.form>
           </motion.div>
         </div>
       </div>

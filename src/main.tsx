@@ -4,6 +4,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import App from './App';
 import './index.css';
+import emailjs from '@emailjs/browser';
+
+// Initialize EmailJS with your public key
+// Get your public key from: https://dashboard.emailjs.com/admin/account/api
+emailjs.init('e3pbo0MYGSoBagA77');
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
