@@ -184,7 +184,7 @@ const BioSection: React.FC<BioSectionProps> = ({ onCursorChange = () => {}, sect
                       </p>
                       <p>
                         I believe that the best digital experiences emerge from a deep understanding of both the brand's objectives and the audience's needs, combined with technical expertise and creative flair.
-                      </p>
+              </p>
             </div>
                   </>
                 ) : (

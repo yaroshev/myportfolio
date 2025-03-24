@@ -78,7 +78,7 @@ const AboutPage: React.FC<AboutPageProps> = ({ onCursorChange = () => {}, setAct
       <NavDots 
         activeSection={activeSection} 
         sections={sections} 
-        sectionRefs={sectionRefs} 
+        onDotClick={handleDotClick}
         onCursorChange={onCursorChange}
       />
       
