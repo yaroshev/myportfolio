@@ -196,13 +196,13 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
       </div>
         
       {/* Horizontal scroll container for both mobile and desktop */}
-      <div className="relative z-10 overflow-hidden">
+      <div className="relative z-10 overflow-visible">
         <div 
           ref={scrollContainerRef}
           className="
             flex overflow-x-auto snap-x snap-mandatory scrollbar-hide
             -mx-6 px-6 md:px-12 lg:px-16
-            pb-6 md:pb-8
+            pb-6 md:pb-8 pt-2
             w-screen
           "
           onMouseDown={handleMouseDown}
@@ -228,12 +228,15 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
                 overflow-hidden rounded-lg
                 backdrop-blur-md bg-dark-800/10
                 border border-dark-300/30
-                transition-all duration-300 group z-10
+                transition-all duration-300 group
                 hover:border-primary-500/30 active:border-primary-500/50
                 ${hoveredIndex === index ? 'shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'shadow-lg'}
                 cursor-pointer
                 snap-center
                 mr-5 md:mr-6 lg:mr-8
+                transform hover:-translate-y-2
+                hover:z-20
+                min-h-[420px]
               `}
               onClick={() => openVideoLightbox(project.videoUrl, project)}
               onMouseEnter={() => {
@@ -244,82 +247,56 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
                 setHoveredIndex(null);
                 onCursorChange('default');
               }}
-              style={{
-                willChange: 'transform, opacity',
-                transform: 'translateZ(0)'
-              }}
             >
+              {/* Background gradients */}
               <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-10" />
-              
-              {/* Hover gradient - no animation, just transition */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
-              {/* Static border highlight instead of animation */}
               <div className="absolute inset-0 rounded-lg border border-primary-500/10 opacity-30 md:opacity-0 md:group-hover:opacity-40 transition-opacity duration-300 -z-5" />
-              
-              {/* Thumbnail with play button */}
-              <div 
-                className="relative aspect-video overflow-hidden"
-              >
-                <img 
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                  style={{
-                    willChange: 'transform',
-                    transform: 'translateZ(0)'
-                  }}
-                />
-                
-                {/* Play button */}
-                <div className="absolute inset-0 flex items-center justify-center z-20 bg-dark-900/30 group-hover:bg-dark-900/10 transition-all duration-300">
-                  <div className="w-14 h-14 rounded-full bg-dark-900/70 backdrop-blur-sm flex items-center justify-center border border-primary-500/30 transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary-500/20">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
+
+              {/* Content container */}
+              <div className="flex flex-col h-full">
+                {/* Thumbnail with play button */}
+                <div className="relative h-48 md:h-52 overflow-hidden">
+                  <img 
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                  />
+                  
+                  {/* Play button */}
+                  <div className="absolute inset-0 flex items-center justify-center z-20 bg-dark-900/30 group-hover:bg-dark-900/10 transition-all duration-300">
+                    <div className="w-14 h-14 rounded-full bg-dark-900/70 backdrop-blur-sm flex items-center justify-center border border-primary-500/30 transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary-500/20">
+                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              {/* Project info */}
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-light text-dark-200">{project.title}</h3>
-                  <span className="text-xs text-primary-400 uppercase tracking-wider">{project.category}</span>
-                </div>
-                
-                <div className="flex flex-wrap gap-1 mb-4">
-                  {project.tags.map((tag, tagIndex) => (
-                    <span 
-                      key={tagIndex}
-                      className="px-2 py-0.5 bg-dark-800/50 rounded-full text-xs text-primary-300"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                
-                <p className="text-dark-400 text-sm mb-4 line-clamp-2">
-                  {project.description}
-                </p>
-                
-                <div className="flex justify-between items-center pt-3 border-t border-dark-300/20">
-                  <div className="flex space-x-4">
-                    {Object.entries(project.metrics).map(([key, value], index) => (
-                      <div key={index} className="text-center">
-                        <div className="text-primary-400 text-sm font-medium">{value}</div>
-                        <div className="text-dark-500 text-xs capitalize">{key}</div>
-                      </div>
-                    ))}
+
+                {/* Project info - Simplified */}
+                <div className="p-6 flex flex-col flex-grow">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-xl font-light text-dark-200">{project.title}</h3>
+                    <span className="text-xs text-primary-400 uppercase tracking-wider">{project.category}</span>
                   </div>
                   
-                  <div 
-                    className="text-primary-300 text-sm hover:text-primary-400 transition-colors duration-300 flex items-center"
-                  >
-                    Watch
-                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
+                  <p className="text-dark-400 text-sm mb-auto line-clamp-2">
+                    {project.description}
+                  </p>
+                  
+                  <div className="pt-6 mt-6 border-t border-dark-300/20">
+                    <div className="flex items-center justify-between">
+                      <div className="text-dark-300 text-sm">
+                        {Object.entries(project.metrics)[0][1]} <span className="text-dark-500">views</span>
+                      </div>
+                      
+                      <div className="text-primary-300 text-sm hover:text-primary-400 transition-colors duration-300 flex items-center">
+                        Watch
+                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

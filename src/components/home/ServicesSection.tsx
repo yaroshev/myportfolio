@@ -180,8 +180,9 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
                 relative overflow-hidden rounded-lg p-6
                 backdrop-blur-md bg-dark-800/10 
                 border border-dark-300/30
-                transition-colors duration-300 group
+                transition-all duration-300 group
                 hover:border-primary-500/30 active:border-primary-500/50
+                hover:-translate-y-1
                 ${hoveredIndex === index ? 'shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'shadow-lg'}
                 cursor-pointer
                 flex-none w-[75vw] md:w-auto
