@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { ResponsiveComponent } from '../../responsive';
+import { useLocation } from 'react-router-dom';
 
 // Desktop components
 import DesktopHeroSection from '../../responsive/desktop/about/heroSection/component';
@@ -17,11 +18,18 @@ import MobileSkillsSection from '../../responsive/mobile/about/skillsSection/com
 import MobileTimelineSection from '../../responsive/mobile/about/timelineSection/component';
 import MobileNavDots from '../../responsive/mobile/about/navDots/component';
 
+// Define the Section type
 type Section = {
   id: string;
   ref: React.RefObject<HTMLElement>;
   inView: boolean;
 };
+
+// Update this interface if needed
+interface BioSectionProps {
+  sectionRef: React.RefObject<HTMLElement>;
+  onCursorChange?: React.Dispatch<React.SetStateAction<string>>;
+}
 
 const AboutPage: React.FC = () => {
   const [activeSection, setActiveSection] = useState('hero');
@@ -39,11 +47,22 @@ const AboutPage: React.FC = () => {
     threshold: 0.4, // Trigger when 40% of the section is visible
   };
   
+  // Remove unused variables
+  const { pathname } = useLocation();
+  
   // Set up IntersectionObserver for each section
-  const [heroInView] = useInView({ ...options, root: null, rootMargin: '-10% 0px -20% 0px' });
-  const [bioInView] = useInView({ ...options, root: null, rootMargin: '-10% 0px -20% 0px' });
-  const [skillsInView] = useInView({ ...options, root: null, rootMargin: '-10% 0px -20% 0px' });
-  const [timelineInView] = useInView({ ...options, root: null, rootMargin: '-10% 0px -20% 0px' });
+  const { ref: heroInViewRef, inView: heroInView } = useInView({ ...options, root: null, rootMargin: '-10% 0px -20% 0px' });
+  const { ref: bioInViewRef, inView: bioInView } = useInView({ ...options, root: null, rootMargin: '-10% 0px -20% 0px' });
+  const { ref: skillsInViewRef, inView: skillsInView } = useInView({ ...options, root: null, rootMargin: '-10% 0px -20% 0px' });
+  const { ref: timelineInViewRef, inView: timelineInView } = useInView({ ...options, root: null, rootMargin: '-10% 0px -20% 0px' });
+  
+  // Connect refs for both React refs and inView refs
+  useEffect(() => {
+    if (heroRef.current) heroInViewRef(heroRef.current);
+    if (bioRef.current) bioInViewRef(bioRef.current);
+    if (skillsRef.current) skillsInViewRef(skillsRef.current);
+    if (timelineRef.current) timelineInViewRef(timelineRef.current);
+  }, [heroInViewRef, bioInViewRef, skillsInViewRef, timelineInViewRef]);
   
   // Define sections for navigation
   const sections: Section[] = [

@@ -266,7 +266,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           </motion.div>
 
           {/* Add custom animation keyframes */}
-          <style jsx global>{`
+          <style>{`
             @keyframes pulse-slow {
               0%, 100% { opacity: 1; text-shadow: 0 0 0px rgba(255, 255, 255, 0); }
               50% { opacity: 0.95; text-shadow: 0 0 8px rgba(255, 255, 255, 0.3); }
@@ -274,6 +274,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             .animate-pulse-slow {
               animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
               will-change: opacity, text-shadow;
+            }
+          `}</style>
+
+          {/* Add the animation keyframes as inline style */}
+          <style>{`
+            @keyframes marquee {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-100%); }
             }
           `}</style>
         </motion.div>

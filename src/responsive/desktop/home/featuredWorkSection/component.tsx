@@ -423,13 +423,24 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
       )}
       
       {/* CSS for hiding scrollbar */}
-      <style jsx global>{`
+      <style>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }
         .scrollbar-hide {
           -ms-overflow-style: none;
           scrollbar-width: none;
+        }
+      `}</style>
+
+      {/* Add global styles */}
+      <style>{`
+        .image-container {
+          height: calc(100vh - 80px);
+        }
+        
+        .video-container {
+          max-height: calc(100vh - 200px);
         }
       `}</style>
     </section>

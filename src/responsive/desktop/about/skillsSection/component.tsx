@@ -114,7 +114,7 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ onCursorChange = () => {}
             WebkitOverflowScrolling: 'touch'
           }}
         >
-          <style jsx>{`
+          <style>{`
             div::-webkit-scrollbar {
               display: none;
             }

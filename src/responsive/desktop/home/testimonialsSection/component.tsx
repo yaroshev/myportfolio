@@ -415,13 +415,32 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
       )}
       
       {/* CSS for hiding scrollbar */}
-      <style jsx global>{`
+      <style>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }
         .scrollbar-hide {
           -ms-overflow-style: none;
           scrollbar-width: none;
+        }
+      `}</style>
+
+      <style>{`
+        .testimonial-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          left: 0;
+          bottom: 0;
+          background: radial-gradient(350px circle at var(--x) var(--y), rgba(255, 255, 255, 0.02), transparent 40%);
+          z-index: 0;
+          opacity: 0;
+          transition: opacity 0.3s;
+        }
+        
+        .testimonial-card:hover::before {
+          opacity: 1;
         }
       `}</style>
     </section>

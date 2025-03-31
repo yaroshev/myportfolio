@@ -254,13 +254,24 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
       </div>
       
       {/* CSS for hiding scrollbar */}
-      <style jsx global>{`
+      <style>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }
         .scrollbar-hide {
           -ms-overflow-style: none;
           scrollbar-width: none;
+        }
+      `}</style>
+      
+      <style>{`
+        .services-card-header-bg {
+          background: linear-gradient(270deg, var(--feature-color-dark) 0%, var(--feature-color-light) 100%);
+        }
+        
+        @keyframes pulse-glow {
+          0%, 100% { opacity: 0.8; }
+          50% { opacity: 1; filter: brightness(1.2); }
         }
       `}</style>
     </section>
