@@ -1,4 +1,4 @@
-import { Skill, TimelineEvent } from './types';
+import { Skill, TimelinePoint } from './types';
 
 // Skills data
 export const skills: Skill[] = [
@@ -25,7 +25,7 @@ export const skills: Skill[] = [
 ];
 
 // Timeline data
-export const timelineEvents: TimelineEvent[] = [
+export const timelineEvents: TimelinePoint[] = [
   {
     year: '2024',
     title: 'Digital Content & Marketing Manager',

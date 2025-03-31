@@ -1,11 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, useAnimation, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
-import { HomeProps, TestimonialProps } from '../../types/home';
+import { HomeProps } from '../types/home';
 
 interface TestimonialsSectionProps extends Pick<HomeProps, 'onCursorChange'> {}
 
-const testimonials: TestimonialProps[] = [
+// Use a local interface for Testimonial since it needs the name property
+interface Testimonial {
+  quote: string[];
+  author: string;
+  role: string;
+  company: string;
+  image?: string;
+  name: string;
+}
+
+const testimonials: Testimonial[] = [
   {
     quote: [
       "Yaroslav is a pleasure to work with and goes the extra mile for us every single time, no matter the size of the project. He is knowledgeable, professional and always strives to make our projects the best that they can be, delivering a finished product beyond our expectations.",
@@ -43,7 +53,7 @@ const testimonials: TestimonialProps[] = [
 
 const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChange }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [selectedTestimonial, setSelectedTestimonial] = useState<TestimonialProps | null>(null);
+  const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null);
   const [selectedTestimonialIndex, setSelectedTestimonialIndex] = useState<number>(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -110,7 +120,7 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ onCursorChang
     };
   }, [isMobile, testimonials.length]);
 
-  const openLightbox = (testimonial: TestimonialProps) => {
+  const openLightbox = (testimonial: Testimonial) => {
     const index = testimonials.findIndex(t => t.company === testimonial.company);
     setSelectedTestimonialIndex(index);
     setSelectedTestimonial(testimonial);

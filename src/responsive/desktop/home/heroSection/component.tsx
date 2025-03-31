@@ -136,11 +136,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             whileTap={{ scale: 0.98 }}
             onMouseEnter={() => {
               setImageHovered(true);
-              onCursorChange('button');
+              onCursorChange && onCursorChange('button');
             }}
             onMouseLeave={() => {
               setImageHovered(false);
-              onCursorChange('default');
+              onCursorChange && onCursorChange('default');
             }}
             transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
           >
@@ -213,11 +213,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                 className="relative z-10 text-sm uppercase tracking-wider font-light text-dark-200 hover:text-primary-400 transition-colors duration-300 animate-pulse-slow px-3 py-2"
                 onMouseEnter={() => {
                   setWorkHovered(true);
-                  onCursorChange('button');
+                  onCursorChange && onCursorChange('button');
                 }}
                 onMouseLeave={() => {
                   setWorkHovered(false);
-                  onCursorChange('default');
+                  onCursorChange && onCursorChange('default');
                 }}
                 style={{
                   textShadow: workHovered ? 'none' : '0 0 8px rgba(255, 255, 255, 0.2)',
@@ -242,11 +242,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                 className="relative z-10 text-sm uppercase tracking-wider font-light text-dark-200 hover:text-primary-400 transition-colors duration-300 animate-pulse-slow px-3 py-2"
                 onMouseEnter={() => {
                   setAboutHovered(true);
-                  onCursorChange('button');
+                  onCursorChange && onCursorChange('button');
                 }}
                 onMouseLeave={() => {
                   setAboutHovered(false);
-                  onCursorChange('default');
+                  onCursorChange && onCursorChange('default');
                 }}
                 style={{
                   textShadow: aboutHovered ? 'none' : '0 0 8px rgba(255, 255, 255, 0.2)',

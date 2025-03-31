@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { useScroll, useTransform, useSpring, motion, AnimatePresence } from 'framer-motion';
 import { WorkProps } from './types';
-import { projects, featuredVideos, filters } from './data';
+import { projects, filters } from './data';
 import { ResponsiveComponent } from '../../responsive';
 
 // Desktop components

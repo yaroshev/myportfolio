@@ -1,10 +1,10 @@
 export interface Project {
   id: string;
   title: string;
-  slug: string;
+  slug?: string;
   category: string;
-  thumbnail: string;
-  technologies: string[];
+  thumbnail?: string;
+  technologies?: string[];
   videos?: {
     id: string;
     title: string;
@@ -14,14 +14,14 @@ export interface Project {
   description: string;
   client: string;
   year: number;
-  role: string;
-  overview: string;
-  process: string[];
-  results: string[];
+  role?: string;
+  overview?: string;
+  process?: string[];
+  results?: string[];
   challenge?: string;
   solution?: string;
   impact?: string;
-  images: string[];
+  images?: string[];
   featured?: boolean;
   url?: string;
   tools?: string[];
@@ -32,4 +32,17 @@ export interface Project {
     url: string;
     thumbnail: string;
   };
+  image?: string;
+  fallbackImage?: string;
+  website?: string;
+  services?: string[];
+  stats?: string[];
+  color?: string;
+  accentColor?: string;
+}
+
+export interface Filter {
+  id: string;
+  name: string;
+  value: string;
 } 

@@ -51,8 +51,14 @@ export const ResponsiveComponent: React.FC<ResponsiveProps> = ({
  * This is useful when you need to get components dynamically.
  */
 export const getResponsiveComponent = (path: string, component: string) => {
-  const mobileComponent = React.lazy(() => /* @vite-ignore */ import(`./mobile/${path}/${component}/component`));
-  const desktopComponent = React.lazy(() => /* @vite-ignore */ import(`./desktop/${path}/${component}/component`));
+  const mobileComponent = React.lazy(() => 
+    /* @vite-ignore */
+    import(`./mobile/${path}/${component}/component.tsx`)
+  );
+  const desktopComponent = React.lazy(() => 
+    /* @vite-ignore */
+    import(`./desktop/${path}/${component}/component.tsx`)
+  );
   
   return {
     mobileComponent,

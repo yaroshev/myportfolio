@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { HomeProps, FeatureProps } from '../../types/home';
+import { HomeProps, FeatureProps } from '../types/home';
 import emailjs from '@emailjs/browser';
 
 interface CallToActionSectionProps extends Pick<HomeProps, 'onCursorChange'> {}

@@ -1,7 +1,8 @@
 export interface Skill {
-  name: string;
-  level: number;
+  name?: string;
+  level?: number;
   category: string;
+  items: string[];
 }
 
 export interface TimelinePoint {

@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://yaroshev.com/</loc>
-    <lastmod>2025-03-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <loc>https://yaroshev.com</loc>
+    <lastmod>2025-03-31T04:51:47.108Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://yaroshev.com/work</loc>
-    <lastmod>2025-03-19</lastmod>
+    <lastmod>2025-03-31T04:51:47.109Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://yaroshev.com/about</loc>
-    <lastmod>2025-03-19</lastmod>
+    <lastmod>2025-03-31T04:51:47.109Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://yaroshev.com/resources</loc>
-    <lastmod>2025-03-19</lastmod>
+    <lastmod>2025-03-31T04:51:47.109Z</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
 </urlset>

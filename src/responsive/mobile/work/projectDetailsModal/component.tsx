@@ -122,15 +122,12 @@ const ProjectDetailsModal: React.FC<ProjectDetailsModalProps> = ({
               </div>
               
               {/* Technologies/Tools used */}
-              {project.technologies && project.technologies.length > 0 && (
+              {project.technologies && Array.isArray(project.technologies) && project.technologies.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-light text-dark-100 mb-3">Technologies</h3>
+                  <h3 className="text-xl font-semibold mb-2">Technologies</h3>
                   <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech, index) => (
-                      <span 
-                        key={index}
-                        className="py-1 px-3 text-xs rounded-full bg-dark-800/80 text-dark-300 border border-dark-700/50"
-                      >
+                    {project.technologies.map((tech: string, index: number) => (
+                      <span key={index} className="bg-dark-800 px-3 py-1 rounded-full text-xs">
                         {tech}
                       </span>
                     ))}
@@ -139,33 +136,17 @@ const ProjectDetailsModal: React.FC<ProjectDetailsModalProps> = ({
               )}
               
               {/* Project videos */}
-              {project.videos && project.videos.length > 0 && (
+              {project.videos && Array.isArray(project.videos) && project.videos.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-light text-dark-100 mb-3">Project Videos</h3>
-                  <div className="space-y-3">
-                    {project.videos.map((video, index) => (
-                      <motion.div
-                        key={index}
-                        className="relative aspect-video rounded-lg overflow-hidden cursor-pointer"
-                        onClick={() => onVideoClick && onVideoClick(video.url, project)}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <img 
-                          src={video.thumbnail || project.image} 
-                          alt={video.title} 
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-dark-900/50 backdrop-blur-[2px] flex items-center justify-center">
-                          <div className="w-12 h-12 rounded-full bg-primary-500/20 border border-primary-500/40 flex items-center justify-center backdrop-blur-sm">
-                            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M8 5v14l11-7z" />
-                            </svg>
-                          </div>
-                        </div>
-                        <div className="absolute bottom-0 left-0 right-0 p-3 bg-dark-900/70 backdrop-blur-sm">
-                          <span className="text-sm text-dark-100">{video.title}</span>
-                        </div>
-                      </motion.div>
+                  <h3 className="text-xl font-semibold mb-2">Videos</h3>
+                  <div className="grid gap-4">
+                    {project.videos.map((video: any, index: number) => (
+                      <div key={index} className="bg-dark-800 p-3 rounded-lg">
+                        <h4 className="text-lg mb-1">{video.title}</h4>
+                        <a href={video.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                          Watch Video
+                        </a>
+                      </div>
                     ))}
                   </div>
                 </div>

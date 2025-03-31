@@ -241,11 +241,11 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
               onClick={() => openVideoLightbox(project.videoUrl, project)}
               onMouseEnter={() => {
                 setHoveredIndex(index);
-                onCursorChange('button');
+                onCursorChange && onCursorChange('button');
               }}
               onMouseLeave={() => {
                 setHoveredIndex(null);
-                onCursorChange('default');
+                onCursorChange && onCursorChange('default');
               }}
             >
               {/* Background gradients */}
@@ -313,11 +313,11 @@ const FeaturedWorkSection: React.FC<FeaturedWorkSectionProps> = ({ setActivePage
               className="relative z-10 text-sm uppercase tracking-wider font-light text-dark-200 hover:text-primary-400 transition-colors duration-300"
               onMouseEnter={() => {
                 setPortfolioHovered(true);
-                onCursorChange('button');
+                onCursorChange && onCursorChange('button');
               }}
               onMouseLeave={() => {
                 setPortfolioHovered(false);
-                onCursorChange('default');
+                onCursorChange && onCursorChange('default');
               }}
               style={{
                 textShadow: portfolioHovered ? 'none' : '0 0 8px rgba(255, 255, 255, 0.2)'

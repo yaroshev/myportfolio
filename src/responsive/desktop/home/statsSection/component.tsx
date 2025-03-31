@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import { HomeProps, Stat } from '../../types/home';
+import { HomeProps } from '../types/home';
 
 interface StatsSectionProps extends Pick<HomeProps, 'onCursorChange'> {
   setActivePage?: (page: string) => void;
+}
+
+interface Stat {
+  value: string;
+  label: string;
 }
 
 const stats: Stat[] = [

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { HomeProps, ServiceProps } from '../../types/home';
+import { HomeProps, ServiceProps } from '../types/home';
 
 interface ServicesSectionProps extends Pick<HomeProps, 'onCursorChange'> {
   setActivePage?: (page: string) => void;

@@ -8,7 +8,8 @@
     "format": "prettier --write \"src/**/*.{ts,tsx}\" --config config/.prettierrc",
     "generate-sitemap": "node scripts/generate-sitemap.cjs",
     "prebuild": "npm run generate-sitemap",
-    "build": "rm -rf dist && tsc && vite build",
+    "buildWithTypes": "rm -rf dist && npx tsc && vite build",
+    "build": "rm -rf dist && vite build",
     "postbuild": "cp public/_redirects dist/ && cp public/_headers dist/ && cp public/sitemap.xml dist/ && cp public/robots.txt dist/",
     "lint": "eslint --config config/eslint.config.js .",
     "preview": "vite preview"
