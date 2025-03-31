@@ -1,12 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { useScroll, useTransform, useSpring, motion, AnimatePresence } from 'framer-motion';
 import { WorkProps } from './types';
 import { projects, featuredVideos, filters } from './data';
-import HeroSection from '../../responsive/desktop/work/heroSection/component';
-import FilterSection from '../../responsive/desktop/work/filterSection/component';
-import ProjectsGrid from '../../responsive/desktop/work/projectsGrid/component';
-import ProjectDetailsModal from '../../responsive/desktop/work/projectDetailsModal/component';
-import VideoLightbox from '../../responsive/desktop/work/videoLightbox/component';
+import { ResponsiveComponent } from '../../responsive';
+
+// Desktop components
+import DesktopHeroSection from '../../responsive/desktop/work/heroSection/component';
+import DesktopFilterSection from '../../responsive/desktop/work/filterSection/component';
+import DesktopProjectsGrid from '../../responsive/desktop/work/projectsGrid/component';
+import DesktopProjectDetailsModal from '../../responsive/desktop/work/projectDetailsModal/component';
+import DesktopVideoLightbox from '../../responsive/desktop/work/videoLightbox/component';
+
+// Mobile components
+import MobileHeroSection from '../../responsive/mobile/work/heroSection/component';
+import MobileFilterSection from '../../responsive/mobile/work/filterSection/component';
+import MobileProjectsGrid from '../../responsive/mobile/work/projectsGrid/component';
+import MobileProjectDetailsModal from '../../responsive/mobile/work/projectDetailsModal/component';
+import MobileVideoLightbox from '../../responsive/mobile/work/videoLightbox/component';
 
 const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage }) => {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -167,9 +177,16 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
   return (
     <div ref={containerRef} className="relative">
       {/* Hero Section */}
-      <div ref={heroSectionRef}>
-        <HeroSection opacity={opacity} y={y} />
-      </div>
+      <Suspense fallback={<div className="min-h-[90vh] flex items-center justify-center">Loading...</div>}>
+        <div ref={heroSectionRef}>
+          <ResponsiveComponent
+            mobileComponent={MobileHeroSection}
+            desktopComponent={DesktopHeroSection}
+            opacity={opacity}
+            y={y}
+          />
+        </div>
+      </Suspense>
       
       {/* Main Content Area */}
       <div ref={mainContentRef} className="relative z-20">
@@ -197,7 +214,7 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
                     }}
                   >
                     <div className="overflow-y-auto max-h-[calc(100vh-8rem)] py-8">
-                      <FilterSection
+                      <DesktopFilterSection
                         filters={filters}
                         activeFilter={activeFilter}
                         setActiveFilter={setActiveFilter}
@@ -213,7 +230,7 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
             <AnimatePresence mode="wait">
               {filterShouldBeVisible && (
                 <motion.div 
-                  className="md:hidden fixed top-[120px] left-0 right-0 z-40 py-4 px-6 rounded-lg bg-dark-900/40 backdrop-blur-sm"
+                  className="md:hidden fixed top-[80px] left-0 right-0 z-40 py-4 px-6 rounded-b-lg bg-dark-900/80 backdrop-blur-sm border-b border-dark-800/50"
                   variants={filterVariants}
                   initial="hidden"
                   animate="visible"
@@ -222,7 +239,7 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
                     pointerEvents: isFilterInteractive() ? 'auto' : 'none'
                   }}
                 >
-                  <FilterSection
+                  <MobileFilterSection
                     filters={filters}
                     activeFilter={activeFilter}
                     setActiveFilter={setActiveFilter}
@@ -234,33 +251,57 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
 
             {/* Right Column - Projects */}
             <main className="min-h-screen py-16">
-              <ProjectsGrid
-                ref={projectsGridRef}
-                projects={visibleProjects}
-                filters={filters}
-                isLoading={isLoading}
-                hoveredProject={hoveredProject}
-                onProjectHover={setHoveredProject}
-                onProjectClick={openProjectDetails}
-                onCursorChange={onCursorChange}
-              />
+              <Suspense fallback={<div className="min-h-[60vh] flex items-center justify-center">Loading...</div>}>
+                <ResponsiveComponent
+                  mobileComponent={MobileProjectsGrid}
+                  desktopComponent={DesktopProjectsGrid}
+                  ref={projectsGridRef}
+                  projects={visibleProjects}
+                  filters={filters}
+                  isLoading={isLoading}
+                  hoveredProject={hoveredProject}
+                  onProjectHover={setHoveredProject}
+                  onProjectClick={openProjectDetails}
+                  onCursorChange={onCursorChange}
+                />
+              </Suspense>
             </main>
           </div>
         </div>
       </div>
-
-      {/* Modals */}
-      <ProjectDetailsModal
-        project={selectedProject}
-        onClose={closeProjectDetails}
-        onCursorChange={onCursorChange}
-      />
-
-      <VideoLightbox
-        selectedVideo={selectedVideo}
-        selectedVideoProject={selectedVideoProject}
-        onClose={closeVideoLightbox}
-        onCursorChange={onCursorChange}
+      
+      {/* Project Details Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <ResponsiveComponent
+            mobileComponent={MobileProjectDetailsModal}
+            desktopComponent={DesktopProjectDetailsModal}
+            project={selectedProject}
+            onClose={closeProjectDetails}
+            onCursorChange={onCursorChange}
+            onVideoClick={openVideoLightbox}
+          />
+        )}
+      </AnimatePresence>
+      
+      {/* Video Lightbox */}
+      <AnimatePresence>
+        {selectedVideo && (
+          <ResponsiveComponent
+            mobileComponent={MobileVideoLightbox}
+            desktopComponent={DesktopVideoLightbox}
+            videoId={selectedVideo}
+            project={selectedVideoProject}
+            onClose={closeVideoLightbox}
+            onCursorChange={onCursorChange}
+          />
+        )}
+      </AnimatePresence>
+      
+      {/* Progress Indicator at bottom of screen */}
+      <motion.div 
+        className="fixed bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-500 to-accent-500 z-50 origin-left"
+        style={{ scaleX, opacity: filterShouldBeVisible ? 1 : 0 }}
       />
     </div>
   );
