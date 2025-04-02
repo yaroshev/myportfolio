@@ -5,18 +5,18 @@ import { projects, filters } from './data';
 import { ResponsiveComponent } from '../../responsive';
 
 // Desktop components
-import DesktopHeroSection from '../../responsive/desktop/work/heroSection/component';
-import DesktopFilterSection from '../../responsive/desktop/work/filterSection/component';
-import DesktopProjectsGrid from '../../responsive/desktop/work/projectsGrid/component';
-import DesktopProjectDetailsModal from '../../responsive/desktop/work/projectDetailsModal/component';
-import DesktopVideoLightbox from '../../responsive/desktop/work/videoLightbox/component';
+import DesktopHeroSection from '../../responsive/desktop/work/heroSection/heroSection';
+import DesktopFilterSection from '../../responsive/desktop/work/filterSection/filterSection';
+import DesktopProjectsGrid from '../../responsive/desktop/work/projectsGrid/projectsGrid';
+import DesktopProjectDetailsModal from '../../responsive/desktop/work/projectDetailsModal/projectDetailsModal';
+import DesktopVideoLightbox from '../../responsive/desktop/work/videoLightbox/videoLightbox';
 
 // Mobile components
-import MobileHeroSection from '../../responsive/mobile/work/heroSection/component';
-import MobileFilterSection from '../../responsive/mobile/work/filterSection/component';
-import MobileProjectsGrid from '../../responsive/mobile/work/projectsGrid/component';
-import MobileProjectDetailsModal from '../../responsive/mobile/work/projectDetailsModal/component';
-import MobileVideoLightbox from '../../responsive/mobile/work/videoLightbox/component';
+import MobileHeroSection from '../../responsive/mobile/work/heroSection/heroSection';
+import MobileFilterSection from '../../responsive/mobile/work/filterSection/filterSection';
+import MobileProjectsGrid from '../../responsive/mobile/work/projectsGrid/projectsGrid';
+import MobileProjectDetailsModal from '../../responsive/mobile/work/projectDetailsModal/projectDetailsModal';
+import MobileVideoLightbox from '../../responsive/mobile/work/videoLightbox/videoLightbox';
 
 const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage }) => {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -61,14 +61,14 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
   // 1. Hero section complete indicator (0 when hero visible, 1 when completely passed)
   const heroComplete = useTransform(
     heroScrollProgress,
-    [0.75, 0.8],
+    [0.5, 0.6],
     [0, 1]
   );
   
   // 2. Project grid visibility factor (0 when out of view, 1 when in view)
   const projectsVisible = useTransform(
     projectsGridScrollProgress,
-    [0.05, 0.15, 0.85, 0.95],
+    [0.0, 0.05, 0.9, 0.95],
     [0, 1, 1, 0]
   );
   
@@ -76,8 +76,8 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
   useEffect(() => {
     const unsubscribeHero = heroComplete.onChange(heroValue => {
       const projValue = projectsVisible.get();
-      // Filter should be visible when hero is at least 75% out of view and projects are visible
-      const shouldShow = heroValue > 0.75 && projValue > 0;
+      // Filter should be visible when hero is at least 50% out of view and projects are visible
+      const shouldShow = heroValue > 0.5 && projValue > 0;
       
       if (shouldShow !== filterShouldBeVisible) {
         setFilterShouldBeVisible(shouldShow);
@@ -86,8 +86,8 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
     
     const unsubscribeProj = projectsVisible.onChange(projValue => {
       const heroValue = heroComplete.get();
-      // Filter should be visible when hero is at least 75% out of view and projects are visible
-      const shouldShow = heroValue > 0.75 && projValue > 0;
+      // Filter should be visible when hero is at least 50% out of view and projects are visible
+      const shouldShow = heroValue > 0.5 && projValue > 0;
       
       if (shouldShow !== filterShouldBeVisible) {
         setFilterShouldBeVisible(shouldShow);
@@ -101,13 +101,13 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
   }, [heroComplete, projectsVisible, filterShouldBeVisible]);
   
   // 4. Filter Y position animation
-  const filterY = useTransform(projectsGridScrollProgress, [0, 0.1], [20, 0]);
+  const filterY = useTransform(projectsGridScrollProgress, [0, 0.05], [20, 0]);
   const filterSpring = useSpring(filterY, { stiffness: 100, damping: 30 });
 
   // Helper for checking if filter should be interactive (for pointer-events)
   const isFilterInteractive = () => {
-    return heroScrollProgress.get() > 0.75 && 
-           projectsGridScrollProgress.get() > 0.05 && 
+    return heroScrollProgress.get() > 0.5 && 
+           projectsGridScrollProgress.get() > 0 && 
            projectsGridScrollProgress.get() < 0.95;
   };
 
@@ -158,9 +158,9 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
   const filterVariants = {
     hidden: { 
       opacity: 0,
-      y: 20,
+      y: 15,
       transition: { 
-        duration: 0.4,
+        duration: 0.3,
         ease: "easeOut"
       }
     },
@@ -168,7 +168,7 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
       opacity: 1,
       y: 0,
       transition: { 
-        duration: 0.7,
+        duration: 0.4,
         ease: "easeOut"
       }
     }
@@ -226,15 +226,15 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
               </AnimatePresence>
             </div>
             
-            {/* Mobile Filter - Fixed Version with elegant fade in/out */}
+            {/* Mobile Filter - Fixed Version at top */}
             <AnimatePresence mode="wait">
               {filterShouldBeVisible && (
                 <motion.div 
-                  className="md:hidden fixed top-[80px] left-0 right-0 z-40 py-4 px-6 rounded-b-lg bg-dark-900/80 backdrop-blur-sm border-b border-dark-800/50"
-                  variants={filterVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
+                  className="md:hidden fixed top-0 left-0 right-0 z-40 py-3 px-4 pt-safe-top bg-dark-900/95 backdrop-blur-md border-b border-dark-800/50 shadow-md"
+                  initial={{ opacity: 0, y: -15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
                   style={{
                     pointerEvents: isFilterInteractive() ? 'auto' : 'none'
                   }}
@@ -250,7 +250,7 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
             </AnimatePresence>
 
             {/* Right Column - Projects */}
-            <main className="min-h-screen py-16">
+            <main className="min-h-screen pt-16 pb-28 md:py-16">
               <Suspense fallback={<div className="min-h-[60vh] flex items-center justify-center">Loading...</div>}>
                 <ResponsiveComponent
                   mobileComponent={MobileProjectsGrid}
@@ -297,12 +297,6 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
           />
         )}
       </AnimatePresence>
-      
-      {/* Progress Indicator at bottom of screen */}
-      <motion.div 
-        className="fixed bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-500 to-accent-500 z-50 origin-left"
-        style={{ scaleX, opacity: filterShouldBeVisible ? 1 : 0 }}
-      />
     </div>
   );
 };

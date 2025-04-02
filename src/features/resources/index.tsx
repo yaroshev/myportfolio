@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ExternalLink } from 'lucide-react';
 import { categories, featuredLinks } from './data';
-import ResourceCard from '../../responsive/desktop/resources/resourcesCards/component';
+import ResourceCard from '../../responsive/desktop/resources/resourcesCards/resourcesCards';
 
 const Resources: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from './Header';
-import Footer from './Footer';
+import DesktopFooter from './Footer';
+import MobileFooter from '../../../responsive/mobile/layout/footer/footer';
+import { ResponsiveComponent } from '../../../responsive';
 import { Helmet } from 'react-helmet-async';
 
 interface LayoutProps {
@@ -61,7 +63,11 @@ const Layout: React.FC<LayoutProps> = ({
         <div className="flex-grow">
           {children}
         </div>
-        <Footer />
+        <ResponsiveComponent
+          mobileComponent={MobileFooter}
+          desktopComponent={DesktopFooter}
+          setActivePage={setActivePage}
+        />
       </div>
     </>
   );

@@ -5,18 +5,18 @@ import { ResponsiveComponent } from '../../responsive';
 import { useLocation } from 'react-router-dom';
 
 // Desktop components
-import DesktopHeroSection from '../../responsive/desktop/about/heroSection/component';
-import DesktopBioSection from '../../responsive/desktop/about/bioSection/component';
-import DesktopSkillsSection from '../../responsive/desktop/about/skillsSection/component';
-import DesktopTimelineSection from '../../responsive/desktop/about/timelineSection/component';
-import DesktopNavDots from '../../responsive/desktop/about/navDots/component';
+import DesktopHeroSection from '../../responsive/desktop/about/heroSection/heroSection';
+import DesktopBioSection from '../../responsive/desktop/about/bioSection/bioSection';
+import DesktopSkillsSection from '../../responsive/desktop/about/skillsSection/skillsSection';
+import DesktopTimelineSection from '../../responsive/desktop/about/timelineSection/timelineSection';
+import DesktopNavDots from '../../responsive/desktop/about/navDots/navDots';
 
 // Mobile components
-import MobileHeroSection from '../../responsive/mobile/about/heroSection/component';
-import MobileBioSection from '../../responsive/mobile/about/bioSection/component';
-import MobileSkillsSection from '../../responsive/mobile/about/skillsSection/component';
-import MobileTimelineSection from '../../responsive/mobile/about/timelineSection/component';
-import MobileNavDots from '../../responsive/mobile/about/navDots/component';
+import MobileHeroSection from '../../responsive/mobile/about/heroSection/heroSection';
+import MobileBioSection from '../../responsive/mobile/about/bioSection/bioSection';
+import MobileSkillsSection from '../../responsive/mobile/about/skillsSection/skillsSection';
+import MobileTimelineSection from '../../responsive/mobile/about/timelineSection/timelineSection';
+import MobileNavDots from '../../responsive/mobile/about/navDots/navDots';
 
 // Define the Section type
 type Section = {

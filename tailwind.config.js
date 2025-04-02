@@ -100,6 +100,12 @@ export default {
         'glow-accent': '0 0 15px rgba(217, 70, 239, 0.5)',
         'glow-sm': '0 0 8px rgba(14, 165, 233, 0.3)',
       },
+      height: {
+        'safe-bottom': 'env(safe-area-inset-bottom, 12px)',
+      },
+      padding: {
+        'safe-bottom': 'env(safe-area-inset-bottom, 12px)',
+      },
     },
   },
   plugins: [],

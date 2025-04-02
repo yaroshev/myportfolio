@@ -53,11 +53,11 @@ export const ResponsiveComponent: React.FC<ResponsiveProps> = ({
 export const getResponsiveComponent = (path: string, component: string) => {
   const mobileComponent = React.lazy(() => 
     /* @vite-ignore */
-    import(`./mobile/${path}/${component}/component.tsx`)
+    import(`./mobile/${path}/${component}/${component}.tsx`)
   );
   const desktopComponent = React.lazy(() => 
     /* @vite-ignore */
-    import(`./desktop/${path}/${component}/component.tsx`)
+    import(`./desktop/${path}/${component}/${component}.tsx`)
   );
   
   return {

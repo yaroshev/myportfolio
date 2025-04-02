@@ -4,16 +4,20 @@ import { HomeProps } from '../../core/types/home';
 import { ResponsiveComponent } from '../../responsive';
 
 // Desktop components
-import DesktopHeroSection from '../../responsive/desktop/home/heroSection/component';
-import DesktopStatsSection from '../../responsive/desktop/home/statsSection/component';
-import DesktopServicesSection from '../../responsive/desktop/home/servicesSection/component';
-import DesktopTestimonialsSection from '../../responsive/desktop/home/testimonialsSection/component';
-import DesktopFeaturedWorkSection from '../../responsive/desktop/home/featuredWorkSection/component';
-import DesktopCallToActionSection from '../../responsive/desktop/home/callToActionSection/component';
+import DesktopHeroSection from '../../responsive/desktop/home/heroSection/heroSection';
+import DesktopStatsSection from '../../responsive/desktop/home/statsSection/statsSection';
+import DesktopServicesSection from '../../responsive/desktop/home/servicesSection/servicesSection';
+import DesktopTestimonialsSection from '../../responsive/desktop/home/testimonialsSection/testimonialsSection';
+import DesktopFeaturedWorkSection from '../../responsive/desktop/home/featuredWorkSection/featuredWorkSection';
+import DesktopCallToActionSection from '../../responsive/desktop/home/callToActionSection/callToActionSection';
 
 // Mobile components
-import MobileHeroSection from '../../responsive/mobile/home/heroSection/component';
-import MobileStatsSection from '../../responsive/mobile/home/statsSection/component';
+import MobileHeroSection from '../../responsive/mobile/home/heroSection/heroSection';
+import MobileStatsSection from '../../responsive/mobile/home/statsSection/statsSection';
+import MobileServicesSection from '../../responsive/mobile/home/servicesSection/servicesSection';
+import MobileTestimonialsSection from '../../responsive/mobile/home/testimonialsSection/testimonialsSection';
+import MobileFeaturedWorkSection from '../../responsive/mobile/home/featuredWorkSection/featuredWorkSection';
+import MobileCallToActionSection from '../../responsive/mobile/home/callToActionSection/callToActionSection';
 
 // Add more mobile component imports as they are created
 
@@ -85,22 +89,29 @@ const Home: React.FC<HomeProps> = ({ setActivePage, onCursorChange = () => {} })
           setActivePage={setActivePage}
         />
         
-        {/* For components without mobile version yet, fallback to desktop */}
-        <DesktopServicesSection
+        <ResponsiveComponent
+          mobileComponent={MobileServicesSection}
+          desktopComponent={DesktopServicesSection}
           onCursorChange={onCursorChange}
           setActivePage={setActivePage}
         />
         
-        <DesktopTestimonialsSection
+        <ResponsiveComponent
+          mobileComponent={MobileTestimonialsSection}
+          desktopComponent={DesktopTestimonialsSection}
           onCursorChange={onCursorChange}
         />
         
-        <DesktopFeaturedWorkSection
+        <ResponsiveComponent
+          mobileComponent={MobileFeaturedWorkSection}
+          desktopComponent={DesktopFeaturedWorkSection}
           setActivePage={setActivePage}
           onCursorChange={onCursorChange}
         />
         
-        <DesktopCallToActionSection
+        <ResponsiveComponent
+          mobileComponent={MobileCallToActionSection}
+          desktopComponent={DesktopCallToActionSection}
           onCursorChange={onCursorChange}
         />
       </Suspense>

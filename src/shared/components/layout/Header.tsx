@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { ResponsiveComponent } from '../../../responsive';
 
 // Lazy load the components
-const DesktopHeader = React.lazy(() => import('../../../responsive/desktop/layout/header/component'));
-const MobileHeader = React.lazy(() => import('../../../responsive/mobile/layout/header/component'));
+const DesktopHeader = React.lazy(() => import('../../../responsive/desktop/layout/header/header'));
+const MobileHeader = React.lazy(() => import('../../../responsive/mobile/layout/header/header'));
 
 interface HeaderProps {
   activePage: string;

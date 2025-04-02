@@ -42,10 +42,10 @@ const StatsSection: React.FC<StatsSectionProps> = ({
               key={index} 
               className={`
                 relative overflow-hidden rounded-lg p-5
-                backdrop-blur-md bg-dark-800/10 
-                border border-dark-300/30
+                bg-dark-800/30
+                border border-dark-700/50
                 transition-all duration-300
-                ${activeIndex === index ? 'border-primary-500/30 shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'shadow-lg'}
+                ${activeIndex === index ? 'border-primary-500/30 shadow-[0_0_10px_rgba(56,189,248,0.1)]' : ''}
               `}
               onClick={() => {
                 setActiveIndex(index);
@@ -57,16 +57,15 @@ const StatsSection: React.FC<StatsSectionProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              {/* Card background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-10" />
-              
-              {/* Gradient background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 opacity-0 transition-opacity duration-300" 
-                style={{ opacity: activeIndex === index ? 0.5 : 0 }}
-              />
-              
-              {/* Static border highlight */}
-              <div className="absolute inset-0 rounded-lg border border-primary-500/10 opacity-30 transition-opacity duration-300 -z-5" />
+              {/* Active state highlight */}
+              {activeIndex === index && (
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-accent-500/5 -z-10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
               
               {/* Value with subtle animation */}
               <div className="text-2xl font-light mb-2 text-dark-100 relative">
@@ -74,12 +73,12 @@ const StatsSection: React.FC<StatsSectionProps> = ({
               </div>
               
               {/* Label */}
-              <div className="text-dark-300 text-xs tracking-wider uppercase transition-colors duration-300 font-medium relative">
+              <div className="text-dark-300 text-xs tracking-wider uppercase font-medium relative">
                 {stat.label}
               </div>
               
               {/* Clickable indicator */}
-              <div className="absolute bottom-2 right-2 flex items-center opacity-70 transition-opacity duration-300">
+              <div className="absolute bottom-2 right-2 flex items-center opacity-70">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>

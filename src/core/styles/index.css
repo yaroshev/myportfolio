@@ -6,11 +6,35 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    background-color: #0F1225; /* Dark background to match theme */
   }
   
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #0F1225; /* Dark background to match theme */
+    min-height: 100vh;
+  }
+  
+  /* Safari mobile-specific fixes */
+  @supports (-webkit-touch-callout: none) {
+    html, body {
+      /* Force dark background on Safari mobile */
+      background-color: #0F1225 !important;
+      color-scheme: dark;
+    }
+    
+    /* Fix for Safari address bar color on scroll */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: env(safe-area-inset-top);
+      background-color: #0F1225;
+      z-index: 9999;
+    }
   }
   
   /* Force hardware acceleration for animations */

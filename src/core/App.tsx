@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Header from '../shared/components/layout/Header';
-import Footer from '../shared/components/layout/Footer';
+import DesktopFooter from '../shared/components/layout/Footer';
+import MobileFooter from '../responsive/mobile/layout/footer/footer';
+import { ResponsiveComponent } from '../responsive';
 import Home from '../features/home';
 import Work from '../features/projects';
 import About from '../features/about';
@@ -104,6 +106,8 @@ function App() {
         <meta property="og:url" content={seoData.canonicalUrl} />
         <meta name="twitter:title" content={seoData.title} />
         <meta name="twitter:description" content={seoData.description} />
+        <meta name="theme-color" content="#0F1225" />
+        <meta name="color-scheme" content="dark" />
       </Helmet>
       
       <div className="min-h-screen bg-dark-950 text-dark-100 flex flex-col relative overflow-hidden">
@@ -132,7 +136,11 @@ function App() {
           </Routes>
         </main>
         
-        <Footer setActivePage={setActivePage} />
+        <ResponsiveComponent
+          mobileComponent={MobileFooter}
+          desktopComponent={DesktopFooter}
+          setActivePage={setActivePage}
+        />
       </div>
     </>
   );
