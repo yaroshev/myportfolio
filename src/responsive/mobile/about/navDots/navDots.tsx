@@ -81,15 +81,15 @@ const NavDots: React.FC<NavDotsProps> = ({
           transition={{ duration: 0.4 }}
         >
           {/* Pill container */}
-          <div className="bg-dark-800/80 backdrop-blur-md rounded-full py-2 px-3 border border-dark-700/50 shadow-lg shadow-black/30 flex justify-between">
+          <div className="bg-dark-800/80 backdrop-blur-md rounded-full py-1.5 px-3 border border-dark-700/50 shadow-lg shadow-black/30 flex justify-between">
             {sections.map((section) => (
               <motion.button
                 key={section}
-                className="relative px-3 py-2 flex flex-col items-center"
+                className="relative px-3 py-1.5 flex flex-col items-center"
                 onClick={() => onDotClick(section)}
                 whileTap={{ scale: 0.9 }}
               >
-                {/* Icon and dot indicator */}
+                {/* Icon only - removed moving dot */}
                 <div className="relative">
                   {/* Icon */}
                   <motion.div 
@@ -99,19 +99,10 @@ const NavDots: React.FC<NavDotsProps> = ({
                   >
                     {getSectionIcon(section)}
                   </motion.div>
-                  
-                  {/* Active indicator dot */}
-                  {activeSection === section && (
-                    <motion.div 
-                      className="absolute -bottom-1.5 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full bg-primary-500"
-                      layoutId="activeDot"
-                      transition={{ type: "spring", duration: 0.5 }}
-                    />
-                  )}
                 </div>
                 
                 {/* Text label */}
-                <span className={`text-xs text-center mt-1 transition-colors duration-300 ${
+                <span className={`text-xs text-center mt-0.5 transition-colors duration-300 ${
                   activeSection === section ? 'text-primary-400' : 'text-dark-400/70'
                 }`}>
                   {getSectionDisplayText(section)}

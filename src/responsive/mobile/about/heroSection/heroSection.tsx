@@ -46,7 +46,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onCursorChange = () => {}, se
   return (
     <section 
       ref={sectionRef}
-      className="min-h-[85vh] flex items-center justify-center relative overflow-hidden px-4 pt-6 pb-12"
+      className="pt-36 pb-12 flex flex-col items-center justify-center relative overflow-hidden px-4"
     >
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-radial from-dark-900/50 via-dark-950 to-black opacity-80 z-0" />
@@ -61,20 +61,21 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onCursorChange = () => {}, se
         />
       </div>
       
-      <div className="w-full relative z-10">
-        <div className="flex flex-col items-center justify-center gap-8">
+      <div className="w-full relative z-10 max-w-md mx-auto">
+        <div className="flex flex-col items-center justify-center">
+          {/* Profile image wrapper */}
           <motion.div 
-            className="w-full mt-2"
+            className="w-full flex justify-center mb-6"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <div className="relative mx-auto" style={{ maxWidth: "220px" }}>
+            <div className="relative mx-auto" style={{ width: "180px", height: "220px" }}>
               {/* Decorative elements */}
               <div className="absolute -inset-4 rounded-2xl bg-gradient-to-r from-primary-500/20 to-accent-500/20 blur-xl opacity-70" />
               <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-primary-500/80 to-accent-500/80 opacity-50" />
               
-              <div className="relative overflow-hidden rounded-2xl" style={{ aspectRatio: "4/5" }}>
+              <div className="relative overflow-hidden rounded-2xl h-full">
                 <img 
                   src={profileImage} 
                   alt="Yaroslav Shevchenko" 
@@ -84,14 +85,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onCursorChange = () => {}, se
             </div>
           </motion.div>
           
+          {/* Text and buttons */}
           <motion.div 
-            className="w-full text-center pt-2"
+            className="w-full text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <motion.h1 
-              className="text-4xl font-light tracking-tight mb-3 font-display"
+              className="text-3xl font-light tracking-tight mb-3 font-display"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
@@ -118,7 +120,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onCursorChange = () => {}, se
             </motion.div>
             
             <motion.p 
-              className="text-dark-400 text-base max-w-md mb-8 font-light mx-auto px-4"
+              className="text-dark-400 text-sm leading-relaxed max-w-md mb-8 font-light mx-auto px-2"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
@@ -127,14 +129,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onCursorChange = () => {}, se
             </motion.p>
             
             <motion.div
-              className="flex flex-col sm:flex-row gap-3 justify-center"
+              className="flex flex-row gap-3 justify-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.9 }}
             >
               <motion.button
                 onClick={handleContactClick}
-                className="px-6 py-3 bg-primary-500 text-dark-950 rounded-full text-sm font-medium hover:bg-primary-400 transition-all duration-300 shadow-lg shadow-primary-500/20 flex items-center justify-center"
+                className="px-5 py-2.5 bg-primary-500 text-dark-950 rounded-full text-sm font-medium hover:bg-primary-400 transition-all duration-300 shadow-lg shadow-primary-500/20 flex items-center justify-center whitespace-nowrap"
                 whileTap={{ scale: 0.95 }}
               >
                 <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -147,7 +149,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onCursorChange = () => {}, se
               <motion.a
                 href="/Yaroslav Shevchenko Resume.pdf"
                 download="Yaroslav Shevchenko Resume.pdf"
-                className="px-6 py-3 bg-dark-800 text-dark-300 rounded-full text-sm font-medium hover:bg-dark-700 transition-all duration-300 flex items-center justify-center border border-dark-700"
+                className="px-5 py-2.5 bg-dark-800 text-dark-300 rounded-full text-sm font-medium hover:bg-dark-700 transition-all duration-300 flex items-center justify-center border border-dark-700 whitespace-nowrap"
                 whileTap={{ scale: 0.95 }}
               >
                 <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

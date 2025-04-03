@@ -97,7 +97,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                   backgroundColor: menuOpen ? "#a3a8b8" : "#a3a8b8",
                   width: 24
                 }}
-                transition={{ duration: 0.3, ease: "anticipate" }}
+                transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
               />
               <motion.span 
                 className="absolute w-6 h-[2px] bg-dark-200 block"
@@ -107,7 +107,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                   width: menuOpen ? 0 : 24,
                   backgroundColor: "#a3a8b8"
                 }}
-                transition={{ duration: 0.3, ease: "anticipate" }}
+                transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
               />
               <motion.span 
                 className="absolute w-6 h-[2px] bg-dark-200 block"
@@ -117,7 +117,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                   backgroundColor: menuOpen ? "#a3a8b8" : "#a3a8b8",
                   width: 24
                 }}
-                transition={{ duration: 0.3, ease: "anticipate" }}
+                transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
               />
             </div>
           </motion.button>
@@ -131,13 +131,27 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ 
+                duration: 0.5, 
+                ease: [0.25, 0.1, 0.25, 1],
+                opacity: { duration: 0.2 }
+              }}
             >
               <div className="relative py-4 px-6 border-t border-dark-800/30">
                 {/* Background Elements */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                  <div className="absolute top-1/4 -right-32 w-60 h-60 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-full blur-3xl"></div>
-                  <div className="absolute bottom-1/4 -left-32 w-60 h-60 bg-gradient-to-tr from-accent-500/10 to-primary-500/10 rounded-full blur-3xl"></div>
+                  <motion.div 
+                    className="absolute top-1/4 -right-32 w-60 h-60 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-full blur-3xl"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, delay: 0.1 }}
+                  />
+                  <motion.div 
+                    className="absolute bottom-1/4 -left-32 w-60 h-60 bg-gradient-to-tr from-accent-500/10 to-primary-500/10 rounded-full blur-3xl"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                  />
                   <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9Im5vbmUiIGQ9Ik0wIDBoMTAwdjEwMEgweiIvPjxwYXRoIGQ9Ik0xMDAgMEgwdjEwMGgxMDBWMHoiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIuNSIvPjwvZz48L3N2Zz4=')] opacity-5"></div>
                 </div>
                 
@@ -145,12 +159,12 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                   {navItems.map((item, index) => (
                     <motion.div
                       key={item.id}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
+                      initial={{ opacity: 0, y: 15, x: -5 }}
+                      animate={{ opacity: 1, y: 0, x: 0 }}
                       transition={{ 
-                        duration: 0.3, 
-                        delay: 0.05 + index * 0.08,
-                        ease: [0.25, 1, 0.5, 1]
+                        duration: 0.45, 
+                        delay: 0.1 + index * 0.08,
+                        ease: [0.25, 0.1, 0.25, 1]
                       }}
                       className="relative"
                     >
@@ -163,16 +177,21 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                         className="block"
                       >
                         <div className="flex items-center">
-                          <span className={`text-xs font-mono mr-4 ${
-                            activePage === item.id ? 'text-primary-400' : 'text-dark-400'
-                          }`}>0{index + 1}</span>
+                          <motion.span 
+                            className={`text-xs font-mono mr-4 ${
+                              activePage === item.id ? 'text-primary-400' : 'text-dark-400'
+                            }`}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.3, delay: 0.2 + index * 0.08 }}
+                          >0{index + 1}</motion.span>
                           {activePage === item.id && (
                             <motion.div 
                               className="w-1 h-8 bg-gradient-to-b from-primary-400 to-accent-400 rounded-full mr-4"
                               layoutId="activeNavIndicator"
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              transition={{ duration: 0.3 }}
+                              initial={{ opacity: 0, scaleY: 0.7 }}
+                              animate={{ opacity: 1, scaleY: 1 }}
+                              transition={{ duration: 0.35 }}
                             />
                           )}
                           <span className={`text-xl font-light tracking-wide ${
@@ -191,9 +210,9 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                 {/* Footer with social links */}
                 <motion.div 
                   className="relative z-10 mt-2 pt-4 border-t border-dark-800/50"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3, delay: 0.3 }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.35 }}
                 >
                   <div className="flex items-center justify-between">
                     <div className="text-dark-400 text-xs">
@@ -201,13 +220,16 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
                     </div>
                     <div className="flex space-x-4">
                       {['Twitter', 'LinkedIn', 'Instagram'].map((social, i) => (
-                        <a 
+                        <motion.a 
                           key={social} 
                           href="#" 
                           className="text-dark-400 hover:text-dark-200 text-xs transition-colors duration-200"
+                          initial={{ opacity: 0, y: 5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: 0.4 + i * 0.05 }}
                         >
                           {social}
-                        </a>
+                        </motion.a>
                       ))}
                     </div>
                   </div>

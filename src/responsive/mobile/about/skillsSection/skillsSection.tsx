@@ -1,5 +1,5 @@
 import React, { RefObject, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { AboutSectionProps } from '../../../../features/about/types';
 import { skills } from '../../../../features/about/data';
 
@@ -99,80 +99,67 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ sectionRef }) => {
           </p>
         </motion.div>
         
-        {/* Accordion-style skill categories */}
-        <div className="space-y-4 mb-4">
+        {/* Simplified accordion skill categories */}
+        <div className="space-y-3 mb-4">
           {skills.map((skillGroup, index) => (
-            <motion.div 
+            <div 
               key={skillGroup.category}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true, margin: "-30px" }}
-              className="overflow-hidden"
+              className="overflow-hidden bg-dark-800/30 backdrop-blur-sm rounded-xl border border-dark-700/30"
             >
-              <motion.div 
-                className={`bg-dark-800/30 backdrop-blur-sm rounded-xl border border-dark-700/30 overflow-hidden`}
-                whileTap={{ scale: 0.98 }}
+              {/* Category header with gradient */}
+              <div 
+                className="h-full relative cursor-pointer"
+                onClick={() => toggleCategory(skillGroup.category)}
               >
-                {/* Category header with gradient */}
                 <div 
-                  className={`h-full relative`}
-                  onClick={() => toggleCategory(skillGroup.category)}
-                >
-                  <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${categoryColors[skillGroup.category as keyof typeof categoryColors]}`} />
-                  
-                  <div className="px-5 py-4 flex justify-between items-center">
-                    <h3 className="text-lg font-display text-left bg-clip-text text-transparent bg-gradient-to-r from-white to-dark-200">
-                      {skillGroup.category}
-                    </h3>
-                    <motion.div
-                      animate={{ rotate: expandedCategory === skillGroup.category ? 180 : 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <svg className="w-5 h-5 text-dark-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                      </svg>
-                    </motion.div>
+                  className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${categoryColors[skillGroup.category as keyof typeof categoryColors]}`}
+                />
+                
+                <div className="px-5 py-4 flex justify-between items-center">
+                  <h3 className="text-lg font-display text-left bg-clip-text text-transparent bg-gradient-to-r from-white to-dark-200">
+                    {skillGroup.category}
+                  </h3>
+                  <div className={`transition-transform duration-200 ${expandedCategory === skillGroup.category ? 'rotate-180' : ''}`}>
+                    <svg className="w-5 h-5 text-dark-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
                   </div>
                 </div>
-                
-                {/* Skills content */}
-                <motion.div 
-                  className="overflow-hidden"
-                  initial={{ height: 0 }}
-                  animate={{ 
-                    height: expandedCategory === skillGroup.category ? 'auto' : 0,
-                    opacity: expandedCategory === skillGroup.category ? 1 : 0
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="px-5 py-4 space-y-4">
-                    {skillGroup.items.map((skill, i) => (
-                      <motion.div 
-                        key={i}
-                        className="relative"
-                        initial={{ opacity: 0, x: -5 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: 0.1 + i * 0.05 }}
-                      >
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-dark-200 text-sm">{skill}</span>
-                          <span className="text-dark-400 text-xs opacity-60">{skillProficiency[skill as keyof typeof skillProficiency]}%</span>
-                        </div>
-                        <div className="h-1 bg-dark-800/60 rounded-full overflow-hidden">
-                          <motion.div 
-                            className={`h-full rounded-full bg-gradient-to-r ${categoryColors[skillGroup.category as keyof typeof categoryColors]}/80`}
-                            initial={{ width: 0 }}
-                            animate={{ width: `${skillProficiency[skill as keyof typeof skillProficiency]}%` }}
-                            transition={{ duration: 0.8, delay: 0.2 + i * 0.05 }}
-                          />
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              </motion.div>
-            </motion.div>
+              </div>
+              
+              {/* Simple CSS transition for content */}
+              <div 
+                className={`overflow-hidden transition-all duration-300 ease-out ${
+                  expandedCategory === skillGroup.category 
+                    ? 'max-h-[500px] opacity-100' 
+                    : 'max-h-0 opacity-0'
+                }`}
+              >
+                <div className="px-5 py-4 space-y-4">
+                  {skillGroup.items.map((skill, i) => (
+                    <div key={i} className="relative">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-dark-200 text-sm">{skill}</span>
+                        <span className="text-dark-400 text-xs opacity-60">
+                          {skillProficiency[skill as keyof typeof skillProficiency]}%
+                        </span>
+                      </div>
+                      <div className="h-1 bg-dark-800/60 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full rounded-full bg-gradient-to-r ${categoryColors[skillGroup.category as keyof typeof categoryColors]}/80`}
+                          style={{ 
+                            width: expandedCategory === skillGroup.category 
+                              ? `${skillProficiency[skill as keyof typeof skillProficiency]}%` 
+                              : '0%',
+                            transition: 'width 0.6s ease-out'
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>
