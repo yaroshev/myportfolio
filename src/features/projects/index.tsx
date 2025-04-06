@@ -226,15 +226,15 @@ const Work: React.FC<WorkProps> = ({ onCursorChange = () => {}, setActivePage })
               </AnimatePresence>
             </div>
             
-            {/* Mobile Filter - Fixed Version at top */}
+            {/* Mobile Filter - Fixed Version at bottom right */}
             <AnimatePresence mode="wait">
               {filterShouldBeVisible && (
                 <motion.div 
-                  className="md:hidden fixed top-0 left-0 right-0 z-40 py-3 px-4 pt-safe-top bg-dark-900/95 backdrop-blur-md border-b border-dark-800/50 shadow-md"
-                  initial={{ opacity: 0, y: -15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
-                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  className="md:hidden fixed bottom-4 right-4 z-40"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
                   style={{
                     pointerEvents: isFilterInteractive() ? 'auto' : 'none'
                   }}

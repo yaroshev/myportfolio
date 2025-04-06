@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { ExternalLink } from 'lucide-react';
+import { Construction, ExternalLink, ChevronRight } from 'lucide-react';
 import { categories, featuredLinks } from './data';
 import ResourceCard from '../../responsive/desktop/resources/resourcesCards/resourcesCards';
+import { ResponsiveComponent } from '../../responsive';
+import DesktopUnderConstruction from '../../responsive/desktop/resources/UnderConstruction';
+import MobileUnderConstruction from '../../responsive/mobile/resources/UnderConstruction';
 
 const Resources: React.FC = () => {
+  const [showOriginalContent, setShowOriginalContent] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
 
@@ -19,14 +23,32 @@ const Resources: React.FC = () => {
     }))
     .filter(category => category.resources.length > 0);
 
+  if (!showOriginalContent) {
+    return (
+      <ResponsiveComponent
+        desktopComponent={DesktopUnderConstruction}
+        mobileComponent={MobileUnderConstruction}
+        setShowOriginalContent={setShowOriginalContent}
+      />
+    );
+  }
+
   return (
     <div className="pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-8">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-neutral-100 to-neutral-400">
-            Resources
-          </span>
-        </h1>
+        <div className="mb-8 flex justify-between items-center">
+          <h1 className="text-4xl md:text-5xl font-light tracking-tight">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-neutral-100 to-neutral-400">
+              Resources
+            </span>
+          </h1>
+          <button 
+            onClick={() => setShowOriginalContent(false)}
+            className="text-sm tracking-wider uppercase whitespace-nowrap px-4 py-2 rounded-full transition-colors duration-300 text-neutral-400 hover:text-neutral-200 border border-neutral-800"
+          >
+            Back to Coming Soon
+          </button>
+        </div>
         <p className="text-neutral-400 max-w-3xl mb-16">
           A curated collection of resources, tools, and links that I've found valuable in my work. Feel free to explore and use these resources for your own projects.
         </p>

@@ -46,6 +46,9 @@ export default {
       animation: {
         fadeIn: 'fadeIn 0.8s ease-in-out forwards',
         float: 'float 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        float1: 'float1 8s ease-in-out infinite',
+        float2: 'float2 12s ease-in-out infinite',
+        float3: 'float3 10s ease-in-out infinite',
         pulse: 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         shimmer: 'shimmer 2s linear infinite',
         slideUp: 'slideUp 0.8s ease-out forwards',
@@ -62,6 +65,25 @@ export default {
         float: {
           '0%, 100%': { transform: 'translateY(0) translateZ(0)' },
           '50%': { transform: 'translateY(-20px) translateZ(0)' },
+        },
+        float1: {
+          '0%': { transform: 'translate(0, 0) translateZ(0)' },
+          '33%': { transform: 'translate(10px, -15px) translateZ(0)' },
+          '66%': { transform: 'translate(-10px, 10px) translateZ(0)' },
+          '100%': { transform: 'translate(0, 0) translateZ(0)' },
+        },
+        float2: {
+          '0%': { transform: 'translate(0, 0) translateZ(0)' },
+          '25%': { transform: 'translate(-12px, 15px) translateZ(0)' },
+          '50%': { transform: 'translate(10px, 5px) translateZ(0)' },
+          '75%': { transform: 'translate(15px, -10px) translateZ(0)' },
+          '100%': { transform: 'translate(0, 0) translateZ(0)' },
+        },
+        float3: {
+          '0%': { transform: 'translate(0, 0) translateZ(0)' },
+          '40%': { transform: 'translate(10px, 10px) translateZ(0)' },
+          '60%': { transform: 'translate(-15px, -7px) translateZ(0)' },
+          '100%': { transform: 'translate(0, 0) translateZ(0)' },
         },
         shimmer: {
           '0%': { backgroundPosition: '-200% 0', transform: 'translateZ(0)' },

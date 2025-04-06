@@ -68,7 +68,7 @@ const ProjectsGrid = forwardRef<HTMLDivElement, ProjectsGridProps>(
 
     // Mobile-optimized projects grid with horizontal scrolling galleries
     return (
-      <div ref={ref} className="pt-16 pb-20">
+      <div ref={ref} className="pt-16 pb-32">
         <AnimatePresence mode="wait">
           <motion.div
             key={projects.length} // Re-render when projects change
