@@ -124,21 +124,23 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  const [activeCardIndex, setActiveCardIndex] = useState(1); // Start with middle card (index 1)
+  const [activeCardIndex, setActiveCardIndex] = useState(1); // Start with middle card
 
   // Center the initial card on load
   useEffect(() => {
     if (!scrollContainerRef.current) return;
     
-    // Set initial active card to the middle card (index 1)
-    const targetIndex = 1; // Middle card
-    setActiveCardIndex(targetIndex);
+    // Set initial active card to the middle card
+    const middleIndex = 1; // Middle card (0-indexed) of 3 cards
+    setActiveCardIndex(middleIndex);
     
     // Calculate scroll position to center the middle card
     const containerWidth = scrollContainerRef.current.clientWidth;
     const cardWidth = containerWidth * 0.75; // 75% of container width
     const cardSpacing = 16; // gap-4 = 16px
-    const scrollPosition = (targetIndex * (cardWidth + cardSpacing)) - (containerWidth - cardWidth) / 2 + (cardSpacing / 2);
+    
+    // Adjust scroll position to account for the card's width and spacing
+    const scrollPosition = middleIndex * (cardWidth + cardSpacing);
     
     // Add a small delay to ensure the DOM is fully rendered
     const timer = setTimeout(() => {
@@ -162,17 +164,9 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
       const cardWidth = containerWidth * 0.75; // 75% of container width
       const cardSpacing = 16; // gap-4 = 16px
       
-      // Calculate the active index based on scroll position
-      const offset = (containerWidth - cardWidth) / 2;
-      const adjustedPosition = scrollPosition + offset - (cardSpacing / 2);
-      const newActiveIndex = Math.round(adjustedPosition / (cardWidth + cardSpacing));
-      
-      // Ensure index is within bounds
-      const boundedIndex = Math.max(0, Math.min(newActiveIndex, services.length - 1));
-      setActiveCardIndex(boundedIndex);
-      
-      // Also update touch active index to match scroll position
-      setActiveIndex(boundedIndex);
+      // Calculate the active index based on scroll position and card width+spacing
+      const newActiveIndex = Math.round(scrollPosition / (cardWidth + cardSpacing));
+      setActiveCardIndex(Math.min(newActiveIndex, services.length - 1));
     };
     
     const scrollContainer = scrollContainerRef.current;
@@ -209,27 +203,6 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
     }
   };
 
-  // Dot indicator click handler to scroll to specific card
-  const handleDotClick = (index: number) => {
-    if (!scrollContainerRef.current) return;
-    
-    // Calculate scroll position for the selected card
-    const containerWidth = scrollContainerRef.current.clientWidth;
-    const cardWidth = containerWidth * 0.75; // 75% of container width
-    const cardSpacing = 16; // gap-4 = 16px
-    const scrollPosition = (index * (cardWidth + cardSpacing)) - (containerWidth - cardWidth) / 2 + (cardSpacing / 2);
-    
-    // Smooth scroll to the position
-    scrollContainerRef.current.scrollTo({
-      left: scrollPosition,
-      behavior: 'smooth'
-    });
-    
-    // Update active indices
-    setActiveCardIndex(index);
-    setActiveIndex(index);
-  };
-
   return (
     <section className="py-12 relative">
       <div className="max-w-7xl mx-auto px-4">
@@ -254,31 +227,25 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
           msOverflowStyle: 'none'
         }}
       >
-        {/* Left spacer for better centering */}
-        <div className="flex-none w-[calc(50vw-37.5vw-8px)]" aria-hidden="true" />
-        
         {services.map((service, index) => (
           <div
             key={index} 
             className={`
               relative overflow-hidden rounded-lg p-6
-              backdrop-blur-md bg-dark-800/10 
-              border transition-all duration-300
-              ${activeCardIndex === index 
-                ? 'border-primary-500/30 shadow-[0_0_15px_rgba(255,255,255,0.1)]' 
-                : 'border-dark-300/30 shadow-lg'}
-              cursor-pointer
               flex-none w-[75vw]
               snap-center
+              cursor-pointer
+              border transition-all duration-300
+              ${activeCardIndex === index ? 'border-primary-500/30 shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'border-dark-300/30 shadow-lg'}
             `}
             onClick={handleCardClick}
             onTouchStart={() => setActiveIndex(index)}
             onTouchEnd={() => setActiveIndex(null)}
           >
-            {/* Card background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-dark-800/40 to-dark-900/40 backdrop-blur-md -z-10" />
+            {/* Solid background that's consistent for all cards */}
+            <div className="absolute inset-0 bg-dark-900/60 -z-10" />
             
-            {/* Gradient background */}
+            {/* Gradient background that only appears on active cards */}
             <div 
               className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 transition-opacity duration-300" 
               style={{ opacity: activeCardIndex === index ? 0.5 : 0 }}
@@ -315,9 +282,6 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
             </div>
           </div>
         ))}
-        
-        {/* Right spacer for better centering */}
-        <div className="flex-none w-[calc(50vw-37.5vw-8px)]" aria-hidden="true" />
       </div>
       
       {/* Scroll indicators */}
@@ -325,7 +289,22 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
         {services.map((_, index) => (
           <button
             key={index}
-            onClick={() => handleDotClick(index)}
+            onClick={() => {
+              // Handle dot click to scroll to the specific card
+              if (!scrollContainerRef.current) return;
+              
+              const containerWidth = scrollContainerRef.current.clientWidth;
+              const cardWidth = containerWidth * 0.75;
+              const cardSpacing = 16;
+              const scrollPosition = index * (cardWidth + cardSpacing);
+              
+              scrollContainerRef.current.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+              });
+              
+              setActiveCardIndex(index);
+            }}
             className={`h-1.5 rounded-full transition-all duration-300 ${
               activeCardIndex === index 
                 ? 'bg-primary-400 w-6' 
