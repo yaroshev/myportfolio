@@ -124,28 +124,31 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [activeCardIndex, setActiveCardIndex] = useState(1); // Start with middle card (index 1)
 
   // Center the initial card on load
   useEffect(() => {
     if (!scrollContainerRef.current) return;
     
-    // Set initial active card to the middle card
-    const middleIndex = Math.floor(services.length / 2);
-    setActiveCardIndex(middleIndex);
+    // Set initial active card to the middle card (index 1)
+    const targetIndex = 1; // Middle card
+    setActiveCardIndex(targetIndex);
     
     // Calculate scroll position to center the middle card
     const containerWidth = scrollContainerRef.current.clientWidth;
     const cardWidth = containerWidth * 0.75; // 75% of container width
-    const scrollPosition = middleIndex * cardWidth;
+    const cardSpacing = 16; // gap-4 = 16px
+    const scrollPosition = (targetIndex * (cardWidth + cardSpacing)) - (containerWidth - cardWidth) / 2 + (cardSpacing / 2);
     
     // Add a small delay to ensure the DOM is fully rendered
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       if (scrollContainerRef.current) {
         scrollContainerRef.current.scrollLeft = scrollPosition;
       }
-    }, 100);
-  }, [services.length]);
+    }, 200);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   // Handle scroll snap 
   useEffect(() => {
@@ -157,9 +160,19 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
       const containerWidth = scrollContainerRef.current.clientWidth;
       const scrollPosition = scrollContainerRef.current.scrollLeft;
       const cardWidth = containerWidth * 0.75; // 75% of container width
+      const cardSpacing = 16; // gap-4 = 16px
       
-      const newActiveIndex = Math.round(scrollPosition / cardWidth);
-      setActiveCardIndex(Math.min(newActiveIndex, services.length - 1));
+      // Calculate the active index based on scroll position
+      const offset = (containerWidth - cardWidth) / 2;
+      const adjustedPosition = scrollPosition + offset - (cardSpacing / 2);
+      const newActiveIndex = Math.round(adjustedPosition / (cardWidth + cardSpacing));
+      
+      // Ensure index is within bounds
+      const boundedIndex = Math.max(0, Math.min(newActiveIndex, services.length - 1));
+      setActiveCardIndex(boundedIndex);
+      
+      // Also update touch active index to match scroll position
+      setActiveIndex(boundedIndex);
     };
     
     const scrollContainer = scrollContainerRef.current;
@@ -196,6 +209,27 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
     }
   };
 
+  // Dot indicator click handler to scroll to specific card
+  const handleDotClick = (index: number) => {
+    if (!scrollContainerRef.current) return;
+    
+    // Calculate scroll position for the selected card
+    const containerWidth = scrollContainerRef.current.clientWidth;
+    const cardWidth = containerWidth * 0.75; // 75% of container width
+    const cardSpacing = 16; // gap-4 = 16px
+    const scrollPosition = (index * (cardWidth + cardSpacing)) - (containerWidth - cardWidth) / 2 + (cardSpacing / 2);
+    
+    // Smooth scroll to the position
+    scrollContainerRef.current.scrollTo({
+      left: scrollPosition,
+      behavior: 'smooth'
+    });
+    
+    // Update active indices
+    setActiveCardIndex(index);
+    setActiveIndex(index);
+  };
+
   return (
     <section className="py-12 relative">
       <div className="max-w-7xl mx-auto px-4">
@@ -209,7 +243,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
       {/* Horizontal scroll container */}
       <div 
         ref={scrollContainerRef}
-        className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-4 px-4 pb-6 gap-4"
+        className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide px-4 pb-6 gap-4"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleDragEnd}
@@ -220,15 +254,19 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
           msOverflowStyle: 'none'
         }}
       >
+        {/* Left spacer for better centering */}
+        <div className="flex-none w-[calc(50vw-37.5vw-8px)]" aria-hidden="true" />
+        
         {services.map((service, index) => (
           <div
             key={index} 
             className={`
               relative overflow-hidden rounded-lg p-6
               backdrop-blur-md bg-dark-800/10 
-              border border-dark-300/30
-              transition-all duration-300
-              ${activeIndex === index ? 'border-primary-500/30 shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'shadow-lg'}
+              border transition-all duration-300
+              ${activeCardIndex === index 
+                ? 'border-primary-500/30 shadow-[0_0_15px_rgba(255,255,255,0.1)]' 
+                : 'border-dark-300/30 shadow-lg'}
               cursor-pointer
               flex-none w-[75vw]
               snap-center
@@ -242,8 +280,8 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
             
             {/* Gradient background */}
             <div 
-              className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 opacity-0 transition-opacity duration-300" 
-              style={{ opacity: activeIndex === index ? 0.5 : 0 }}
+              className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-dark-300/5 to-accent-500/10 -z-10 transition-opacity duration-300" 
+              style={{ opacity: activeCardIndex === index ? 0.5 : 0 }}
             />
             
             {/* Static border highlight */}
@@ -277,18 +315,23 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onCursorChange, setAc
             </div>
           </div>
         ))}
+        
+        {/* Right spacer for better centering */}
+        <div className="flex-none w-[calc(50vw-37.5vw-8px)]" aria-hidden="true" />
       </div>
       
       {/* Scroll indicators */}
       <div className="flex justify-center gap-3 mt-2">
         {services.map((_, index) => (
-          <div 
+          <button
             key={index}
+            onClick={() => handleDotClick(index)}
             className={`h-1.5 rounded-full transition-all duration-300 ${
               activeCardIndex === index 
                 ? 'bg-primary-400 w-6' 
                 : 'bg-dark-600 w-1.5'
             }`}
+            aria-label={`Go to service ${index + 1}`}
           />
         ))}
       </div>
